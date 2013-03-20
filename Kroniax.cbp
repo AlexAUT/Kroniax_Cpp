@@ -80,7 +80,7 @@
 		<Unit filename="include/gui/GuiBaseClass.hpp" />
 		<Unit filename="include/gui/GuiController.hpp" />
 		<Unit filename="include/gui/Layer.hpp" />
-		<Unit filename="resource.rc">
+		<Unit filename="res/resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
 		<Unit filename="src/aw/utilities/converter.cpp" />
