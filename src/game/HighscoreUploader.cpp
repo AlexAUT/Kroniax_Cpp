@@ -1,4 +1,4 @@
-#include "../../include/game/highscoreUploader.hpp"
+#include "../../include/game/HighscoreUploader.hpp"
 
 HighscoreUploader::HighscoreUploader()
 {

@@ -374,7 +374,7 @@ void Level::LoadTileData(int layer)
 
 void Level::LoadCollideGrid()
 {
-    std::string filePath = m_path + "collideGrid.cfg";
+    std::string filePath = m_path + "collidegrid.cfg";
 
     std::fstream file;
     file.open(filePath.c_str(), std::ios::in);

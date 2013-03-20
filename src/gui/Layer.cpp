@@ -1,4 +1,4 @@
-#include "../../include/gui/layer.hpp"
+#include "../../include/gui/Layer.hpp"
 
 
 GuiLayer::GuiLayer() : m_activeElement(0)

@@ -1,8 +1,8 @@
 #ifndef HIGHSCOREBOARD
 #define HIGHSCOREBOARD
 
-#include "highscoreUploader.hpp"
-#include "../../include/Aw/utilities/converter.hpp"
+#include "HighscoreUploader.hpp"
+#include "../../include/aw/utilities/converter.hpp"
 
 #include <SFML/Graphics.hpp>
 
