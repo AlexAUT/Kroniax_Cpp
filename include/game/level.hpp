@@ -9,7 +9,7 @@
 #include <fstream>
 
 #include "../../include/aw/utilities/converter.hpp"
-#include "../../include/game/highscoreUploader.hpp"
+#include "../../include/game/HighscoreUploader.hpp"
 
 #include "settings.hpp"
 

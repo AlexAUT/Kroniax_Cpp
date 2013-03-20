@@ -3,7 +3,7 @@
 
 #include "level.hpp"
 
-#include "highscoreUploader.hpp"
+#include "HighscoreUploader.hpp"
 #include "HighscoreBoard.hpp"
 
 #include "../../include/aw/utilities/stopwatch.hpp"

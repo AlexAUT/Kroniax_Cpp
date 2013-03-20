@@ -4,7 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "../../include/gui/guiController.hpp"
+#include "../../include/gui/GuiController.hpp"
 
 #include "../../include/aw/utilities/converter.hpp"
 
