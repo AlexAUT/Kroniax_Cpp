@@ -1,4 +1,4 @@
-#include "../../include/game/menuBackground.hpp"
+#include "../../include/game/MenuBackground.hpp"
 
 MenuBackground::MenuBackground(sf::RenderWindow &window) : m_window(window)
 {
