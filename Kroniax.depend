@@ -1,0 +1,292 @@
+# depslib dependency file v1.0
+1353867452 source:c:\users\alexander\desktop\kroniax\aw\collision\collideengine.cpp
+	"CollideEngine.hpp"
+
+1353840002 c:\users\alexander\desktop\kroniax\aw\collision\collideengine.hpp
+	<math.h>
+	<iostream>
+	"CollideTriangle.hpp"
+	"CollideCircle.hpp"
+	"CollideRect.hpp"
+
+1353835858 c:\users\alexander\desktop\kroniax\aw\collision\collidetriangle.hpp
+	"../types/Vector2D.hpp"
+
+1353857912 c:\users\alexander\desktop\kroniax\aw\types\vector2d.hpp
+	<math.h>
+	<SFML/System/Vector2.hpp>
+
+1353838538 c:\users\alexander\desktop\kroniax\aw\collision\collidecircle.hpp
+	"../types/Vector2D.hpp"
+
+1353834328 c:\users\alexander\desktop\kroniax\aw\collision\colliderect.hpp
+	"../types/Vector2D.hpp"
+
+1353915406 source:c:\users\alexander\desktop\kroniax\aw\types\triangle.cpp
+	"Triangle.hpp"
+
+1353858688 c:\users\alexander\desktop\kroniax\aw\types\triangle.hpp
+	"Vector2D.hpp"
+	<SFML/Graphics.hpp>
+	<iostream>
+
+1353845114 source:c:\users\alexander\desktop\kroniax\aw\utilities\converter.cpp
+	"converter.hpp"
+	<iostream>
+
+1353845114 c:\users\alexander\desktop\kroniax\aw\utilities\converter.hpp
+	<string>
+	<sstream>
+	<vector>
+
+1363377841 source:c:\users\alexander\desktop\kroniax\aw\utilities\stopwatch.cpp
+	"stopwatch.hpp"
+
+1363377804 c:\users\alexander\desktop\kroniax\aw\utilities\stopwatch.hpp
+	<SFML/System.hpp>
+
+1363628494 source:c:\users\alexander\desktop\kroniax\dialogscreen.cpp
+	"DialogScreen.hpp"
+	<iostream>
+
+1362832923 c:\users\alexander\desktop\kroniax\dialogscreen.hpp
+	"Gui/GuiController.hpp"
+
+1362852040 c:\users\alexander\desktop\kroniax\gui\guicontroller.hpp
+	<iostream>
+	<SFML/Graphics.hpp>
+	"Layer.hpp"
+
+1362837766 c:\users\alexander\desktop\kroniax\gui\layer.hpp
+	<vector>
+	"GuiBaseClass.hpp"
+
+1363380385 c:\users\alexander\desktop\kroniax\gui\guibaseclass.hpp
+	<iostream>
+	<SFML/Graphics.hpp>
+
+1363629689 source:c:\users\alexander\desktop\kroniax\game.cpp
+	"game.hpp"
+	<iostream>
+	<cmath>
+	"settings.hpp"
+
+1363628770 c:\users\alexander\desktop\kroniax\game.hpp
+	"level.hpp"
+	"highscoreUploader.hpp"
+	"HighscoreBoard.hpp"
+	"Aw/utilities/stopwatch.hpp"
+
+1363422209 c:\users\alexander\desktop\kroniax\level.hpp
+	<SFML/Graphics.hpp>
+	<SFML/Audio.hpp>
+	<iostream>
+	<vector>
+	<sstream>
+	<fstream>
+	"Aw/utilities/converter.hpp"
+	"settings.hpp"
+
+1362847746 c:\users\alexander\desktop\kroniax\settings.hpp
+	<vector>
+	<string>
+	<random>
+	<time.h>
+	"DialogScreen.hpp"
+
+1363386182 c:\users\alexander\desktop\kroniax\highscoreuploader.hpp
+	<SFML/Network.hpp>
+	<vector>
+	<iostream>
+
+1363383071 c:\users\alexander\desktop\kroniax\highscoreboard.hpp
+	"highscoreUploader.hpp"
+	"Aw/utilities/converter.hpp"
+	<SFML/Graphics.hpp>
+
+1363380411 source:c:\users\alexander\desktop\kroniax\gui\guibaseclass.cpp
+	"GuiBaseClass.hpp"
+
+1363384095 source:c:\users\alexander\desktop\kroniax\gui\guicontroller.cpp
+	"GuiController.hpp"
+
+1363384095 source:c:\users\alexander\desktop\kroniax\gui\layer.cpp
+	"Layer.hpp"
+
+1363386192 source:c:\users\alexander\desktop\kroniax\highscoreuploader.cpp
+	"highscoreUploader.hpp"
+
+1363686835 source:c:\users\alexander\desktop\kroniax\level.cpp
+	"level.hpp"
+	<iostream>
+	"highscoreUploader.hpp"
+
+1363629003 source:c:\users\alexander\desktop\kroniax\main.cpp
+	<iostream>
+	"menu.hpp"
+	"game.hpp"
+
+1363388263 c:\users\alexander\desktop\kroniax\menu.hpp
+	<SFML/Audio.hpp>
+	<SFML/Graphics.hpp>
+	"Gui/guiController.hpp"
+	"Aw/utilities/converter.hpp"
+	"settings.hpp"
+	"MenuBackground.hpp"
+	"HighscoreUploader.hpp"
+	"HighscoreBoard.hpp"
+
+1362845623 c:\users\alexander\desktop\kroniax\menubackground.hpp
+	"settings.hpp"
+	"Aw/utilities/converter.hpp"
+	<fstream>
+
+1363628391 source:c:\users\alexander\desktop\kroniax\menu.cpp
+	"menu.hpp"
+	<fstream>
+
+1363097448 source:c:\users\alexander\desktop\kroniax\menubackground.cpp
+	"menuBackground.hpp"
+
+1362851426 source:c:\users\alexander\desktop\kroniax\resource.rc
+
+1362847765 source:c:\users\alexander\desktop\kroniax\settings.cpp
+	"settings.hpp"
+	<fstream>
+	<iostream>
+	"Aw/utilities/converter.hpp"
+
+1363385058 source:c:\users\alexander\desktop\kroniax\highscoreboard.cpp
+	"HighscoreBoard.hpp"
+
+1363785849 source:c:\users\alexander\desktop\kroniax\src\aw\utilities\converter.cpp
+	"../../../include/aw/utilities/converter.hpp"
+	<iostream>
+
+1353845114 c:\users\alexander\desktop\kroniax\include\aw\utilities\converter.hpp
+	<string>
+	<sstream>
+	<vector>
+
+1363785813 source:c:\users\alexander\desktop\kroniax\src\aw\utilities\stopwatch.cpp
+	"../../../include/aw/utilities/stopwatch.hpp"
+
+1363785813 c:\users\alexander\desktop\kroniax\include\aw\utilities\stopwatch.hpp
+	<SFML/System.hpp>
+
+1363785307 source:c:\users\alexander\desktop\kroniax\src\game\dialogscreen.cpp
+	"../../include/game/DialogScreen.hpp"
+	<iostream>
+
+1363785813 c:\users\alexander\desktop\kroniax\include\game\dialogscreen.hpp
+	"../../include/gui/GuiController.hpp"
+
+1363785813 c:\users\alexander\desktop\kroniax\include\gui\guicontroller.hpp
+	<iostream>
+	<SFML/Graphics.hpp>
+	"Layer.hpp"
+
+1363785813 c:\users\alexander\desktop\kroniax\include\gui\layer.hpp
+	<vector>
+	"GuiBaseClass.hpp"
+
+1363785813 c:\users\alexander\desktop\kroniax\include\gui\guibaseclass.hpp
+	<iostream>
+	<SFML/Graphics.hpp>
+
+1363785870 source:c:\users\alexander\desktop\kroniax\src\game\game.cpp
+	"../../include/game/game.hpp"
+	<iostream>
+	<cmath>
+	"../../include/game/settings.hpp"
+
+1363785813 c:\users\alexander\desktop\kroniax\include\game\game.hpp
+	"level.hpp"
+	"highscoreUploader.hpp"
+	"HighscoreBoard.hpp"
+	"../../include/aw/utilities/stopwatch.hpp"
+
+1363785813 c:\users\alexander\desktop\kroniax\include\game\level.hpp
+	<SFML/Graphics.hpp>
+	<SFML/Audio.hpp>
+	<iostream>
+	<vector>
+	<sstream>
+	<fstream>
+	"../../include/aw/utilities/converter.hpp"
+	"../../include/game/highscoreUploader.hpp"
+	"settings.hpp"
+
+1362847746 c:\users\alexander\desktop\kroniax\include\game\settings.hpp
+	<vector>
+	<string>
+	<random>
+	<time.h>
+	"DialogScreen.hpp"
+
+1363785813 c:\users\alexander\desktop\kroniax\include\game\highscoreuploader.hpp
+	<SFML/Network.hpp>
+	<vector>
+	<iostream>
+
+1363785813 c:\users\alexander\desktop\kroniax\include\game\highscoreboard.hpp
+	"highscoreUploader.hpp"
+	"../../include/Aw/utilities/converter.hpp"
+	<SFML/Graphics.hpp>
+
+1363785813 source:c:\users\alexander\desktop\kroniax\src\game\highscoreboard.cpp
+	"../../include/game/HighscoreBoard.hpp"
+
+1363785849 source:c:\users\alexander\desktop\kroniax\src\game\highscoreuploader.cpp
+	"../../include/game/highscoreUploader.hpp"
+
+1363785888 source:c:\users\alexander\desktop\kroniax\src\game\level.cpp
+	"../../include/game/level.hpp"
+
+1363785440 source:c:\users\alexander\desktop\kroniax\src\game\main.cpp
+	<iostream>
+	"../../include/game/menu.hpp"
+	"../../include/game/game.hpp"
+
+1363785813 c:\users\alexander\desktop\kroniax\include\game\menu.hpp
+	<SFML/Audio.hpp>
+	<SFML/Graphics.hpp>
+	"../../include/gui/guiController.hpp"
+	"../../include/aw/utilities/converter.hpp"
+	"../../include/game/settings.hpp"
+	"../../include/game/MenuBackground.hpp"
+	"../../include/game/HighscoreUploader.hpp"
+	"../../include/game/HighscoreBoard.hpp"
+
+1363785813 c:\users\alexander\desktop\kroniax\include\game\menubackground.hpp
+	"settings.hpp"
+	"../../include/aw/utilities/converter.hpp"
+	<fstream>
+
+1363785888 source:c:\users\alexander\desktop\kroniax\src\game\menu.cpp
+	"../../include/game/menu.hpp"
+	<fstream>
+
+1363785888 source:c:\users\alexander\desktop\kroniax\src\game\menubackground.cpp
+	"../../include/game/menuBackground.hpp"
+
+1363785870 source:c:\users\alexander\desktop\kroniax\src\game\settings.cpp
+	"../../include/game/settings.hpp"
+	<fstream>
+	<iostream>
+	"../../include/aw/utilities/converter.hpp"
+
+1363785870 source:c:\users\alexander\desktop\kroniax\src\gui\guibaseclass.cpp
+	"../../include/gui/GuiBaseClass.hpp"
+
+1363785849 source:c:\users\alexander\desktop\kroniax\src\gui\guicontroller.cpp
+	"../../include/gui/GuiController.hpp"
+
+1363785849 source:c:\users\alexander\desktop\kroniax\src\gui\layer.cpp
+	"../../include/gui/layer.hpp"
+
+1363785552 source:c:\users\alexander\desktop\kroniax\src\main.cpp
+	<iostream>
+	"../include/game/menu.hpp"
+	"../include/game/game.hpp"
+
