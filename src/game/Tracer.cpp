@@ -41,8 +41,10 @@ void Tracer::AddPoint(sf::Vector2f shipPos, bool upsteering, bool speedUp, bool 
     //First change the size and color depending on the parameters
     if(upsteering)
     {
-        newObject.setRadius(12);
+        newObject.setRadius(5);
         newObject.setFillColor(sf::Color::Red);
+        newObject.setOutlineColor(sf::Color::White);
+        newObject.setOutlineThickness(2);
     }
     else
     {

@@ -216,7 +216,11 @@ void Game::DoLogic(Tracer &currentTracer)
     // Multiplay with 1000 because this function need milliseconds and not seconds
     if(currentTracer.Update(m_lastFrameTime*1000))
     {
-        currentTracer.AddPoint(m_position, false, false, false);
+        bool steerUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+        bool speedUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+        bool speedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+
+        currentTracer.AddPoint(m_position, steerUp, speedUp, speedDown);
     }
 
 }
