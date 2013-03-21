@@ -39,36 +39,19 @@ int main()
 
         if(value == "game")
         {
-            Game* game = nullptr;
             std::string returnValue;
 
             do
             {
-                game = new Game(window);
+                Game game(window);
 
                 settings::SetSpeedY(0);
                 settings::SetDownforce(settings::GetStartDownforce());
                 settings::SetSpeedX(settings::GetStartSpeedX());
-                returnValue = game->Run(menu.GetLevelName());
 
-                if(game)
-                    delete game;
-
-                game = nullptr;
-                game = new Game(window);
+                returnValue = game.Run(menu.GetLevelName());
 
             }while(returnValue == "restart");
-
-            if(game)
-            {
-                delete game;
-                game = nullptr;
-            }
-
-            if(returnValue == "win")
-            {
-
-            }
 
         }
     }
