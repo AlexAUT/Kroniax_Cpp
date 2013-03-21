@@ -5,6 +5,8 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
+#include <memory>
+
 namespace sf
 {
 	class RenderWindow;
@@ -67,7 +69,7 @@ private:
 
     std::string m_path;
 
-    std::vector<sf::Texture> m_textures;
+    std::vector<std::unique_ptr<sf::Texture>> m_textures;
     std::vector<sf::Sprite> m_tiles;
     std::vector<int> m_collision;
 

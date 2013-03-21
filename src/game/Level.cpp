@@ -228,10 +228,11 @@ bool Level::LoadTextures()
                 file.eof();
                 std::getline(file, line);
 
-                sf::Texture tex;
-                tex.loadFromFile(line);
-                tex.setSmooth(true);
-                m_textures.push_back(tex);
+                std::unique_ptr<sf::Texture> tex(new sf::Texture());
+
+                tex->loadFromFile(line);
+                tex->setSmooth(true);
+                m_textures.push_back(std::move(tex));
             }
         }
         if(line == "[Music]")
@@ -339,7 +340,7 @@ void Level::LoadTileData(int layer)
                             sprite.setRotation(aw::conv::ToInt(tempRotation));
                             sprite.setOrigin(0,0);
 
-                            sprite.setTexture(m_textures[aw::conv::ToInt(tempNumTex)], false);
+                            sprite.setTexture(*m_textures[aw::conv::ToInt(tempNumTex)], false);
 
                             if(aw::conv::ToInt(tempRotation) == 90)
                             {
