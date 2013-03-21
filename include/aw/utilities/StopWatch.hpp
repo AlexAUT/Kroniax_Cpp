@@ -1,9 +1,7 @@
 #ifndef STOPWATCH_HPP
 #define STOPWATCH_HPP
 
-#include <SFML/System.hpp>
-
-
+#include <SFML/System/Clock.hpp>
 
 class Stopwatch
 {

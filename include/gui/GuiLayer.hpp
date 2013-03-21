@@ -1,9 +1,18 @@
 #ifndef GUILAYER_HPP
 #define GUILAYER_HPP
 
-#include <vector>
+#include "../../include/gui/GuiBaseClass.hpp"
 
-#include "GuiBaseClass.hpp"
+#include <SFML/System/Vector2.hpp>
+
+namespace sf
+{
+	class Event;
+	class RenderWindow;
+}
+
+#include <vector>
+#include <string>
 
 class GuiLayer
 {

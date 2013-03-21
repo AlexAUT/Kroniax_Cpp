@@ -1,7 +1,12 @@
 #ifndef DIALOGSCREEN_HPP
 #define DIALOGSCREEN_HPP
 
-#include "../../include/gui/GuiController.hpp"
+namespace sf
+{
+	class RenderWindow;
+}
+
+#include <string>
 
 namespace db
 {

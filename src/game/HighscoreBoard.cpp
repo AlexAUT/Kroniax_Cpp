@@ -1,4 +1,19 @@
 #include "../../include/game/HighscoreBoard.hpp"
+#include "../../include/aw/utilities/Converter.hpp"
+
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Vertex.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/System/Vector2.hpp>
+
 
 void ListHighscore(sf::RenderWindow &window, std::string lvlname, std::vector<Score> &m_scores)
 {

@@ -1,9 +1,9 @@
-#ifndef AWCONVERTER
-#define AWCONVERTER
+#ifndef CONVERTER_HPP
+#define CONVERTER_HPP
 
 #include <string>
-#include <sstream>
 #include <vector>
+
 namespace aw
 {
     namespace conv
@@ -22,11 +22,9 @@ namespace aw
         float ToFloat(std::string value);
         float ToFloat(int value);
 
-
-
         std::vector<int> SplitStringIntoInt(std::string line);
 
     }
 }
 
-#endif
+#endif // CONVERTER_HPP

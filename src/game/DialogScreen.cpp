@@ -1,6 +1,14 @@
 #include "../../include/game/DialogScreen.hpp"
+#include "../../include/gui/GuiController.hpp"
 
-#include <iostream>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/View.hpp>
+#include <SFML/Window/Event.hpp>
 
 namespace db
 {

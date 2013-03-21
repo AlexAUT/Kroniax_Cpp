@@ -1,4 +1,4 @@
-#include "../../../include/aw/utilities/stopwatch.hpp"
+#include "../../../include/aw/utilities/StopWatch.hpp"
 
 Stopwatch::Stopwatch() : m_state(stopped), m_lastTime(0)
 {

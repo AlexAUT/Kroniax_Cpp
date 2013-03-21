@@ -1,4 +1,11 @@
 #include "../../include/game/MenuBackground.hpp"
+#include "../../include/game/Settings.hpp"
+#include "../../include/aw/utilities/Converter.hpp"
+
+#include <SFML/Graphics/RenderWindow.hpp>
+
+#include <fstream>
+#include <sstream>
 
 MenuBackground::MenuBackground(sf::RenderWindow &window) : m_window(window)
 {

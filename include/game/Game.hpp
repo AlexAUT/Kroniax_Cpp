@@ -1,12 +1,24 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "level.hpp"
+#include "../../include/aw/utilities/StopWatch.hpp"
 
-#include "HighscoreUploader.hpp"
-#include "HighscoreBoard.hpp"
+class Level;
 
-#include "../../include/aw/utilities/stopwatch.hpp"
+#include <SFML/Audio/Music.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/View.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Vertex.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/System/Clock.hpp>
+
+namespace sf
+{
+	class RenderWindow;
+}
+
+#include <string>
 
 class Game
 {
@@ -65,4 +77,4 @@ private:
 
 };
 
-#endif
+#endif // GAME_HPP

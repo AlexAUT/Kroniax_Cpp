@@ -1,9 +1,8 @@
 #ifndef HIGHSCOREUPLOADER_HPP
 #define HIGHSCOREUPLOADER_HPP
 
-#include <SFML/Network.hpp>
 #include <vector>
-#include <iostream>
+#include <string>
 
 struct Score
 {
@@ -22,8 +21,6 @@ public:
     bool GetHighscore(std::string levelname);
 
     std::vector<Score> &GetScore();
-
-private:
 
 private:
 
