@@ -1,16 +1,11 @@
+#ifndef SETTINGS_HPP
+#define SETTINGS_HPP
 
 #include <vector>
 #include <string>
 
-#include <random>
-#include <time.h>
-
-#include "DialogScreen.hpp"
-
 namespace settings
 {
-
-
     void Load();
     void Save();
 
@@ -45,5 +40,6 @@ namespace settings
 
     void SetMusic(int index);
     int GetMusic();
-
 }
+
+#endif // SETTINGS_HPP

@@ -1,5 +1,8 @@
-#include "../../include/gui/Layer.hpp"
+#include "../../include/gui/GuiLayer.hpp"
 
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 GuiLayer::GuiLayer() : m_activeElement(0)
 {

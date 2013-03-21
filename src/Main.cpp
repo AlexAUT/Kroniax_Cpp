@@ -1,13 +1,17 @@
-#include <iostream>
+#include "../include/game/Menu.hpp"
+#include "../include/game/Game.hpp"
+#include "../include/game/Settings.hpp"
 
-#include "../include/game/menu.hpp"
-#include "../include/game/game.hpp"
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Image.hpp>
 
-
+#include <string>
+#include <cstdlib> // srand
+#include <ctime> // time
 
 int main()
 {
-    srand (time(NULL));
+    std::srand(std::time(nullptr));
 
 
     sf::RenderWindow window;

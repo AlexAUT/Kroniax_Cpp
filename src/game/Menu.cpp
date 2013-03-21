@@ -1,4 +1,15 @@
-#include "../../include/game/menu.hpp"
+#include "../../include/game/Menu.hpp"
+#include "../../include/aw/utilities/Converter.hpp"
+#include "../../include/game/HighscoreUploader.hpp"
+#include "../../include/game/HighscoreBoard.hpp"
+#include "../../include/game/Settings.hpp"
+#include "../../include/game/MenuBackground.hpp"
+#include "../../include/game/DialogScreen.hpp"
+
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/View.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/System/Vector2.hpp>
 
 #include <fstream>
 

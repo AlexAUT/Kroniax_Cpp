@@ -1,5 +1,11 @@
 #include "../../include/gui/GuiBaseClass.hpp"
 
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
+
 GuiBaseElement::GuiBaseElement()
 {
     m_activeEntry = -1;

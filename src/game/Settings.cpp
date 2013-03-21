@@ -1,10 +1,7 @@
-#include "../../include/game/settings.hpp"
+#include "../../include/game/Settings.hpp"
+#include "../../include/aw/utilities/Converter.hpp"
 
 #include <fstream>
-#include <iostream>
-
-#include "../../include/aw/utilities/converter.hpp"
-
 
 namespace settings
 {

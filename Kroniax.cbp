@@ -21,7 +21,6 @@
 					<Add option="-lsfml-window-d" />
 					<Add option="-lsfml-network-d" />
 					<Add option="-lsfml-system-d" />
-					<Add option="-static-libstdc++" />
 				</Linker>
 			</Target>
 			<Target title="Release Static">
@@ -42,6 +41,7 @@
 					<Add option="-lsfml-network-s" />
 					<Add option="-lsfml-system-s" />
 					<Add option="-static-libstdc++" />
+					<Add option="-static-libgcc" />
 				</Linker>
 			</Target>
 			<Target title="Release Dynamic">
@@ -67,36 +67,36 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/aw/utilities/converter.hpp" />
-		<Unit filename="include/aw/utilities/stopwatch.hpp" />
+		<Unit filename="include/aw/utilities/Converter.hpp" />
+		<Unit filename="include/aw/utilities/StopWatch.hpp" />
 		<Unit filename="include/game/DialogScreen.hpp" />
+		<Unit filename="include/game/Game.hpp" />
 		<Unit filename="include/game/HighscoreBoard.hpp" />
 		<Unit filename="include/game/HighscoreUploader.hpp" />
+		<Unit filename="include/game/Level.hpp" />
+		<Unit filename="include/game/Menu.hpp" />
 		<Unit filename="include/game/MenuBackground.hpp" />
-		<Unit filename="include/game/game.hpp" />
-		<Unit filename="include/game/level.hpp" />
-		<Unit filename="include/game/menu.hpp" />
-		<Unit filename="include/game/settings.hpp" />
+		<Unit filename="include/game/Settings.hpp" />
 		<Unit filename="include/gui/GuiBaseClass.hpp" />
 		<Unit filename="include/gui/GuiController.hpp" />
-		<Unit filename="include/gui/Layer.hpp" />
+		<Unit filename="include/gui/GuiLayer.hpp" />
 		<Unit filename="res/resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="src/aw/utilities/converter.cpp" />
-		<Unit filename="src/aw/utilities/stopwatch.cpp" />
+		<Unit filename="src/Main.cpp" />
+		<Unit filename="src/aw/utilities/Converter.cpp" />
+		<Unit filename="src/aw/utilities/StopWatch.cpp" />
 		<Unit filename="src/game/DialogScreen.cpp" />
+		<Unit filename="src/game/Game.cpp" />
 		<Unit filename="src/game/HighscoreBoard.cpp" />
 		<Unit filename="src/game/HighscoreUploader.cpp" />
+		<Unit filename="src/game/Level.cpp" />
+		<Unit filename="src/game/Menu.cpp" />
 		<Unit filename="src/game/MenuBackground.cpp" />
-		<Unit filename="src/game/game.cpp" />
-		<Unit filename="src/game/level.cpp" />
-		<Unit filename="src/game/menu.cpp" />
-		<Unit filename="src/game/settings.cpp" />
+		<Unit filename="src/game/Settings.cpp" />
 		<Unit filename="src/gui/GuiBaseClass.cpp" />
 		<Unit filename="src/gui/GuiController.cpp" />
-		<Unit filename="src/gui/Layer.cpp" />
-		<Unit filename="src/main.cpp" />
+		<Unit filename="src/gui/GuiLayer.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

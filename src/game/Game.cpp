@@ -1,9 +1,18 @@
-#include "../../include/game/game.hpp"
+#include "../../include/game/Game.hpp"
+#include "../../include/game/Level.hpp"
+#include "../../include/game/Settings.hpp"
+#include "../../include/game/DialogScreen.hpp"
+#include "../../include/game/HighscoreUploader.hpp"
+#include "../../include/game/HighscoreBoard.hpp"
+#include "../../include/aw/utilities/Converter.hpp"
 
-#include <iostream>
-#include <cmath>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
-#include "../../include/game/settings.hpp"
+#include <cmath> // sqrt
 
 Game::Game(sf::RenderWindow &window) : m_window(window)
 {

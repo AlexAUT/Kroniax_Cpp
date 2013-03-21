@@ -1,21 +1,21 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-
 #include "../../include/gui/GuiController.hpp"
 
-#include "../../include/aw/utilities/converter.hpp"
+class MenuBackground;
 
-#include "../../include/game/settings.hpp"
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Audio/Music.hpp>
 
-#include "../../include/game/MenuBackground.hpp"
+namespace sf
+{
+	class RenderWindow;
+}
 
-#include "../../include/game/HighscoreUploader.hpp"
-
-#include "../../include/game/HighscoreBoard.hpp"
-
+#include <string>
 
 class Menu
 {
