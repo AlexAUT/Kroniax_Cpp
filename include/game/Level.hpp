@@ -1,19 +1,17 @@
 #ifndef LEVEL_HPP
 #define LEVEL_HPP
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <iostream>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+
+namespace sf
+{
+	class RenderWindow;
+}
+
 #include <vector>
-#include <sstream>
-#include <fstream>
-
-#include "../../include/aw/utilities/converter.hpp"
-#include "../../include/game/HighscoreUploader.hpp"
-
-#include "settings.hpp"
-
-
+#include <string>
 
 struct Script
 {
@@ -63,12 +61,9 @@ private:
 
     void LoadScripts();
 
-
 private:
 
     sf::RenderWindow &m_window;
-
-
 
     std::string m_path;
 
@@ -90,9 +85,6 @@ private:
 
     unsigned int m_filledBlocks;
     unsigned int m_collisionBlocks;
-
-
-
 };
 
 #endif

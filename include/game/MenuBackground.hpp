@@ -1,11 +1,18 @@
-#ifndef MENUm_BACKGROUND
-#define MENUm_BACKGROUND
+#ifndef MENUBACKGROUND_HPP
+#define MENUBACKGROUND_HPP
 
-#include "settings.hpp"
+#include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/View.hpp>
+#include <SFML/System/Vector2.hpp>
 
-#include "../../include/aw/utilities/converter.hpp"
+namespace sf
+{
+	class RenderWindow;
+}
 
-#include <fstream>
+#include <vector>
+#include <string>
 
 class MenuBackground
 {
@@ -48,4 +55,4 @@ private:
 
 };
 
-#endif // MENUm_BACKGROUND
+#endif // MENUBACKGROUND_HPP

@@ -1,13 +1,14 @@
 #include "../../include/game/HighscoreUploader.hpp"
 
+#include <SFML/Network/TcpSocket.hpp>
+#include <SFML/Network/Packet.hpp>
+#include <SFML/Network/IpAddress.hpp>
+#include <SFML/Network/Socket.hpp>
+
 HighscoreUploader::HighscoreUploader()
 {
 
 }
-
-
-
-
 
 bool HighscoreUploader::Submit(std::string lvlname, std::string name, unsigned int length, unsigned int filledBlocks, unsigned int collisionBlocks, unsigned int score)
 {

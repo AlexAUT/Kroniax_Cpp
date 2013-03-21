@@ -1,5 +1,7 @@
 #include "../../include/gui/GuiController.hpp"
 
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Event.hpp>
 
 GuiController::GuiController() : m_activeLayer(0)
 {

@@ -1,10 +1,21 @@
 #ifndef GUICONTROLLER_HPP
 #define GUICONTROLLER_HPP
 
-#include <iostream>
-#include <SFML/Graphics.hpp>
+#include "../../include/gui/GuiLayer.hpp"
 
-#include "Layer.hpp"
+class GuiBaseElement;
+
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Font.hpp>
+
+namespace sf
+{
+	class Event;
+	class RenderWindow;
+}
+
+#include <string>
+#include <vector>
 
 class GuiController
 {

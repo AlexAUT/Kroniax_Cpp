@@ -1,7 +1,13 @@
-#include "../../include/game/level.hpp"
+#include "../../include/game/Level.hpp"
+#include "../../include/aw/utilities/Converter.hpp"
+#include "../../include/game/Settings.hpp"
 
-#define WINDOWHALFWIDTH 300
+const static int WINDOWHALFWIDTH = 300;
 
+#include <SFML/Graphics/RenderWindow.hpp>
+
+#include <sstream>
+#include <fstream>
 
 Level::Level(sf::RenderWindow &window) : m_window(window), m_finished(false), m_filledBlocks(15680451), m_collisionBlocks(14125125)
 {

@@ -1,11 +1,16 @@
-#ifndef HIGHSCOREBOARD
-#define HIGHSCOREBOARD
+#ifndef HIGHSCOREBOARD_HPP
+#define HIGHSCOREBOARD_HPP
 
-#include "HighscoreUploader.hpp"
-#include "../../include/aw/utilities/converter.hpp"
+#include "../../include/game/HighscoreUploader.hpp"
 
-#include <SFML/Graphics.hpp>
+namespace sf
+{
+	class RenderWindow;
+}
+
+#include <vector>
+#include <string>
 
 void ListHighscore(sf::RenderWindow &window, std::string lvlname, std::vector<Score> &m_scores);
 
-#endif // HIGHSCOREBOARD
+#endif // HIGHSCOREBOARD_HPP

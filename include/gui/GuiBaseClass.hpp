@@ -1,8 +1,18 @@
 #ifndef GUIBASECLASS_HPP
 #define GUIBASECLASS_HPP
 
-#include <iostream>
-#include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Vertex.hpp>
+
+namespace sf
+{
+	class RenderWindow;
+	class Font;
+	class Event;
+}
+
+#include <string>
 
 class GuiBaseElement
 {
