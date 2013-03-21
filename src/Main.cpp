@@ -1,10 +1,12 @@
 #include "../include/game/Menu.hpp"
 #include "../include/game/Game.hpp"
+#include "../include/game/Tracer.hpp"
 #include "../include/game/Settings.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Image.hpp>
 
+#include <memory>
 #include <string>
 #include <cstdlib> // srand
 #include <ctime> // time
@@ -41,6 +43,9 @@ int main()
         {
             std::string returnValue;
 
+            std::unique_ptr<Tracer> currentTracer(new Tracer);
+            std::unique_ptr<Tracer> lastTracer(new Tracer);
+
             do
             {
                 Game game(window);
@@ -49,7 +54,10 @@ int main()
                 settings::SetDownforce(settings::GetStartDownforce());
                 settings::SetSpeedX(settings::GetStartSpeedX());
 
-                returnValue = game.Run(menu.GetLevelName());
+                returnValue = game.Run(menu.GetLevelName(), *currentTracer, *lastTracer);
+
+                std::swap(currentTracer, lastTracer);
+                currentTracer->Reset();
 
             }while(returnValue == "restart");
 

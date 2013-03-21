@@ -4,7 +4,9 @@
 #include "../../include/game/DialogScreen.hpp"
 #include "../../include/game/HighscoreUploader.hpp"
 #include "../../include/game/HighscoreBoard.hpp"
+#include "../../include/game/Tracer.hpp"
 #include "../../include/aw/utilities/Converter.hpp"
+
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -33,7 +35,7 @@ Game::~Game()
     m_pLevel = nullptr;
 }
 
-std::string Game::Run(std::string levelName)
+std::string Game::Run(std::string levelName, Tracer &currentTracer, Tracer &lastTracer)
 {
     m_levelName = levelName;
 
@@ -98,12 +100,12 @@ std::string Game::Run(std::string levelName)
     {
         HandleEvents();
 
-        DoLogic();
+        DoLogic(currentTracer);
 
         if(m_pLevel->GetFinished())
             Finish();
 
-        Draw();
+        Draw(currentTracer, lastTracer);
 
         SetWindowName();
     }
@@ -176,7 +178,7 @@ void Game::HandleEvents()
 
 
 
-void Game::DoLogic()
+void Game::DoLogic(Tracer &currentTracer)
 {
 
     m_pLevel->CheckForScripts(m_position.x+20);
@@ -209,13 +211,26 @@ void Game::DoLogic()
         m_speedX.setString("SpeedX: " + aw::conv::ToString(aw::conv::ToInt(settings::GetSpeedX())));
     }
 
+
+    // Check if there current Tracer need an update
+    // Multiplay with 1000 because this function need milliseconds and not seconds
+    if(currentTracer.Update(m_lastFrameTime*1000))
+    {
+        currentTracer.AddPoint(m_position, false, false, false);
+    }
+
 }
 
-void Game::Draw()
+void Game::Draw(Tracer &currentTracer, Tracer &lastTracer)
 {
     m_window.clear(sf::Color::Black);
 
     m_pLevel->Draw(m_view.getCenter().x);
+
+    //Draw the tracerlines
+    lastTracer.Draw(m_window);
+    currentTracer.Draw(m_window);
+
 
     CreateBody();
     m_window.draw(m_body, 3, sf::Triangles);

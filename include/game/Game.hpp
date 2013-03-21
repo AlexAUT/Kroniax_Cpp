@@ -4,6 +4,7 @@
 #include "../../include/aw/utilities/StopWatch.hpp"
 
 class Level;
+class Tracer;
 
 #include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -27,7 +28,7 @@ public:
 
     ~Game();
 
-    std::string Run(std::string levelName);
+    std::string Run(std::string levelName, Tracer &currentTracer, Tracer &lastTracer);
 
 private:
 
@@ -36,9 +37,9 @@ private:
 
     void HandleEvents();
 
-    void DoLogic();
+    void DoLogic(Tracer &currentTracer);
 
-    void Draw();
+    void Draw(Tracer &currentTracer, Tracer &lastTracer);
 
     void PauseTheGame();
     void Finish();
