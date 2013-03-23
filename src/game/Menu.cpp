@@ -145,6 +145,8 @@ void Menu::HandleEvents()
 
             else if(m_gui.GetSelectedElement()->GetID() == "back")
             {
+
+                // If the game returns from the option menu save the new options.
                 if(m_gui.GetActiveLayerInt() == 3)
                 {
                      settings::AdjustVolume(aw::conv::ToInt(m_gui.GetSelectedLayer()->GetElement(3)->GetText()));
@@ -162,6 +164,43 @@ void Menu::HandleEvents()
 
                     if(!settings::IsMusicOn())
                         m_music.setVolume(0);
+
+                    //Save the new Antialiasing level
+                    settings::SetAntialiasing(aw::conv::ToInt(m_gui.GetSelectedLayer()->GetElement(5)->GetText()));
+                    //Has the anitailiasing level change? -> Yes create a new window with the new settings
+                    if(m_window.getSettings().antialiasingLevel != settings::GetAntialiasing())
+                    {
+                        //The new Window should have the same settings except the antia. level
+                        sf::ContextSettings newSettings = m_window.getSettings();
+                        newSettings.antialiasingLevel = settings::GetAntialiasing();
+                        //Store the old size
+                        //The size has to set after the creating because otherwise the dialogscreens
+                        //And the interface during the game will be display not correctly!
+                        //So you have to create the window with the size (800,450)
+                        //Because of the defaultview.
+                        sf::Vector2u oldSize = m_window.getSize();
+                        //Store to old view to set it for the "new" window
+                        sf::View currentView = m_window.getView();
+                        //Store the old position of the window
+                        sf::Vector2i oldPos = m_window.getPosition();
+                        //Create a new window with the same size but other contextsettings.
+                        //The size has to set after the creating because otherwise the dialogscreens
+                        //And the interface during the game will be display not correctly!
+                        m_window.create(sf::VideoMode(800,450), "Kroniax", sf::Style::Default, newSettings);
+                        //Set the new Size
+                        m_window.setSize(oldSize);
+                        //Set the old view
+                        m_window.setView(currentView);
+                        //Set the new Position
+                        m_window.setPosition(oldPos);
+
+                    }
+
+                    //Save the new times for the tracer
+                    settings::SetTimeForTracer(aw::conv::ToInt(m_gui.GetSelectedLayer()->GetElement(7)->GetText()));
+
+                    //Save new settings into the config file
+                    settings::Save();
 
                 }
 
@@ -332,6 +371,57 @@ void Menu::InitGui()
 
     int index = settings::GetMusicVolume() / 10;
 
+    m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(index);
+
+
+    // Antialiasing option
+    m_gui.AddElement(3, 1, "anti", sf::Vector2f(280,260), "Antialiasing: ");
+    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+
+
+    m_gui.AddElement(3, 2, "antialiasing", sf::Vector2f(505,260), "0");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("0");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("2");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("4");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("8");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("16");
+
+
+    switch(settings::GetAntialiasing())
+    {
+    case 2: index = 1; break;
+    case 4: index = 2; break;
+    case 8: index = 3; break;
+    case 16: index = 4; break;
+    default : index = 0; break;
+    }
+    m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(index);
+
+
+    // TimeBetweenPoints option
+    m_gui.AddElement(3, 1, "tracertim", sf::Vector2f(280,300), "Time between \ntracer points: ");
+    m_gui.GetLastLayer()->GetLastElement()->SetCharacterSize(14);
+    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+
+
+    m_gui.AddElement(3, 2, "tracertime", sf::Vector2f(480,300), "800");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("75");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("100");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("300");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("600");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("800");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("1000");
+
+
+    switch(settings::GetTimeForTracer())
+    {
+    case 75:   index = 0; break;
+    case 100:  index = 1; break;
+    case 300:  index = 2; break;
+    case 600:  index = 3; break;
+    case 800: index = 4; break;
+    default :  index = 5; break;
+    }
     m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(index);
 
 

@@ -42,6 +42,14 @@ public:
     // Draws the Tracerline
     void Draw(sf::RenderWindow &window);
 
+    //
+    // Setter
+    //
+
+    // Changes the amount of points created
+    // also set the timer to update, so at the start there will be a point
+    void SetTimeBetweenPoints(int milliseconds);
+
 private:
 
 private:
@@ -49,6 +57,7 @@ private:
     //
     std::vector<sf::CircleShape> m_points;
 
+    int m_timeBetweenPoints;
     float m_timeSinceLastAdd;
 
 };

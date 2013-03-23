@@ -6,15 +6,25 @@
 
 namespace settings
 {
+    // Load & Save
     void Load();
     void Save();
 
+
+    //Get and Set options from the optionmenu
     bool IsMusicOn();
     int  GetMusicVolume();
 
     void EnableMusic(bool value);
     void AdjustVolume(int value);
 
+    void SetAntialiasing(unsigned int value);
+    unsigned int GetAntialiasing();
+
+    void SetTimeForTracer(int milliseconds);
+    int GetTimeForTracer();
+
+    //Settings from the current level
     void SetGamemode(int value);
     int GetGamemode();
 
@@ -40,6 +50,7 @@ namespace settings
 
     void SetMusic(int index);
     int GetMusic();
+
 }
 
 #endif // SETTINGS_HPP

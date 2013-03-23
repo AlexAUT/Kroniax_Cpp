@@ -9,6 +9,8 @@ namespace settings
     {
         bool m_music = true;
         int  m_musicVolume = 100;
+        unsigned int m_antialiasing = 0;
+        int m_timeForTracer = 800;
 
         std::vector<std::string> m_levelList;
         int m_unlocked;
@@ -58,6 +60,21 @@ namespace settings
                     m_musicVolume = 50;
             }
 
+            if(line == "[Antialiasing]")
+            {
+                file.eof();
+                std::getline(file, line);
+
+                m_antialiasing = aw::conv::ToInt(line);
+            }
+            if(line == "[TimeForTracer]")
+            {
+                file.eof();
+                std::getline(file, line);
+
+                m_timeForTracer = aw::conv::ToInt(line);
+            }
+
             if(line == "[Levellist]")
             {
                 while(!file.eof())
@@ -102,6 +119,12 @@ namespace settings
         file << "[Volume]\n";
         file << m_musicVolume << "\n";
 
+        file << "[Antialiasing]\n";
+        file << m_antialiasing << "\n";
+
+        file << "[TimeForTracer]\n";
+        file << m_timeForTracer << "\n";
+
         file << "[Levellist]\n";
 
         for(unsigned int i = 0; i < m_levelList.size(); i++)
@@ -136,6 +159,22 @@ namespace settings
     void AdjustVolume(int value)
     {
         m_musicVolume = value;
+    }
+    void SetAntialiasing(unsigned int value)
+    {
+        m_antialiasing = value;
+    }
+    unsigned int GetAntialiasing()
+    {
+        return m_antialiasing;
+    }
+    void SetTimeForTracer(int milliseconds)
+    {
+        m_timeForTracer = milliseconds;
+    }
+    int GetTimeForTracer()
+    {
+        return m_timeForTracer;
     }
 
     void SetGamemode(int value)

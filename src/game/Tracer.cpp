@@ -3,11 +3,11 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 //Defines how often a Points should be add in milliseconds
-const static int TIME_BETWEEN_POINTS = 200;
 
 
 
-Tracer::Tracer() : m_timeSinceLastAdd(0)
+
+Tracer::Tracer() : m_timeBetweenPoints(600), m_timeSinceLastAdd(600)
 {
 
 }
@@ -22,7 +22,7 @@ bool Tracer::Update(float frameTime)
 {
     m_timeSinceLastAdd += frameTime;
 
-    if(m_timeSinceLastAdd >= TIME_BETWEEN_POINTS)
+    if(m_timeSinceLastAdd >= m_timeBetweenPoints)
     {
         return true;
     }
@@ -41,14 +41,14 @@ void Tracer::AddPoint(sf::Vector2f shipPos, bool upsteering, bool speedUp, bool 
     //First change the size and color depending on the parameters
     if(upsteering)
     {
-        newObject.setRadius(5);
+        newObject.setRadius(3);
         newObject.setFillColor(sf::Color::Red);
         newObject.setOutlineColor(sf::Color::White);
-        newObject.setOutlineThickness(2);
+        newObject.setOutlineThickness(1);
     }
     else
     {
-        newObject.setRadius(5);
+        newObject.setRadius(3);
         newObject.setFillColor(sf::Color::Red);
     }
 
@@ -59,7 +59,7 @@ void Tracer::AddPoint(sf::Vector2f shipPos, bool upsteering, bool speedUp, bool 
 
     if(speedDown)
     {
-        newObject.setFillColor(sf::Color::Yellow);
+        newObject.setFillColor(sf::Color::Green);
     }
 
     // Set the middle of the circel to the position
@@ -75,4 +75,15 @@ void Tracer::Draw(sf::RenderWindow &window)
     {
         window.draw(*p);
     }
+}
+
+
+//
+// Setter
+//
+
+void Tracer::SetTimeBetweenPoints(int milliseconds)
+{
+    m_timeBetweenPoints = milliseconds;
+    m_timeSinceLastAdd = milliseconds+1;
 }

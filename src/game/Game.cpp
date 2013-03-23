@@ -213,12 +213,19 @@ void Game::DoLogic(Tracer &currentTracer)
 
 
     // Check if there current Tracer need an update
-    // Multiplay with 1000 because this function need milliseconds and not seconds
+    // Multiply with 1000 because this function need milliseconds and not seconds
     if(currentTracer.Update(m_lastFrameTime*1000))
     {
         bool steerUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
-        bool speedUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
-        bool speedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+
+        bool speedUp   = false;
+        bool speedDown = false;
+        //Only check for speedUps and Downs if the gamemode is Speed Challenge
+        if(settings::GetGamemode() == 1)
+        {
+            speedUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+            speedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+        }
 
         currentTracer.AddPoint(m_position, steerUp, speedUp, speedDown);
     }
