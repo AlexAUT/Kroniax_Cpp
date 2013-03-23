@@ -87,3 +87,12 @@ void Tracer::SetTimeBetweenPoints(int milliseconds)
     m_timeBetweenPoints = milliseconds;
     m_timeSinceLastAdd = milliseconds+1;
 }
+
+//
+// Getter
+//
+
+unsigned int Tracer::GetSize()
+{
+    return m_points.size();
+}

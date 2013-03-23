@@ -66,8 +66,14 @@ int main()
                 returnValue = game.Run(menu.GetLevelName(), *currentTracer, *lastTracer);
 
                 //Swap the addressed and clear the two tries old version to store the new one in the next try
-                std::swap(currentTracer, lastTracer);
+                //Only swap if the new Tracer is longer then the old one
+                if(currentTracer->GetSize() >= lastTracer->GetSize())
+                {
+                    std::swap(currentTracer, lastTracer);
+                }
+                //Reset the currentTracer so its empty for the next try
                 currentTracer->Reset();
+
 
             }while(returnValue == "restart");
 

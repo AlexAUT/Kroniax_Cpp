@@ -50,6 +50,12 @@ public:
     // also set the timer to update, so at the start there will be a point
     void SetTimeBetweenPoints(int milliseconds);
 
+    //
+    // Getter
+    //
+
+    unsigned GetSize();
+
 private:
 
 private:
