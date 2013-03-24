@@ -385,7 +385,7 @@ void Game::Finish()
             if(!uploader.Submit(m_levelName, name, m_pLevel->GetLevelLength(), m_pLevel->GetFilledBlocks(), m_pLevel->GetCollisionBlocks(), m_gameTime.GetTimeInMs()))
             {
                 // Give the user feedback about the failed Connection
-                db::DialogOK(m_window, "Connection failed after 3  retries!\nPlease try it again later");
+                db::DialogOK(m_window, uploader.GetError());
             }
             else
             {

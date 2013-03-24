@@ -33,6 +33,7 @@ bool HighscoreUploader::Submit(std::string lvlname, std::string name, unsigned i
         if(numberOfRetries > 2)
         {
             //return false if the connection failed after 3 retries
+            m_errorMessage = "Connection failed after 3  retries!\nPlease try it again later";
             return false;
         }
     }
@@ -64,9 +65,10 @@ bool HighscoreUploader::Submit(std::string lvlname, std::string name, unsigned i
         return true;
     }
 
-    else if(command == "error")
+    else if(command == "error" || command == "Error")
     {
-        rec >> command;
+        rec >> m_errorMessage;
+        return false;
     }
 
     server.disconnect();
@@ -98,6 +100,7 @@ bool HighscoreUploader::GetHighscore(std::string levelname)
         if(numberOfRetries > 2)
         {
             //return false if the connection failed after 3 retries
+            m_errorMessage = "Connection failed after 3  retries!\nPlease try it again later";
             return false;
         }
     }
@@ -126,6 +129,11 @@ bool HighscoreUploader::GetHighscore(std::string levelname)
         }
         return true;
     }
+    else if(command == "error" || command == "Error")
+    {
+        rec >> m_errorMessage;
+        return false;
+    }
 
     return false;
 
@@ -135,4 +143,9 @@ bool HighscoreUploader::GetHighscore(std::string levelname)
 std::vector<Score>& HighscoreUploader::GetScore()
 {
     return m_score;
+}
+
+std::string HighscoreUploader::GetError()
+{
+    return m_errorMessage;
 }

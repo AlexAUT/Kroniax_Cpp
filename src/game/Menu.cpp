@@ -242,8 +242,8 @@ void Menu::HandleEvents()
                 //Returns false if the connection failed
                 if(!uploader.GetHighscore(lvlname1))
                 {
-                    //Give the user feedback
-                    db::DialogOK(m_window, "Connection failed after 3  retries!\nPlease try it again later");
+                    //Give the user feedback about the error
+                    db::DialogOK(m_window, uploader.GetError());
                 }
                 else
                 {
