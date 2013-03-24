@@ -381,13 +381,21 @@ void Game::Finish()
 
             std::string name = db::InputDialog(m_window, "Please insert your name: ", "guest");
 
-            uploader.Submit(m_levelName, name, m_pLevel->GetLevelLength(), m_pLevel->GetFilledBlocks(), m_pLevel->GetCollisionBlocks(), m_gameTime.GetTimeInMs());
+            //Return false = The connection failed
+            if(!uploader.Submit(m_levelName, name, m_pLevel->GetLevelLength(), m_pLevel->GetFilledBlocks(), m_pLevel->GetCollisionBlocks(), m_gameTime.GetTimeInMs()))
+            {
+                // Give the user feedback about the failed Connection
+                db::DialogOK(m_window, "Connection failed after 3  retries!\nPlease try it again later");
+            }
+            else
+            {
+                //If the connection works get the Highscore
+                std::vector<Score> &temp = uploader.GetScore();
+                // And display them
+                ListHighscore(m_window, m_levelName, temp);
+            }
 
-            std::vector<Score> &temp = uploader.GetScore();
-
-            ListHighscore(m_window, m_levelName, temp);
-
-            if(db::DialogYesNo(m_window, "Do you want to play this level again?\nﬂ\nﬂ"))
+            if(db::DialogYesNo(m_window, "Do you want to play this level again?"))
             {
                 m_returnValue = "restart";
             }

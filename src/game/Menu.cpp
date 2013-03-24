@@ -238,9 +238,19 @@ void Menu::HandleEvents()
                 std::string lvlname1 = db::InputDialog(m_window, "Enter the name of the Level", "Level1");
 
                 HighscoreUploader uploader;
-                uploader.GetHighscore(lvlname1);
 
-                ListHighscore(m_window, lvlname1, uploader.GetScore());
+                //Returns false if the connection failed
+                if(!uploader.GetHighscore(lvlname1))
+                {
+                    //Give the user feedback
+                    db::DialogOK(m_window, "Connection failed after 3  retries!\nPlease try it again later");
+                }
+                else
+                {
+                    //List the Highscore if the connection worked
+                    ListHighscore(m_window, lvlname1, uploader.GetScore());
+                }
+
 
             }
 

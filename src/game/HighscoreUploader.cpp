@@ -23,7 +23,19 @@ bool HighscoreUploader::Submit(std::string lvlname, std::string name, unsigned i
     packet << "highscore";
     packet << lvlname << name << length << filledBlocks << collisionBlocks << score;
 
-    while(server.connect(serverAddress, port) != sf::Socket::Done);
+    //Counts the connection attempts
+    int numberOfRetries = 0;
+
+    while(server.connect(serverAddress, port) != sf::Socket::Done)
+    {
+        numberOfRetries++;
+
+        if(numberOfRetries > 2)
+        {
+            //return false if the connection failed after 3 retries
+            return false;
+        }
+    }
 
     server.send(packet);
 
@@ -75,7 +87,20 @@ bool HighscoreUploader::GetHighscore(std::string levelname)
     packet << "getHighscore";
     packet << levelname;
 
-    while(server.connect(serverAddress, port) != sf::Socket::Done);
+
+    //Counts the connection attempts
+    int numberOfRetries = 0;
+
+    while(server.connect(serverAddress, port) != sf::Socket::Done)
+    {
+        numberOfRetries++;
+
+        if(numberOfRetries > 2)
+        {
+            //return false if the connection failed after 3 retries
+            return false;
+        }
+    }
 
     server.send(packet);
 
