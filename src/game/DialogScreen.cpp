@@ -23,6 +23,7 @@ void DialogOK(sf::RenderWindow &window, std::string text)
 
     gui.AddElement(0, 0, "text", sf::Vector2f(10,10), text);
     gui.GetLastLayer()->GetLastElement()->SetCharacterSize(15);
+    gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
 
     float startX = window.getView().getCenter().x - window.getView().getSize().x/2;
 
