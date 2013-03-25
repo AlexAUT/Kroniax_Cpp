@@ -21,7 +21,7 @@ int main()
     sf::RenderWindow window;
 
     window.create(sf::VideoMode(800,450), "Kroniax", sf::Style::Default, sf::ContextSettings(24,8,4));
-    window.setFramerateLimit(200);
+    window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
 
     sf::Image tex;
