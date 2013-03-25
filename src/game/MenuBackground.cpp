@@ -3,6 +3,7 @@
 #include "../../include/aw/utilities/Converter.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Clock.hpp>
 
 #include <fstream>
 #include <sstream>
@@ -42,11 +43,15 @@ void MenuBackground::Init()
 
 void MenuBackground::DoLogic()
 {
-    m_view.move(4,0);
+    //Now the background of menu will move always at the same pace
+    static sf::Clock frameTime;
+    m_view.move(1.5f*frameTime.getElapsedTime().asMilliseconds(),0);
+    frameTime.restart();
 
+    //When the view reaches the End of the current level, reset the view and Load a new level
     if(m_view.getCenter().x >= m_tileSize.x * m_levelLength)
     {
-         m_view = m_window.getView();
+        m_view = m_window.getView();
 
         m_view.setCenter(400,225);
 
