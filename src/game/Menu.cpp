@@ -193,6 +193,8 @@ void Menu::HandleEvents()
                         m_window.setView(currentView);
                         //Set the new Position
                         m_window.setPosition(oldPos);
+                        //Set vert. sync
+                        m_window.setVerticalSyncEnabled(true);
 
                     }
 
@@ -417,6 +419,7 @@ void Menu::InitGui()
     m_gui.AddElement(3, 2, "tracertime", sf::Vector2f(480,300), "800");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("75");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("100");
+    m_gui.GetLastLayer()->GetLastElement()->AddEntry("200");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("300");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("600");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("800");
@@ -427,10 +430,11 @@ void Menu::InitGui()
     {
     case 75:   index = 0; break;
     case 100:  index = 1; break;
-    case 300:  index = 2; break;
-    case 600:  index = 3; break;
-    case 800: index = 4; break;
-    default :  index = 5; break;
+    case 200:  index = 2; break;
+    case 300:  index = 3; break;
+    case 600:  index = 4; break;
+    case 800:  index = 5; break;
+    default :  index = 6; break;
     }
     m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(index);
 

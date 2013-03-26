@@ -45,7 +45,7 @@ void MenuBackground::DoLogic()
 {
     //Now the background of menu will move always at the same pace
     static sf::Clock frameTime;
-    m_view.move(1.5f*frameTime.getElapsedTime().asMilliseconds(),0);
+    m_view.move(1.2f*frameTime.getElapsedTime().asMilliseconds(),0);
     frameTime.restart();
 
     //When the view reaches the End of the current level, reset the view and Load a new level
