@@ -358,6 +358,8 @@ void Game::Finish()
             if(settings::IncreaseUnlockLevel())
             {
                 db::DialogOK(m_window, "You unlocked a new Map!");
+                //To save the current level progress
+                settings::Save();
             }
         }
 
