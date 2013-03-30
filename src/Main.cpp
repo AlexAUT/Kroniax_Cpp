@@ -17,7 +17,6 @@ int main()
 {
     std::srand(std::time(nullptr));
 
-
     sf::RenderWindow window;
 
     window.create(sf::VideoMode(800,450), "Kroniax", sf::Style::Default, sf::ContextSettings(24,8,4));

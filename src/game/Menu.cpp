@@ -504,7 +504,7 @@ void Menu::InitGui()
 void Menu::StartGame(std::string lvlname)
 {
     std::fstream file;
-    file.open(("levels/"+lvlname+"/settings.ini").c_str(), std::ios::in);
+    file.open(("levels/"+lvlname+"/settings.cfg").c_str(), std::ios::in);
 
     if(file.fail())
     {

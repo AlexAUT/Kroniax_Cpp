@@ -21,6 +21,7 @@ namespace sf
 
 #include <string>
 
+
 class Game
 {
 public:

@@ -113,18 +113,18 @@ void Level::CheckForScripts(int xPos)
 
                 switch(p->m_type)
                 {
-                case 1:
+                case 3: //SpeedUP
                     if(settings::GetGamemode() != 1)
                         settings::SetSpeedX(settings::GetSpeedX()+p->m_value);
                     break;
-                case 2:
+                case 4: //SpeedDOwn
                     if(settings::GetGamemode() != 1)
                         settings::SetSpeedX(settings::GetSpeedX()-p->m_value);
                     break;
-                case 3:
+                case 5: //GravUP
                     settings::SetDownforce(settings::GetDownforce()+p->m_value);
                     break;
-                case 4:
+                case 6: // GravDown
                     settings::SetDownforce(settings::GetDownforce()-p->m_value);
                 default:
                     break;
@@ -415,44 +415,45 @@ void Level::LoadCollideGrid()
 
 void Level::LoadScripts()
 {
-    std::string filePath = m_path + "scripts.ini";
+    //Check for scripts in the collidegrid
+    // 3 = speedUP
+    // 4 = slowDow
+    // 5 = GravUp
+    // 6 = GravDown
+    //------------------------------------
 
-    std::fstream file;
-    file.open(filePath.c_str(), std::ios::in);
-
-    if(file.fail())
+    for(unsigned int i = 0; i < m_collision.size(); i++)
     {
-        file.close();
-        return;
-    }
-
-    std::string line;
-
-    while(!file.eof())
-    {
-        std::getline(file, line);
-        if(line == "[Script]")
+        if(m_collision[i] == 3)
         {
             m_scripts.push_back(Script());
+            m_scripts[m_scripts.size()-1].m_type = 3;
+            m_scripts[m_scripts.size()-1].m_value = 25;
+            m_scripts[m_scripts.size()-1].m_posX = static_cast<int>(i/m_tilesPerCollum)* m_tileSize.x;
+        }
 
-            for(unsigned int i = 0; i < 3; i++)
-            {
-                file.eof();
-                std::getline(file, line);
+        if(m_collision[i] == 4)
+        {
+            m_scripts.push_back(Script());
+            m_scripts[m_scripts.size()-1].m_type = 4;
+            m_scripts[m_scripts.size()-1].m_value = 25;
+            m_scripts[m_scripts.size()-1].m_posX = static_cast<int>(i/m_tilesPerCollum)* m_tileSize.x;
+        }
 
-                if(i == 0)
-                {
-                    m_scripts[m_scripts.size()-1].m_type = aw::conv::ToInt(line);
-                }
-                if(i == 1)
-                {
-                    m_scripts[m_scripts.size()-1].m_value = aw::conv::ToInt(line);
-                }
-                if(i == 2)
-                {
-                    m_scripts[m_scripts.size()-1].m_posX = aw::conv::ToInt(line)* m_tileSize.x;
-                }
-            }
+        if(m_collision[i] == 5)
+        {
+            m_scripts.push_back(Script());
+            m_scripts[m_scripts.size()-1].m_type = 5;
+            m_scripts[m_scripts.size()-1].m_value = 25;
+            m_scripts[m_scripts.size()-1].m_posX = static_cast<int>(i/m_tilesPerCollum)* m_tileSize.x;
+        }
+
+        if(m_collision[i] == 6)
+        {
+            m_scripts.push_back(Script());
+            m_scripts[m_scripts.size()-1].m_type = 6;
+            m_scripts[m_scripts.size()-1].m_value = 25;
+            m_scripts[m_scripts.size()-1].m_posX = static_cast<int>(i/m_tilesPerCollum)* m_tileSize.x;
         }
     }
 }
