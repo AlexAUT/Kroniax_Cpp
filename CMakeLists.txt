@@ -66,6 +66,7 @@ set(
 	${INC_DIR}/game/Menu.hpp
 	${INC_DIR}/game/MenuBackground.hpp
 	${INC_DIR}/game/Settings.hpp
+	${INC_DIR}/game/Tracer.hpp
 	${INC_DIR}/gui/GuiBaseClass.hpp
 	${INC_DIR}/gui/GuiController.hpp
 	${INC_DIR}/gui/GuiLayer.hpp
