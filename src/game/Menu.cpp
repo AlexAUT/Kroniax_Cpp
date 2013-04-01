@@ -6,6 +6,8 @@
 #include "../../include/game/MenuBackground.hpp"
 #include "../../include/game/DialogScreen.hpp"
 
+
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window/Event.hpp>
@@ -109,15 +111,13 @@ void Menu::HandleEvents()
                 m_gui.SetActiveLayer(4);
             }
 
-            else if(m_gui.GetSelectedElement()->GetID() == "speed challenge")
+            else if(m_gui.GetSelectedElement()->GetID() == "custommaps")
             {
                 m_gui.SetActiveLayer(5);
+                m_underlay.setPosition(150,120);
+                m_underlay.setSize(sf::Vector2f(600,325));
             }
 
-            else if(m_gui.GetSelectedElement()->GetID() == "custom Map")
-            {
-                m_gui.SetActiveLayer(1);
-            }
 
             else if(m_gui.GetSelectedElement()->GetID() == "start")
             {
@@ -145,6 +145,9 @@ void Menu::HandleEvents()
 
             else if(m_gui.GetSelectedElement()->GetID() == "back")
             {
+
+                m_underlay.setPosition(220,150);
+                m_underlay.setSize(sf::Vector2f(350,260));
 
                 // If the game returns from the option menu save the new options.
                 if(m_gui.GetActiveLayerInt() == 3)
@@ -229,47 +232,68 @@ void Menu::HandleEvents()
             {
                 db::DialogOK(m_window, "Complete the newest Level\nto unlock more levels");
             }
-
-            else if(m_gui.GetSelectedElement()->GetID() == "helpSpeed")
+            //Custom maps
+            else if(m_gui.GetSelectedElement()->GetID() == "updatelevellist")
             {
-                db::DialogOK(m_window, "You can play the levels you have unlocked\n in the arcade mode\n\nSpeed ups and slow downs are disabled.\n\nYou can control your speed with the arrowkeys.\n\nYou cant influence the gravitation!\nGrav ups and down are still working.\n\nThere is an online highscore where you\n can compare your time with others!");
-            }
-
-            else if(m_gui.GetSelectedElement()->GetID() == "getHighscore")
-            {
-                std::string lvlname1 = db::InputDialog(m_window, "Enter the name of the Level", "Level1");
-
-                HighscoreUploader uploader;
-
-                //Returns false if the connection failed
-                if(!uploader.GetHighscore(lvlname1))
+                if(m_mapManager.UpdateMapList())
                 {
-                    //Give the user feedback about the error
-                    db::DialogOK(m_window, uploader.GetError());
+                    m_mapManager.LoadMapList();
+
+                    m_gui.GetElement(5, 0)->ClearEntries();
+
+                    for(unsigned int i = 0; i < m_mapManager.GetMapCount(); i++)
+                    {
+                        m_gui.GetElement(5, 0)->AddEntry(m_mapManager.GetMap(i)->name);
+                    }
+                    m_gui.GetElement(5, 0)->SetText(m_mapManager.GetMap(0)->name);
+
+                    db::DialogOK(m_window, "Successfully updated the levellist");
                 }
                 else
                 {
-                    //List the Highscore if the connection worked
-                    ListHighscore(m_window, lvlname1, uploader.GetScore());
+                    db::DialogOK(m_window, "Can´t connect to the server.\nPlease try it again later");
                 }
-
-
             }
-
-            else if(m_gui.GetSelectedElement()->GetID() == "startSpeed")
+            else if(m_gui.GetSelectedElement()->GetID() == "play")
             {
-                std::string lvlname = m_gui.GetSelectedLayer()->GetElement(0)->GetText();
-                settings::SetGamemode(1);
-                StartGame(lvlname);
-            }
+                if(m_gui.GetSelectedElement()->GetText() == "Download")
+                {
+                    if(m_mapManager.DownloadMap(m_gui.GetElement(5,0)->GetText()))
+                    {
+                        db::DialogOK(m_window, "Downloaded the map!\nHave fun with it =)");
+                    }
+                    else
+                    {
+                        db::DialogOK(m_window, "Couldn't connect to the server\nor couldn't find the map on the server!");
+                    }
+                }
+                if(m_gui.GetSelectedElement()->GetText() == "Play")
+                {
+                    Map *currentMap = nullptr;
+                    currentMap = m_mapManager.GetMap(m_gui.GetElement(5,0)->GetText());
 
-              else if(m_gui.GetSelectedElement()->GetID() == "lvl speed")
-            {
-                std::string lvlname = m_gui.GetSelectedLayer()->GetElement(0)->GetText();
-                settings::SetGamemode(1);
-                StartGame(lvlname);
+                    if(currentMap)
+                    {
+                        if(currentMap->gameMode == "arcade")
+                        {
+                            settings::SetGamemode(0);
+                            StartGame(m_gui.GetElement(5,0)->GetText());
+                        }
+                        else if(currentMap->gameMode == "speed challenge")
+                        {
+                            if(m_mapManager.DownloadMap(currentMap->name))
+                            {
+                                settings::SetGamemode(1);
+                                StartGame(currentMap->name);
+                            }
+                            else
+                            {
+                                db::DialogOK(m_window, "Can't connect to the server!\nTo play this gamemode a connection is necessary!");
+                            }
+                        }
+                    }
+                }
             }
-
         }
     }
 
@@ -277,7 +301,7 @@ void Menu::HandleEvents()
 
 void Menu::Draw()
 {
-
+    UpdateCustomMapScreen();
 
     m_pbg->DoLogic();
 
@@ -293,6 +317,33 @@ void Menu::Draw()
 
     m_window.display();
 }
+#include <iostream>
+void Menu::UpdateCustomMapScreen()
+{
+    Map* currentMap = nullptr;
+    currentMap = m_mapManager.GetMap(m_gui.GetElement(5,0)->GetText());
+
+    if(currentMap)
+    {
+        m_gui.GetElement(5, 1)->SetText("Author: "+currentMap->author);
+        m_gui.GetElement(5, 2)->SetText("Gamemode: "+currentMap->gameMode);
+        m_gui.GetElement(5, 3)->SetText("Difficulty: "+currentMap->difficulty);
+        m_gui.GetElement(5, 4)->SetText("SpeedX: "+ aw::conv::ToString(currentMap->speedX));
+        m_gui.GetElement(5, 5)->SetText("Length: "+ aw::conv::ToString(currentMap->length));
+
+        if(currentMap->author != "not downloaded")
+        {
+            m_gui.GetElement(5, 6)->SetText("Play");
+        }
+        else
+        {
+            m_gui.GetElement(5, 6)->SetText("Download");
+        }
+    }
+
+
+
+}
 
 std::string Menu::GetLevelName()
 {
@@ -306,9 +357,7 @@ void Menu::InitGui()
 
     m_gui.AddElement(0, 1, "arcade", sf::Vector2f(325,150), "Arcade");
 
-    m_gui.AddElement(0, 1, "speed challenge", sf::Vector2f(250,185), "Speed Challenge");
-
-    m_gui.AddElement(0, 1, "custom Map", sf::Vector2f(300,220), "Custom Map");
+    m_gui.AddElement(0, 1, "custommaps", sf::Vector2f(300,185), "Custom Maps");
 
     m_gui.AddElement(0, 1, "options", sf::Vector2f(325,270), "Options");
 
@@ -445,7 +494,7 @@ void Menu::InitGui()
     //////////////////////////////////////////////////////////////////
 
 
-    m_gui.AddLayer();// 5 Arcade Mode
+    m_gui.AddLayer();// 4 Arcade Mode
 
 
     m_gui.AddElement(4, 2, "lvl", sf::Vector2f(335,150), "Select a level");
@@ -468,34 +517,43 @@ void Menu::InitGui()
 
     m_gui.AddElement(4, 1, "back", sf::Vector2f(355,360), "Back");
 
+    ///////////////////////////////////////////////////////////////////////
 
+    m_gui.AddLayer(); // 5 Custommap mode
 
+    m_mapManager.LoadMapList();
 
-    m_gui.AddLayer();// 6 Speedchallenge
+    float xPos = 200;
 
-
-    m_gui.AddElement(5, 2, "lvl speed", sf::Vector2f(335,150), "Select a level for Speedchallenge");
-
-
-
-    for(int i = 0; i < settings::GetUnlockedLevel(); i++)
+    if(m_mapManager.GetMapCount() == 0)
     {
-        m_gui.GetLastLayer()->GetLastElement()->AddEntry(settings::GetLevelList().at(i));
+        m_gui.AddElement(5, 2, "levellist", sf::Vector2f(xPos,140), "No levels found,\nplease update the list");
+    }
+    else
+    {
+        m_gui.AddElement(5, 2, "levellist", sf::Vector2f(xPos,140), "Select a level");
+
+        for(unsigned int i = 0; i < m_mapManager.GetMapCount(); i++)
+        {
+            m_gui.GetLastLayer()->GetLastElement()->AddEntry(m_mapManager.GetMap(i)->name);
+        }
     }
 
-    if(settings::GetUnlockedLevel() > 1)
-    {
-        m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(settings::GetUnlockedLevel()-1);
-    }
+    m_gui.AddElement(5, 1, "author", sf::Vector2f(xPos,190), "Author: ");
+    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    m_gui.AddElement(5, 1, "gamemmode", sf::Vector2f(xPos,220), "Gamemode: ");
+    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    m_gui.AddElement(5, 1, "difficulty", sf::Vector2f(xPos,250), "Difficulty: ");
+    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    m_gui.AddElement(5, 1, "speedxdisplay", sf::Vector2f(xPos, 290), "SpeedX: ");
+    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    m_gui.AddElement(5, 1, "lengthdisplay", sf::Vector2f(xPos,310), "Length: ");
+    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
 
-    m_gui.AddElement(5, 1, "startSpeed", sf::Vector2f(345,220), "Start");
+    m_gui.AddElement(5, 1, "play", sf::Vector2f(xPos, 350), "Download");
 
-    m_gui.AddElement(5, 1, "helpSpeed", sf::Vector2f(355,255), "Help");
-
-    m_gui.AddElement(5, 1, "getHighscore", sf::Vector2f(250, 290), "Show Highscore");
-
-
-    m_gui.AddElement(5, 1, "back", sf::Vector2f(355,360), "Back");
+    m_gui.AddElement(5, 1, "updatelevellist", sf::Vector2f(xPos,390), "Update levellist");
+    m_gui.AddElement(5, 1, "back", sf::Vector2f(xPos,420), "Back");
 
 }
 
@@ -560,3 +618,5 @@ void Menu::StartGame(std::string lvlname)
             settings::SetGamemode(1);
     }
 }
+
+

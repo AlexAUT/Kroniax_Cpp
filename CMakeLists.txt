@@ -80,6 +80,7 @@ set(
 	${SRC_DIR}/game/MenuBackground.cpp
 	${SRC_DIR}/game/Settings.cpp
 	${SRC_DIR}/game/Tracer.cpp
+	${SRC_DIR}/game/CustomMapManager.cpp
 	${SRC_DIR}/gui/GuiBaseClass.cpp
 	${SRC_DIR}/gui/GuiController.cpp
 	${SRC_DIR}/gui/GuiLayer.cpp

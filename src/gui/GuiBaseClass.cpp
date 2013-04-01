@@ -85,6 +85,10 @@ void GuiBaseElement::AddEntry(std::string entry)
 {
     m_entries.push_back(entry);
 }
+void GuiBaseElement::ClearEntries()
+{
+    m_entries.clear();
+}
 
 //
 // Getter

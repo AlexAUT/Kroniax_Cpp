@@ -27,6 +27,7 @@ public:
     void Draw(sf::RenderWindow &window);
 
     void AddEntry(std::string entry);
+    void ClearEntries();
 
     //
     // Getter

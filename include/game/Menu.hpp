@@ -2,6 +2,8 @@
 #define MENU_HPP
 
 #include "../../include/gui/GuiController.hpp"
+#include "../../include/game/CustomMapManager.hpp"
+
 
 class MenuBackground;
 
@@ -44,6 +46,9 @@ private:
     void InitBackground();
 
 
+    void UpdateCustomMapScreen();
+
+
 private:
 
     sf::RenderWindow &m_window;
@@ -62,6 +67,10 @@ private:
     sf::Music m_music;
 
     sf::RectangleShape m_underlay;
+
+    CustomMapManager m_mapManager;
+    bool m_customMapsActive;
+
 };
 
 
