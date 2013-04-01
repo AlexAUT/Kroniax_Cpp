@@ -161,6 +161,8 @@ bool CustomMapManager::DownloadMapDescription(std::string name)
     file.close();
     server.disconnect();
 
+    LoadSettings(name);
+
     return true;
 }
 
@@ -267,31 +269,31 @@ bool CustomMapManager::LoadSettings(std::string name)
         {
             file.eof();
             std::getline(file, line);
-            m_mapList[m_mapList.size()-1].author = line;
+            GetMap(name)->author = line;
         }
         if(line == "[Gamemode]")
         {
             file.eof();
             std::getline(file, line);
-            m_mapList[m_mapList.size()-1].gameMode = line;
+            GetMap(name)->gameMode = line;
         }
         if(line == "[Difficulty]")
         {
             file.eof();
             std::getline(file, line);
-            m_mapList[m_mapList.size()-1].difficulty = line;
+            GetMap(name)->difficulty = line;
         }
         if(line == "[SpeedX]")
         {
             file.eof();
             std::getline(file, line);
-            m_mapList[m_mapList.size()-1].speedX = aw::conv::ToInt(line);
+            GetMap(name)->speedX = aw::conv::ToInt(line);
         }
         if(line == "[Length]")
         {
             file.eof();
             std::getline(file, line);
-            m_mapList[m_mapList.size()-1].length = aw::conv::ToInt(line);
+            GetMap(name)->length = aw::conv::ToInt(line);
         }
 
     }

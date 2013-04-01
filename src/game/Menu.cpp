@@ -245,7 +245,7 @@ void Menu::HandleEvents()
                     {
                         m_gui.GetElement(5, 0)->AddEntry(m_mapManager.GetMap(i)->name);
                     }
-                    m_gui.GetElement(5, 0)->SetText(m_mapManager.GetMap(0)->name);
+                    m_gui.GetElement(5, 0)->SetText("Select a level");
 
                     db::DialogOK(m_window, "Successfully updated the levellist");
                 }
@@ -331,7 +331,7 @@ void Menu::UpdateCustomMapScreen()
         m_gui.GetElement(5, 4)->SetText("SpeedX: "+ aw::conv::ToString(currentMap->speedX));
         m_gui.GetElement(5, 5)->SetText("Length: "+ aw::conv::ToString(currentMap->length));
 
-        if(currentMap->author != "not downloaded")
+        if(currentMap->speedX != 0)
         {
             m_gui.GetElement(5, 6)->SetText("Play");
         }
