@@ -258,7 +258,7 @@ void Menu::HandleEvents()
             {
                 if(m_gui.GetSelectedElement()->GetText() == "Download")
                 {
-                    if(m_mapManager.DownloadMap(m_gui.GetElement(5,0)->GetText()))
+                    if(m_mapManager.DownloadMapDescription(m_gui.GetElement(5,0)->GetText()) && m_mapManager.DownloadMap(m_gui.GetElement(5,0)->GetText()))
                     {
                         db::DialogOK(m_window, "Downloaded the map!\nHave fun with it =)");
                     }
@@ -267,7 +267,7 @@ void Menu::HandleEvents()
                         db::DialogOK(m_window, "Couldn't connect to the server\nor couldn't find the map on the server!");
                     }
                 }
-                if(m_gui.GetSelectedElement()->GetText() == "Play")
+                else if(m_gui.GetSelectedElement()->GetText() == "Play")
                 {
                     Map *currentMap = nullptr;
                     currentMap = m_mapManager.GetMap(m_gui.GetElement(5,0)->GetText());

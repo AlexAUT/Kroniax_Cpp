@@ -61,7 +61,7 @@ void CustomMapManager::LoadMapList()
 
 bool CustomMapManager::UpdateMapList()
 {
-    short port = 60502;
+    int port = 60602;
     //sf::IpAddress serverAddress("127.0.0.1");
     sf::IpAddress serverAddress("82.211.56.205");
 
@@ -89,7 +89,6 @@ bool CustomMapManager::UpdateMapList()
     std::string path = "levels/levellist.cfg";
     std::fstream file(path.c_str(), std::ios::out |std::ios::trunc);
 
-
     while(!packet.endOfPacket())
     {
         std::string line;
@@ -106,7 +105,7 @@ bool CustomMapManager::UpdateMapList()
 
 bool CustomMapManager::DownloadMapDescription(std::string name)
 {
-    short port = 60502;
+    int port = 60602;
     //sf::IpAddress serverAddress("127.0.0.1");
     sf::IpAddress serverAddress("82.211.56.205");
     sf::TcpSocket server;
@@ -131,6 +130,7 @@ bool CustomMapManager::DownloadMapDescription(std::string name)
     server.receive(packet);
 
     std::string path = "levels/"+name;
+
 
     #ifdef _WIN32
         mkdir(path.c_str());
@@ -166,7 +166,7 @@ bool CustomMapManager::DownloadMapDescription(std::string name)
 
 bool CustomMapManager::DownloadMap(std::string name)
 {
-    short port = 60502;
+    int port = 60602;
     //sf::IpAddress serverAddress("127.0.0.1");
     sf::IpAddress serverAddress("82.211.56.205");
     sf::TcpSocket server;
@@ -182,7 +182,6 @@ bool CustomMapManager::DownloadMap(std::string name)
             return false;
         }
     }
-
     sf::Packet packet;
     packet << "getmap" << name;
     server.send(packet);
@@ -194,9 +193,10 @@ bool CustomMapManager::DownloadMap(std::string name)
         server.receive(packet);
         std::string filename;
         packet >> filename;
-        filename = "levels/"+name+"/"+filename;
 
-        std::fstream file(filename.c_str(), std::ios::out | std::ios::trunc);
+        std::string path = "levels/"+name+"/"+filename;
+
+        std::fstream file(path.c_str(), std::ios::out | std::ios::trunc);
 
         while(!packet.endOfPacket())
         {
@@ -204,10 +204,11 @@ bool CustomMapManager::DownloadMap(std::string name)
             packet >> line;
             file << line << "\n";
         }
-
         file.close();
     }
 
+
+    LoadSettings(name);
 
     server.disconnect();
 
