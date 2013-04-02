@@ -18,8 +18,6 @@
 
 Game::Game(sf::RenderWindow &window) : m_window(window)
 {
-    m_pLevel = nullptr;
-
     m_position = sf::Vector2f(100,100);
     m_lastFrameTime = 0;
 
@@ -29,10 +27,7 @@ Game::Game(sf::RenderWindow &window) : m_window(window)
 
 Game::~Game()
 {
-    if(m_pLevel)
-        delete m_pLevel;
-
-    m_pLevel = nullptr;
+    m_pLevel.release();
 }
 
 std::string Game::Run(std::string levelName, Tracer &currentTracer, Tracer &lastTracer)
@@ -281,7 +276,7 @@ void Game::Draw(Tracer &currentTracer, Tracer &lastTracer)
 
 void Game::Init()
 {
-    m_pLevel = new Level(m_window);
+    m_pLevel = std::unique_ptr<Level>(new Level(m_window));
 
     if(!m_pLevel->Load(m_levelName))
     {

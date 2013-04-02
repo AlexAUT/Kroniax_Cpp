@@ -3,6 +3,8 @@
 
 #include "../../include/aw/utilities/StopWatch.hpp"
 
+#include <memory>
+
 class Level;
 class Tracer;
 
@@ -66,7 +68,7 @@ private:
     sf::Vector2f m_position;
     sf::Vertex m_body[3]; // Triangle
 
-    Level *m_pLevel;
+    std::unique_ptr<Level> m_pLevel;
 
     sf::Vector2f m_viewPositionFloat;
     sf::View m_view;
