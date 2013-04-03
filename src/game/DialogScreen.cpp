@@ -21,9 +21,9 @@ void DialogOK(sf::RenderWindow &window, std::string text)
     gui.AddLayer();
 
 
-    gui.AddElement(0, 0, "text", sf::Vector2f(10,10), text);
+    gui.AddLabel(0, "text", sf::Vector2f(10,10), text);
     gui.GetLastLayer()->GetLastElement()->SetCharacterSize(15);
-    gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    gui.GetLastLayer()->GetLastElement()->SetSelectable(false);
 
     float startX = window.getView().getCenter().x - window.getView().getSize().x/2;
 
@@ -35,7 +35,7 @@ void DialogOK(sf::RenderWindow &window, std::string text)
     gui.GetLastLayer()->GetLastElement()->SetPosition(newPos);
 
 
-   gui.AddElement(0, 1, "ok", sf::Vector2f(10,10), "OK");
+   gui.AddButton(0, "ok", sf::Vector2f(10,10), "OK");
 
 
      newPos = sf::Vector2f(startX +(window.getView().getSize().x / 2) - (gui.GetLastLayer()->GetLastElement()->GetTextObj().getLocalBounds().width / 2),
@@ -111,9 +111,8 @@ bool DialogYesNo(sf::RenderWindow &window, std::string text)
     gui.AddLayer();
 
 
-    gui.AddElement(0, 0, "text", sf::Vector2f(10,10), text);
+    gui.AddLabel(0, "text", sf::Vector2f(10,10), text);
     gui.GetLastLayer()->GetLastElement()->SetCharacterSize(15);
-    gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
 
     float startX = window.getView().getCenter().x - window.getView().getSize().x/2;
 
@@ -124,7 +123,7 @@ bool DialogYesNo(sf::RenderWindow &window, std::string text)
 
     gui.GetLastLayer()->GetLastElement()->SetPosition(newPos);
 
-    gui.AddElement(0, 1, "yes", sf::Vector2f(10,10), "Yes");
+    gui.AddButton(0, "yes", sf::Vector2f(10,10), "Yes");
 
 
     newPos = sf::Vector2f(startX +(window.getView().getSize().x / 2) - (gui.GetLastLayer()->GetLastElement()->GetTextObj().getLocalBounds().width / 2),
@@ -133,7 +132,7 @@ bool DialogYesNo(sf::RenderWindow &window, std::string text)
     gui.GetLastLayer()->GetLastElement()->SetPosition(newPos);
 
 
-    gui.AddElement(0, 1, "no", sf::Vector2f(10,10), "No");
+    gui.AddButton(0, "no", sf::Vector2f(10,10), "No");
 
     newPos = sf::Vector2f(startX +(window.getView().getSize().x / 2) - (gui.GetLastLayer()->GetLastElement()->GetTextObj().getLocalBounds().width / 2),
                           50 + (window.getView().getSize().y/2 + 40));
@@ -212,9 +211,8 @@ std::string InputDialog(sf::RenderWindow &window, std::string text, std::string 
     gui.AddLayer();
 
 
-    gui.AddElement(0, 0, "text", sf::Vector2f(10,10), text);
+    gui.AddLabel(0, "text", sf::Vector2f(10,10), text);
     gui.GetLastLayer()->GetLastElement()->SetCharacterSize(15);
-    gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
 
     float startX = window.getView().getCenter().x - window.getView().getSize().x/2;
 
@@ -225,7 +223,7 @@ std::string InputDialog(sf::RenderWindow &window, std::string text, std::string 
 
     gui.GetLastLayer()->GetLastElement()->SetPosition(newPos);
 
-   gui.AddElement(0, 3, "inp", sf::Vector2f(10,10), inputText);
+   gui.AddInput(0, "inp", sf::Vector2f(10,10), inputText);
 
 
     newPos.y = (window.getView().getSize().y/2 + 10);
@@ -233,7 +231,7 @@ std::string InputDialog(sf::RenderWindow &window, std::string text, std::string 
     gui.GetLastLayer()->GetLastElement()->SetPosition(newPos);
 
 
-    gui.AddElement(0, 1, "submit", sf::Vector2f(10,10), "Submit");
+    gui.AddButton(0, "submit", sf::Vector2f(10,10), "Submit");
 
     newPos = sf::Vector2f(startX +(window.getView().getSize().x / 2) - (gui.GetLastLayer()->GetLastElement()->GetTextObj().getLocalBounds().width / 2),
                           (window.getView().getSize().y/2 + 75));

@@ -11,18 +11,22 @@ GuiBaseElement::GuiBaseElement()
     m_activeEntry = -1;
 }
 
-GuiBaseElement::GuiBaseElement(int type, std::string ID, sf::Vector2f position, std::string text) : m_type(type),  m_selected(false), m_selectAble(true), m_ID(ID), m_position(position)
+GuiBaseElement::GuiBaseElement(GuiType type, const std::string& ID, const sf::Vector2f& position, const std::string& text):
+    m_type(type),
+    m_selected(false),
+    m_selectable(type != GUI_LABEL), // Labels are not selectable
+    m_ID(ID),
+    m_position(position)
 {
     m_body.setString(text);
     m_body.setPosition(position);
     m_body.setCharacterSize(20);
     m_activeEntry = -1;
-
 }
 
 void GuiBaseElement::HandleEvents(sf::Event &e)
 {
-    if(m_type == 2)
+    if(m_type == GUI_LIST)
     {
         if(e.type == sf::Event::KeyPressed)
         {
@@ -64,7 +68,7 @@ void GuiBaseElement::HandleEvents(sf::Event &e)
         }
     }
 
-    if(m_type == 3)
+    if(m_type == GUI_INPUT)
     {
         if(e.type == sf::Event::KeyPressed)
             HandleKeyInput(e);
@@ -80,11 +84,11 @@ void GuiBaseElement::Draw(sf::RenderWindow &window)
 
 }
 
-
 void GuiBaseElement::AddEntry(std::string entry)
 {
     m_entries.push_back(entry);
 }
+
 void GuiBaseElement::ClearEntries()
 {
     m_entries.clear();
@@ -99,21 +103,25 @@ const std::string& GuiBaseElement::GetID()
 {
     return m_ID;
 }
+
 const sf::Vector2f& GuiBaseElement::GetPosition()
 {
     return m_position;
 }
+
 std::string GuiBaseElement::GetText()
 {
     return m_body.getString();
 }
+
 sf::Text &GuiBaseElement::GetTextObj()
 {
     return m_body;
 }
-bool GuiBaseElement::GetSelectAble()
+
+bool GuiBaseElement::IsSelectable() const
 {
-    return m_selectAble;
+    return m_selectable;
 }
 
 //
@@ -124,6 +132,7 @@ void GuiBaseElement::SetID(std::string ID)
 {
     m_ID = ID;
 }
+
 void GuiBaseElement::SetSelected(bool value)
 {
     m_selected = value;
@@ -137,16 +146,19 @@ void GuiBaseElement::SetSelected(bool value)
         m_body.setColor(sf::Color::White);
     }
 }
-void GuiBaseElement::SetSelectAble(bool value)
+
+void GuiBaseElement::SetSelectable(bool value)
 {
-    m_selectAble = value;
+    m_selectable = value;
 }
+
 void GuiBaseElement::SetFont(sf::Font &font)
 {
     m_body.setFont(font);
 
     CreateSelectionVertices();
 }
+
 void GuiBaseElement::SetPosition(sf::Vector2f position)
 {
     m_position = position;
@@ -155,6 +167,7 @@ void GuiBaseElement::SetPosition(sf::Vector2f position)
 
     CreateSelectionVertices();
 }
+
 void GuiBaseElement::SetX(float x)
 {
     m_position.x = x;
@@ -162,6 +175,7 @@ void GuiBaseElement::SetX(float x)
 
     CreateSelectionVertices();
 }
+
 void GuiBaseElement::SetY(float y)
 {
     m_position.y = y;
@@ -169,12 +183,14 @@ void GuiBaseElement::SetY(float y)
 
     CreateSelectionVertices();
 }
+
 void GuiBaseElement::SetText(std::string text)
 {
     m_body.setString(text);
 
     CreateSelectionVertices();
 }
+
 void GuiBaseElement::SetActiveEntry(unsigned int index)
 {
     if(index < m_entries.size())
@@ -184,6 +200,7 @@ void GuiBaseElement::SetActiveEntry(unsigned int index)
         CreateSelectionVertices();
     }
 }
+
 void GuiBaseElement::SetCharacterSize(unsigned int size)
 {
     m_body.setCharacterSize(size);
@@ -209,7 +226,7 @@ void GuiBaseElement::CreateSelectionVertices()
 
     float offset = 7.f;
 
-    if(m_type == 1)
+    if(m_type == GUI_BUTTON)
     {
         // Left triangle
         m_vertices[0] = sf::Vertex(sf::Vector2f(xPos - distance - triWidth, yPos + (height/2.f) - (triheight/2.f) + offset), sf::Color::Red); // Left Top
@@ -223,7 +240,7 @@ void GuiBaseElement::CreateSelectionVertices()
         m_vertices[5] = sf::Vertex(sf::Vector2f(xPos + width + distance           , yPos + (height/2.f)                   + offset), sf::Color::Red); // Left Edge
     }
 
-    if(m_type == 2)
+    if(m_type == GUI_LIST)
     {
         // Left triangle
         m_vertices[0] = sf::Vertex(sf::Vector2f(xPos - distance           , yPos + (height/2.f) - (triheight/2.f) + offset), sf::Color::Red); // Left Top
@@ -237,7 +254,7 @@ void GuiBaseElement::CreateSelectionVertices()
         m_vertices[5] = sf::Vertex(sf::Vector2f(xPos + width + distance + triWidth, yPos + (height/2.f)                   + offset), sf::Color::Red); // Left Edge
     }
 
-    if(m_type == 3) // Recht surrounding the Text
+    if(m_type == GUI_INPUT) // Recht surrounding the Text
     {
         m_vertices[0] = sf::Vertex(sf::Vector2f(xPos - distance, yPos - distance / 3), sf::Color(165,165,165)); // LeftTop
         m_vertices[1] = sf::Vertex(sf::Vector2f(xPos + width + distance, yPos - distance/3), sf::Color(165,165,165)); // RightTop

@@ -14,7 +14,7 @@ GuiLayer::~GuiLayer()
 
 }
 
-void GuiLayer::AddElement(int type, std::string ID, sf::Vector2f position, std::string text)
+void GuiLayer::AddElement(GuiType type, const std::string& ID, const sf::Vector2f& position, const std::string& text)
 {
     m_elements.push_back(GuiBaseElement(type, ID, position, text));
 }
@@ -41,7 +41,7 @@ void GuiLayer::HandleEvents(sf::Event &e)
             }
 
 
-            while(!m_elements[m_activeElement].GetSelectAble())
+            while(!m_elements[m_activeElement].IsSelectable())
             {
                 if(m_activeElement == m_elements.size()-1)
                 {
@@ -71,7 +71,7 @@ void GuiLayer::HandleEvents(sf::Event &e)
             }
 
 
-            while(!m_elements[m_activeElement].GetSelectAble())
+            while(!m_elements[m_activeElement].IsSelectable())
             {
                 if(m_activeElement == 0)
                 {

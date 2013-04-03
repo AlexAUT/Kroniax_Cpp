@@ -25,7 +25,10 @@ public:
 
     void AddLayer();
 
-    void AddElement(unsigned int layer, int type, std::string ID, sf::Vector2f pos, std::string text);
+    void AddLabel(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text);
+    void AddButton(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text);
+    void AddList(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text);
+    void AddInput(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text);
 
     void HandleEvents(sf::Event &e);
 
@@ -52,9 +55,7 @@ public:
 
 private:
 
-
-
-private:
+    void AddElement(unsigned int layer, GuiType type, const std::string& ID, const sf::Vector2f& pos, const std::string& text);
 
     sf::Font m_font;
 

@@ -355,50 +355,46 @@ void Menu::InitGui()
 {
     m_gui.AddLayer();
 
-    m_gui.AddElement(0, 1, "arcade", sf::Vector2f(325,150), "Arcade");
+    m_gui.AddButton(0, "arcade", sf::Vector2f(325,150), "Arcade");
 
-    m_gui.AddElement(0, 1, "custommaps", sf::Vector2f(300,185), "Custom Maps");
+    m_gui.AddButton(0, "custommaps", sf::Vector2f(300,185), "Custom Maps");
 
-    m_gui.AddElement(0, 1, "options", sf::Vector2f(325,270), "Options");
+    m_gui.AddButton(0, "options", sf::Vector2f(325,270), "Options");
 
-    m_gui.AddElement(0, 1, "credits", sf::Vector2f(327,310), "Credits");
+    m_gui.AddButton(0, "credits", sf::Vector2f(327,310), "Credits");
 
-    m_gui.AddElement(0, 1, "exit", sf::Vector2f(355,360), "Exit");
+    m_gui.AddButton(0, "exit", sf::Vector2f(355,360), "Exit");
 
 ///////////////////////////////////////////////////////////////
 
     m_gui.AddLayer();
 
-    m_gui.AddElement(1, 3, "name", sf::Vector2f(315,160), "Levelname");
+    m_gui.AddInput(1, "name", sf::Vector2f(315,160), "Levelname");
 
-    m_gui.AddElement(1, 1, "start", sf::Vector2f(350,220), "Start");
+    m_gui.AddButton(1, "start", sf::Vector2f(350,220), "Start");
 
-    m_gui.AddElement(1, 1, "back", sf::Vector2f(355,360), "Back");
+    m_gui.AddButton(1, "back", sf::Vector2f(355,360), "Back");
 
 //////////////////////////////////////////////////////////////////////////////
 
     m_gui.AddLayer();
 
-    m_gui.AddElement(2, 0, "0", sf::Vector2f(50,180), "Music by MafiaFLairBeatz");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    m_gui.AddLabel(2, "0", sf::Vector2f(50,180), "Music by MafiaFLairBeatz");
 
-    m_gui.AddElement(2, 0, "0", sf::Vector2f(50,220), "The great library SFML created by Laurent");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    m_gui.AddLabel(2, "0", sf::Vector2f(50,220), "The great library SFML created by Laurent");
 
-    m_gui.AddElement(2, 0, "0", sf::Vector2f(50,255), "Developed by Alexander Weinrauch");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    m_gui.AddLabel(2, "0", sf::Vector2f(50,255), "Developed by Alexander Weinrauch");
 
-    m_gui.AddElement(2, 1, "back", sf::Vector2f(355,360), "Back");
+    m_gui.AddButton(2, "back", sf::Vector2f(355,360), "Back");
 
 ///////////////////////////////////////////////////////////////////////
 
     m_gui.AddLayer();
 
-    m_gui.AddElement(3, 1, "music", sf::Vector2f(280,180), "Music: ");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    // Music on/off option
+    m_gui.AddLabel(3, "music", sf::Vector2f(280,180), "Music: ");
 
-
-    m_gui.AddElement(3, 2, "vol", sf::Vector2f(500,180), "on");
+    m_gui.AddList(3, "vol", sf::Vector2f(500,180), "on");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("on");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("off");
 
@@ -411,13 +407,10 @@ void Menu::InitGui()
         m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(1);
     }
 
+    // Music volume option
+    m_gui.AddLabel(3, "music", sf::Vector2f(280,220), "Musicvoume: ");
 
-
-    m_gui.AddElement(3, 1, "music", sf::Vector2f(280,220), "Musicvoume: ");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
-
-
-    m_gui.AddElement(3, 2, "vol", sf::Vector2f(500,220), "50");
+    m_gui.AddList(3, "vol", sf::Vector2f(500,220), "50");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("0");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("10");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("20");
@@ -436,36 +429,31 @@ void Menu::InitGui()
 
 
     // Antialiasing option
-    m_gui.AddElement(3, 1, "anti", sf::Vector2f(280,260), "Antialiasing: ");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    m_gui.AddLabel(3, "anti", sf::Vector2f(280,260), "Antialiasing: ");
 
-
-    m_gui.AddElement(3, 2, "antialiasing", sf::Vector2f(505,260), "0");
+    m_gui.AddList(3, "antialiasing", sf::Vector2f(505,260), "0");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("0");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("2");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("4");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("8");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("16");
 
-
     switch(settings::GetAntialiasing())
     {
-    case 2: index = 1; break;
-    case 4: index = 2; break;
-    case 8: index = 3; break;
-    case 16: index = 4; break;
-    default : index = 0; break;
+        case 2: index = 1; break;
+        case 4: index = 2; break;
+        case 8: index = 3; break;
+        case 16: index = 4; break;
+        default : index = 0; break;
     }
     m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(index);
 
 
     // TimeBetweenPoints option
-    m_gui.AddElement(3, 1, "tracertim", sf::Vector2f(280,300), "Time between \ntracer points: ");
+    m_gui.AddLabel(3, "tracertim", sf::Vector2f(280,300), "Time between \ntracer points: ");
     m_gui.GetLastLayer()->GetLastElement()->SetCharacterSize(14);
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
 
-
-    m_gui.AddElement(3, 2, "tracertime", sf::Vector2f(480,300), "800");
+    m_gui.AddList(3, "tracertime", sf::Vector2f(480,300), "800");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("75");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("100");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("200");
@@ -477,18 +465,18 @@ void Menu::InitGui()
 
     switch(settings::GetTimeForTracer())
     {
-    case 75:   index = 0; break;
-    case 100:  index = 1; break;
-    case 200:  index = 2; break;
-    case 300:  index = 3; break;
-    case 600:  index = 4; break;
-    case 800:  index = 5; break;
-    default :  index = 6; break;
+        case 75:   index = 0; break;
+        case 100:  index = 1; break;
+        case 200:  index = 2; break;
+        case 300:  index = 3; break;
+        case 600:  index = 4; break;
+        case 800:  index = 5; break;
+        default :  index = 6; break;
     }
     m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(index);
 
 
-    m_gui.AddElement(3, 1, "back", sf::Vector2f(355,360), "Back");
+    m_gui.AddButton(3, "back", sf::Vector2f(355,360), "Back");
 
 
     //////////////////////////////////////////////////////////////////
@@ -497,7 +485,7 @@ void Menu::InitGui()
     m_gui.AddLayer();// 4 Arcade Mode
 
 
-    m_gui.AddElement(4, 2, "lvl", sf::Vector2f(335,150), "Select a level");
+    m_gui.AddList(4, "lvl", sf::Vector2f(335,150), "Select a level");
 
 
     for(int i = 0; i < settings::GetUnlockedLevel(); i++)
@@ -510,12 +498,12 @@ void Menu::InitGui()
         m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(settings::GetUnlockedLevel()-1);
     }
 
-    m_gui.AddElement(4, 1, "startArcade", sf::Vector2f(345,220), "Start");
+    m_gui.AddButton(4, "startArcade", sf::Vector2f(345,220), "Start");
 
-    m_gui.AddElement(4, 1, "helparcade", sf::Vector2f(355,255), "Help");
+    m_gui.AddButton(4, "helparcade", sf::Vector2f(355,255), "Help");
 
 
-    m_gui.AddElement(4, 1, "back", sf::Vector2f(355,360), "Back");
+    m_gui.AddButton(4, "back", sf::Vector2f(355,360), "Back");
 
     ///////////////////////////////////////////////////////////////////////
 
@@ -527,11 +515,11 @@ void Menu::InitGui()
 
     if(m_mapManager.GetMapCount() == 0)
     {
-        m_gui.AddElement(5, 2, "levellist", sf::Vector2f(xPos,140), "No levels found,\nplease update the list");
+        m_gui.AddList(5, "levellist", sf::Vector2f(xPos,140), "No levels found,\nplease update the list");
     }
     else
     {
-        m_gui.AddElement(5, 2, "levellist", sf::Vector2f(xPos,140), "Select a level");
+        m_gui.AddList(5, "levellist", sf::Vector2f(xPos,140), "Select a level");
 
         for(unsigned int i = 0; i < m_mapManager.GetMapCount(); i++)
         {
@@ -539,21 +527,16 @@ void Menu::InitGui()
         }
     }
 
-    m_gui.AddElement(5, 1, "author", sf::Vector2f(xPos,190), "Author: ");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
-    m_gui.AddElement(5, 1, "gamemmode", sf::Vector2f(xPos,220), "Gamemode: ");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
-    m_gui.AddElement(5, 1, "difficulty", sf::Vector2f(xPos,250), "Difficulty: ");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
-    m_gui.AddElement(5, 1, "speedxdisplay", sf::Vector2f(xPos, 290), "SpeedX: ");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
-    m_gui.AddElement(5, 1, "lengthdisplay", sf::Vector2f(xPos,310), "Length: ");
-    m_gui.GetLastLayer()->GetLastElement()->SetSelectAble(false);
+    m_gui.AddLabel(5, "author", sf::Vector2f(xPos,190), "Author: ");
+    m_gui.AddLabel(5, "gamemmode", sf::Vector2f(xPos,220), "Gamemode: ");
+    m_gui.AddLabel(5, "difficulty", sf::Vector2f(xPos,250), "Difficulty: ");
+    m_gui.AddLabel(5, "speedxdisplay", sf::Vector2f(xPos, 290), "SpeedX: ");
+    m_gui.AddLabel(5, "lengthdisplay", sf::Vector2f(xPos,310), "Length: ");
 
-    m_gui.AddElement(5, 1, "play", sf::Vector2f(xPos, 350), "Download");
+    m_gui.AddButton(5, "play", sf::Vector2f(xPos, 350), "Download");
 
-    m_gui.AddElement(5, 1, "updatelevellist", sf::Vector2f(xPos,390), "Update levellist");
-    m_gui.AddElement(5, 1, "back", sf::Vector2f(xPos,420), "Back");
+    m_gui.AddButton(5, "updatelevellist", sf::Vector2f(xPos,390), "Update levellist");
+    m_gui.AddButton(5, "back", sf::Vector2f(xPos,420), "Back");
 
 }
 

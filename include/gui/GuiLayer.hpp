@@ -22,7 +22,7 @@ public:
     ~GuiLayer();
 
 
-    void AddElement(int type, std::string ID, sf::Vector2f position, std::string text);
+    void AddElement(GuiType type, const std::string& ID, const sf::Vector2f& position, const std::string& text);
 
     void HandleEvents(sf::Event &e);
 
