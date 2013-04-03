@@ -392,9 +392,9 @@ void Menu::InitGui()
     m_gui.AddLayer();
 
     // Music on/off option
-    m_gui.AddLabel(3, "music", sf::Vector2f(280,180), "Music: ");
+    m_gui.AddLabel(3, "music", sf::Vector2f(240,180), "Music: ");
 
-    m_gui.AddList(3, "vol", sf::Vector2f(500,180), "on");
+    m_gui.AddList(3, "vol", sf::Vector2f(480,180), "on");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("on");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("off");
 
@@ -408,7 +408,7 @@ void Menu::InitGui()
     }
 
     // Music volume option
-    m_gui.AddLabel(3, "music", sf::Vector2f(280,220), "Musicvoume: ");
+    m_gui.AddLabel(3, "music", sf::Vector2f(240,220), "Music volume: ");
 
     m_gui.AddList(3, "vol", sf::Vector2f(500,220), "50");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("0");
@@ -429,7 +429,7 @@ void Menu::InitGui()
 
 
     // Antialiasing option
-    m_gui.AddLabel(3, "anti", sf::Vector2f(280,260), "Antialiasing: ");
+    m_gui.AddLabel(3, "anti", sf::Vector2f(240,260), "Antialiasing: ");
 
     m_gui.AddList(3, "antialiasing", sf::Vector2f(505,260), "0");
     m_gui.GetLastLayer()->GetLastElement()->AddEntry("0");
@@ -450,7 +450,7 @@ void Menu::InitGui()
 
 
     // TimeBetweenPoints option
-    m_gui.AddLabel(3, "tracertim", sf::Vector2f(280,300), "Time between \ntracer points: ");
+    m_gui.AddLabel(3, "tracertim", sf::Vector2f(240,300), "Time between \ntracer points: ");
     m_gui.GetLastLayer()->GetLastElement()->SetCharacterSize(14);
 
     m_gui.AddList(3, "tracertime", sf::Vector2f(480,300), "800");
