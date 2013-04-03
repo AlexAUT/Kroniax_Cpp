@@ -24,7 +24,7 @@ GuiBaseElement::GuiBaseElement(GuiType type, const std::string& ID, const sf::Ve
     m_activeEntry = -1;
 }
 
-void GuiBaseElement::HandleEvents(sf::Event &e)
+void GuiBaseElement::HandleEvent(const sf::Event &e)
 {
     if(m_type == GUI_LIST)
     {
@@ -75,7 +75,7 @@ void GuiBaseElement::HandleEvents(sf::Event &e)
     }
 }
 
-void GuiBaseElement::Draw(sf::RenderWindow &window)
+void GuiBaseElement::Draw(sf::RenderWindow &window) const
 {
     if(m_selected)
         window.draw(m_vertices, 6, sf::Triangles);
@@ -99,22 +99,22 @@ void GuiBaseElement::ClearEntries()
 //
 
 
-const std::string& GuiBaseElement::GetID()
+const std::string& GuiBaseElement::GetID() const
 {
     return m_ID;
 }
 
-const sf::Vector2f& GuiBaseElement::GetPosition()
+const sf::Vector2f& GuiBaseElement::GetPosition() const
 {
     return m_position;
 }
 
-std::string GuiBaseElement::GetText()
+std::string GuiBaseElement::GetText() const
 {
     return m_body.getString();
 }
 
-sf::Text &GuiBaseElement::GetTextObj()
+const sf::Text& GuiBaseElement::GetTextObj() const
 {
     return m_body;
 }
@@ -152,7 +152,7 @@ void GuiBaseElement::SetSelectable(bool value)
     m_selectable = value;
 }
 
-void GuiBaseElement::SetFont(sf::Font &font)
+void GuiBaseElement::SetFont(const sf::Font &font)
 {
     m_body.setFont(font);
 
@@ -268,7 +268,7 @@ void GuiBaseElement::CreateSelectionVertices()
 
 
 
-void GuiBaseElement::HandleKeyInput(sf::Event &e)
+void GuiBaseElement::HandleKeyInput(const sf::Event &e)
 {
 
     std::string newChar;

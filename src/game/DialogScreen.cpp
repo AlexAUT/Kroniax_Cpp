@@ -71,7 +71,7 @@ void DialogOK(sf::RenderWindow &window, std::string text)
 
         while(window.pollEvent(e))
         {
-            gui.HandleEvents(e);
+            gui.HandleEvent(e);
 
             if(e.type == sf::Event::Closed)
                 window.close();
@@ -166,7 +166,7 @@ bool DialogYesNo(sf::RenderWindow &window, std::string text)
 
         while(window.pollEvent(e))
         {
-            gui.HandleEvents(e);
+            gui.HandleEvent(e);
 
             if(e.type == sf::Event::Closed)
                 window.close();
@@ -265,7 +265,7 @@ std::string InputDialog(sf::RenderWindow &window, std::string text, std::string 
 
         while(window.pollEvent(e))
         {
-            gui.HandleEvents(e);
+            gui.HandleEvent(e);
 
             if(e.type == sf::Event::Closed)
                 window.close();

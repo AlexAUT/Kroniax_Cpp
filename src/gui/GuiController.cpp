@@ -47,10 +47,10 @@ void GuiController::AddElement(unsigned int layer, GuiType type, const std::stri
     }
 }
 
-void GuiController::HandleEvents(sf::Event &e)
+void GuiController::HandleEvent(const sf::Event &e)
 {
 
-    m_layers[m_activeLayer].HandleEvents(e);
+    m_layers[m_activeLayer].HandleEvent(e);
 
 }
 

@@ -20,9 +20,9 @@ void GuiLayer::AddElement(GuiType type, const std::string& ID, const sf::Vector2
 }
 
 
-void GuiLayer::HandleEvents(sf::Event &e)
+void GuiLayer::HandleEvent(const sf::Event &e)
 {
-    m_elements[m_activeElement].HandleEvents(e);
+    m_elements[m_activeElement].HandleEvent(e);
 
     if(e.type == sf::Event::KeyPressed)
     {

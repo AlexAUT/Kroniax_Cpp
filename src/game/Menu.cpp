@@ -101,7 +101,7 @@ void Menu::HandleEvents()
             m_returnValue = "exit";
         }
 
-        m_gui.HandleEvents(e);
+        m_gui.HandleEvent(e);
 
 
         if(e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Return)

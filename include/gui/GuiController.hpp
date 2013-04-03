@@ -1,12 +1,13 @@
 #ifndef GUICONTROLLER_HPP
 #define GUICONTROLLER_HPP
 
-#include "../../include/gui/GuiLayer.hpp"
-
-class GuiBaseElement;
+#include <string>
+#include <vector>
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Font.hpp>
+
+#include "../../include/gui/GuiLayer.hpp"
 
 namespace sf
 {
@@ -14,8 +15,7 @@ namespace sf
 	class RenderWindow;
 }
 
-#include <string>
-#include <vector>
+class GuiBaseElement;
 
 class GuiController
 {
@@ -30,7 +30,7 @@ public:
     void AddList(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text);
     void AddInput(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text);
 
-    void HandleEvents(sf::Event &e);
+    void HandleEvent(const sf::Event &e);
 
     void Draw(sf::RenderWindow &window);
 
@@ -41,7 +41,7 @@ public:
     void SetActiveLayer(unsigned int index);
 
     //
-    // Geter
+    // Getter
     //
     int GetActiveLayerInt();
 

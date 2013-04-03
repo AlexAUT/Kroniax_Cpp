@@ -29,9 +29,9 @@ public:
     GuiBaseElement(GuiType type, const std::string& ID, const sf::Vector2f& m_position, const std::string& text);
 
 
-    void HandleEvents(sf::Event &e);
+    void HandleEvent(const sf::Event &e);
 
-    void Draw(sf::RenderWindow &window);
+    void Draw(sf::RenderWindow &window) const;
 
     void AddEntry(std::string entry);
     void ClearEntries();
@@ -40,10 +40,10 @@ public:
     // Getter
     //
 
-    const std::string& GetID();
-    const sf::Vector2f& GetPosition();
-    std::string GetText();
-    sf::Text &GetTextObj();
+    const std::string& GetID() const;
+    const sf::Vector2f& GetPosition() const;
+    std::string GetText() const;
+    const sf::Text& GetTextObj() const;
     bool IsSelectable() const;
 
     //
@@ -54,7 +54,7 @@ public:
     void SetID(std::string ID);
     void SetSelected(bool value);
     void SetSelectable(bool value);
-    void SetFont(sf::Font &font);
+    void SetFont(const sf::Font& font);
     void SetPosition(sf::Vector2f position);
     void SetX(float x);
     void SetY(float y);
@@ -63,7 +63,7 @@ public:
     void SetCharacterSize(unsigned int size);
 
 
-    void HandleKeyInput(sf::Event &e);
+    void HandleKeyInput(const sf::Event &e);
 
 protected:
 
@@ -73,8 +73,6 @@ private:
 
     sf::Text m_body;
 
-
-private:
     GuiType m_type;
 
     bool m_selected;
@@ -89,8 +87,6 @@ private:
 
     std::vector<std::string> m_entries;
     int m_activeEntry;
-
-
 };
 
 #endif // GUIBASECLASS_HPP
