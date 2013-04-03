@@ -62,9 +62,6 @@ public:
     void SetActiveEntry(unsigned int index);
     void SetCharacterSize(unsigned int size);
 
-
-    void HandleKeyInput(const sf::Event &e);
-
 protected:
 
     virtual void CreateSelectionVertices();

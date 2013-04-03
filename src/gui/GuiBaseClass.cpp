@@ -26,8 +26,9 @@ GuiBaseElement::GuiBaseElement(GuiType type, const std::string& ID, const sf::Ve
 
 void GuiBaseElement::HandleEvent(const sf::Event &e)
 {
-    if(m_type == GUI_LIST)
+    switch (m_type)
     {
+    case GUI_LIST:
         if(e.type == sf::Event::KeyPressed)
         {
             if(e.key.code == sf::Keyboard::Left)
@@ -66,12 +67,39 @@ void GuiBaseElement::HandleEvent(const sf::Event &e)
 
             }
         }
-    }
+        break;
 
-    if(m_type == GUI_INPUT)
-    {
-        if(e.type == sf::Event::KeyPressed)
-            HandleKeyInput(e);
+    case GUI_INPUT:
+        if (e.type == sf::Event::TextEntered)
+        {
+            sf::Uint32 unicode = e.text.unicode;
+            // Ensure the unicode character is printable
+            if (unicode > 30 && (unicode < 127 || unicode > 159))
+            {
+                sf::String string = m_body.getString();
+                string += unicode;
+                m_body.setString(string);
+                CreateSelectionVertices();
+            }
+        }
+        else if (e.type == sf::Event::KeyPressed)
+        {
+             //Delete
+            if(e.key.code == sf::Keyboard::BackSpace)
+            {
+                sf::String temp = m_body.getString();
+                if(temp.getSize() > 0)
+                {
+                    temp.erase(temp.getSize() - 1, 1);
+                    m_body.setString(temp);
+                }
+                CreateSelectionVertices();
+            }
+        }
+        break;
+
+    default:
+        break;
     }
 }
 
@@ -221,8 +249,8 @@ void GuiBaseElement::CreateSelectionVertices()
     float height = m_body.getGlobalBounds().height;
 
     float distance = 10.f;
-    float triWidth = 0.15f * width;
-    float triheight = 0.65f * height;
+    float triWidth = 10;
+    float triheight = 10;
 
     float offset = 7.f;
 
@@ -264,178 +292,4 @@ void GuiBaseElement::CreateSelectionVertices()
         m_vertices[4] = sf::Vertex(sf::Vector2f(xPos - distance, yPos + height + distance), sf::Color(165,165,165)); // LeftBottom
         m_vertices[5] = m_vertices[0]; // LeftTop
     }
-}
-
-
-
-void GuiBaseElement::HandleKeyInput(const sf::Event &e)
-{
-
-    std::string newChar;
-
-    switch (e.key.code)
-    {
-    case sf::Keyboard::A:
-        newChar = "A";
-        break;
-    case sf::Keyboard::B:
-        newChar = "B";
-        break;
-    case sf::Keyboard::C:
-        newChar = "C";
-        break;
-    case sf::Keyboard::D:
-        newChar = "D";
-        break;
-    case sf::Keyboard::E:
-        newChar = "E";
-        break;
-    case sf::Keyboard::F:
-        newChar = "F";
-        break;
-    case sf::Keyboard::G:
-        newChar = "G";
-        break;
-    case sf::Keyboard::H:
-        newChar = "H";
-        break;
-    case sf::Keyboard::I:
-        newChar = "I";
-        break;
-    case sf::Keyboard::J:
-        newChar = "J";
-        break;
-    case sf::Keyboard::K:
-        newChar = "K";
-        break;
-    case sf::Keyboard::L:
-        newChar = "L";
-        break;
-    case sf::Keyboard::M:
-        newChar = "M";
-        break;
-    case sf::Keyboard::N:
-        newChar = "N";
-        break;
-    case sf::Keyboard::O:
-        newChar = "O";
-        break;
-    case sf::Keyboard::P:
-        newChar = "P";
-        break;
-    case sf::Keyboard::Q:
-        newChar = "Q";
-        break;
-    case sf::Keyboard::R:
-        newChar = "R";
-        break;
-    case sf::Keyboard::S:
-        newChar = "S";
-        break;
-    case sf::Keyboard::T:
-        newChar = "T";
-        break;
-    case sf::Keyboard::U:
-        newChar = "U";
-        break;
-    case sf::Keyboard::V:
-        newChar = "V";
-        break;
-    case sf::Keyboard::W:
-        newChar = "W";
-        break;
-    case sf::Keyboard::X:
-        newChar = "X";
-        break;
-    case sf::Keyboard::Y:
-        newChar = "Y";
-        break;
-    case sf::Keyboard::Z:
-        newChar = "Z";
-        break;
-    case sf::Keyboard::Space:
-        newChar = " ";
-        break;
-
-    case sf::Keyboard::Key::Num0:
-        newChar = "0";
-        break;
-    case sf::Keyboard::Key::Num1:
-        newChar = "1";
-        break;
-    case sf::Keyboard::Key::Num2:
-        newChar = "2";
-        break;
-    case sf::Keyboard::Key::Num3:
-        newChar = "3";
-        break;
-    case sf::Keyboard::Key::Num4:
-        newChar = "4";
-        break;
-    case sf::Keyboard::Key::Num5:
-        newChar = "5";
-        break;
-    case sf::Keyboard::Key::Num6:
-        newChar = "6";
-        break;
-    case sf::Keyboard::Key::Num7:
-        newChar = "7";
-        break;
-    case sf::Keyboard::Key::Num8:
-        newChar = "8";
-        break;
-    case sf::Keyboard::Key::Num9:
-        newChar = "9";
-        break;
-
-    case sf::Keyboard::Key::Numpad0:
-        newChar = "0";
-        break;
-    case sf::Keyboard::Key::Numpad1:
-        newChar = "1";
-        break;
-    case sf::Keyboard::Key::Numpad2:
-        newChar = "2";
-        break;
-    case sf::Keyboard::Key::Numpad3:
-        newChar = "3";
-        break;
-    case sf::Keyboard::Key::Numpad4:
-        newChar = "4";
-        break;
-    case sf::Keyboard::Key::Numpad5:
-        newChar = "5";
-        break;
-    case sf::Keyboard::Key::Numpad6:
-        newChar = "6";
-        break;
-    case sf::Keyboard::Key::Numpad7:
-        newChar = "7";
-        break;
-    case sf::Keyboard::Key::Numpad8:
-        newChar = "8";
-        break;
-    case sf::Keyboard::Key::Numpad9:
-        newChar = "9";
-        break;
-
-    default:
-        newChar = "";
-    }
-
-    std::string temp = m_body.getString() + newChar;
-    m_body.setString(temp);
-
-    //Delete
-    if(e.key.code == sf::Keyboard::BackSpace)
-    {
-        if(temp.size() > 0)
-        {
-            temp.erase(temp.size() - 1, 1);
-            m_body.setString(temp);
-        }
-    }
-
-    CreateSelectionVertices();
-
 }
