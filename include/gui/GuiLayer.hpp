@@ -1,9 +1,11 @@
 #ifndef GUILAYER_HPP
 #define GUILAYER_HPP
 
-#include "../../include/gui/GuiBaseClass.hpp"
-
+#include <vector>
+#include <string>
 #include <SFML/System/Vector2.hpp>
+
+#include "../../include/gui/GuiBaseClass.hpp"
 
 namespace sf
 {
@@ -11,8 +13,6 @@ namespace sf
 	class RenderWindow;
 }
 
-#include <vector>
-#include <string>
 
 class GuiLayer
 {
@@ -22,9 +22,9 @@ public:
     ~GuiLayer();
 
 
-    void AddElement(int type, std::string ID, sf::Vector2f position, std::string text);
+    void AddElement(GuiType type, const std::string& ID, const sf::Vector2f& position, const std::string& text);
 
-    void HandleEvents(sf::Event &e);
+    void HandleEvent(const sf::Event &e);
 
     void Draw(sf::RenderWindow &window);
 
@@ -41,8 +41,6 @@ public:
     GuiBaseElement* GetLastElement();
     GuiBaseElement* GetElement(unsigned int index);
     GuiBaseElement* GetSelectedElement();
-
-private:
 
 private:
 

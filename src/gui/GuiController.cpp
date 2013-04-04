@@ -18,23 +18,39 @@ void GuiController::AddLayer()
     m_layers.push_back(GuiLayer());
 }
 
-void GuiController::AddElement(unsigned int layer, int type, std::string ID, sf::Vector2f pos, std::string text)
+void GuiController::AddLabel(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text)
+{
+    AddElement(layer, GUI_LABEL, ID, pos, text);
+}
+
+void GuiController::AddButton(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text)
+{
+    AddElement(layer, GUI_BUTTON, ID, pos, text);
+}
+
+void GuiController::AddList(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text)
+{
+    AddElement(layer, GUI_LIST, ID, pos, text);
+}
+
+void GuiController::AddInput(unsigned int layer, const std::string& ID, const sf::Vector2f& pos, const std::string& text)
+{
+    AddElement(layer, GUI_INPUT, ID, pos, text);
+}
+
+void GuiController::AddElement(unsigned int layer, GuiType type, const std::string& ID, const sf::Vector2f& pos, const std::string& text)
 {
     if(layer < m_layers.size())
     {
         m_layers[layer].AddElement(type, ID, pos, text);
         m_layers[layer].GetLastElement()->SetFont(m_font);
-
-        return;
     }
-
-
 }
 
-void GuiController::HandleEvents(sf::Event &e)
+void GuiController::HandleEvent(const sf::Event &e)
 {
 
-    m_layers[m_activeLayer].HandleEvents(e);
+    m_layers[m_activeLayer].HandleEvent(e);
 
 }
 
