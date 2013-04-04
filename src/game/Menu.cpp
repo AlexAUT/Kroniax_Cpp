@@ -1,3 +1,9 @@
+#include <fstream>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/View.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/System/Vector2.hpp>
+
 #include "../../include/game/Menu.hpp"
 #include "../../include/aw/utilities/Converter.hpp"
 #include "../../include/game/HighscoreUploader.hpp"
@@ -6,14 +12,6 @@
 #include "../../include/game/MenuBackground.hpp"
 #include "../../include/game/DialogScreen.hpp"
 
-
-
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/View.hpp>
-#include <SFML/Window/Event.hpp>
-#include <SFML/System/Vector2.hpp>
-
-#include <fstream>
 
 Menu::Menu(sf::RenderWindow &window) : m_window(window), m_running(true), m_returnValue("exit")
 {
@@ -152,61 +150,11 @@ void Menu::HandleEvents()
                 // If the game returns from the option menu save the new options.
                 if(m_gui.GetActiveLayerInt() == 3)
                 {
-                     settings::AdjustVolume(aw::conv::ToInt(m_gui.GetSelectedLayer()->GetElement(3)->GetText()));
-
-                    if(m_gui.GetSelectedLayer()->GetElement(1)->GetText() == "on")
-                    {
-                        settings::EnableMusic(true);
-                    }
-                    else
-                    {
-                        settings::EnableMusic(false);
-                    }
-
-                    m_music.setVolume(settings::GetMusicVolume());
-
-                    if(!settings::IsMusicOn())
-                        m_music.setVolume(0);
-
-                    //Save the new Antialiasing level
-                    settings::SetAntialiasing(aw::conv::ToInt(m_gui.GetSelectedLayer()->GetElement(5)->GetText()));
-                    //Has the anitailiasing level change? -> Yes create a new window with the new settings
-                    if(m_window.getSettings().antialiasingLevel != settings::GetAntialiasing())
-                    {
-                        //The new Window should have the same settings except the antia. level
-                        sf::ContextSettings newSettings = m_window.getSettings();
-                        newSettings.antialiasingLevel = settings::GetAntialiasing();
-                        //Store the old size
-                        //The size has to set after the creating because otherwise the dialogscreens
-                        //And the interface during the game will be display not correctly!
-                        //So you have to create the window with the size (800,450)
-                        //Because of the defaultview.
-                        sf::Vector2u oldSize = m_window.getSize();
-                        //Store to old view to set it for the "new" window
-                        sf::View currentView = m_window.getView();
-                        //Store the old position of the window
-                        sf::Vector2i oldPos = m_window.getPosition();
-                        //Create a new window with the same size but other contextsettings.
-                        //The size has to set after the creating because otherwise the dialogscreens
-                        //And the interface during the game will be display not correctly!
-                        m_window.create(sf::VideoMode(800,450), "Kroniax", sf::Style::Default, newSettings);
-                        //Set the new Size
-                        m_window.setSize(oldSize);
-                        //Set the old view
-                        m_window.setView(currentView);
-                        //Set the new Position
-                        m_window.setPosition(oldPos);
-                        //Set vert. sync
-                        m_window.setVerticalSyncEnabled(true);
-
-                    }
-
                     //Save the new times for the tracer
                     settings::SetTimeForTracer(aw::conv::ToInt(m_gui.GetSelectedLayer()->GetElement(7)->GetText()));
 
                     //Save new settings into the config file
                     settings::Save();
-
                 }
 
                 m_gui.SetActiveLayer(0);
@@ -292,6 +240,64 @@ void Menu::HandleEvents()
                             }
                         }
                     }
+                }
+            }
+        }
+        else if (e.type == sf::Event::KeyPressed &&
+            (e.key.code == sf::Keyboard::Right || e.key.code == sf::Keyboard::Left))
+        {
+            if(m_gui.GetSelectedElement()->GetID() == "vol")
+            {
+                // Apply new music volume setting
+                settings::AdjustVolume(aw::conv::ToInt(m_gui.GetSelectedLayer()->GetElement(3)->GetText()));
+
+                if(m_gui.GetSelectedLayer()->GetElement(1)->GetText() == "on")
+                {
+                    settings::EnableMusic(true);
+                }
+                else
+                {
+                    settings::EnableMusic(false);
+                }
+
+                m_music.setVolume(settings::GetMusicVolume());
+
+                if(!settings::IsMusicOn())
+                    m_music.setVolume(0);
+            }
+
+            else if(m_gui.GetSelectedElement()->GetID() == "antialiasing")
+            {
+                // Apply new anti-aliasing level
+                settings::SetAntialiasing(aw::conv::ToInt(m_gui.GetSelectedLayer()->GetElement(5)->GetText()));
+                //Has the anitailiasing level change? -> Yes create a new window with the new settings
+                if(m_window.getSettings().antialiasingLevel != settings::GetAntialiasing())
+                {
+                    //The new Window should have the same settings except the antia. level
+                    sf::ContextSettings newSettings = m_window.getSettings();
+                    newSettings.antialiasingLevel = settings::GetAntialiasing();
+                    //Store the old size
+                    //The size has to set after the creating because otherwise the dialogscreens
+                    //And the interface during the game will be display not correctly!
+                    //So you have to create the window with the size (800,450)
+                    //Because of the defaultview.
+                    sf::Vector2u oldSize = m_window.getSize();
+                    //Store to old view to set it for the "new" window
+                    sf::View currentView = m_window.getView();
+                    //Store the old position of the window
+                    sf::Vector2i oldPos = m_window.getPosition();
+                    //Create a new window with the same size but other contextsettings.
+                    //The size has to set after the creating because otherwise the dialogscreens
+                    //And the interface during the game will be display not correctly!
+                    m_window.create(sf::VideoMode(800,450), "Kroniax", sf::Style::Default, newSettings);
+                    //Set the new Size
+                    m_window.setSize(oldSize);
+                    //Set the old view
+                    m_window.setView(currentView);
+                    //Set the new Position
+                    m_window.setPosition(oldPos);
+                    //Set vert. sync
+                    m_window.setVerticalSyncEnabled(true);
                 }
             }
         }
