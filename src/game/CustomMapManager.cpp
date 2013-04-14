@@ -10,6 +10,7 @@
 #include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/Packet.hpp>
 #include <SFML/Network/IpAddress.hpp>
+#include <SFML/System/Time.hpp>
 
 
 #ifdef _WIN32
@@ -69,10 +70,10 @@ bool CustomMapManager::UpdateMapList()
 
     int countRetries = 0;
 
-    while(server.connect(serverAddress, port) != sf::Socket::Done)
+    while(server.connect(serverAddress, port, sf::seconds(1)) != sf::Socket::Done)
     {
         countRetries++;
-
+           std::cout << "hier" << std::endl;
         if(countRetries > 3)
         {
             return false;
@@ -112,7 +113,7 @@ bool CustomMapManager::DownloadMapDescription(std::string name)
 
     int countRetries = 0;
 
-    while(server.connect(serverAddress, port) != sf::Socket::Done)
+    while(server.connect(serverAddress, port, sf::seconds(1)) != sf::Socket::Done)
     {
         countRetries++;
 
@@ -175,7 +176,7 @@ bool CustomMapManager::DownloadMap(std::string name)
 
     int countRetries = 0;
 
-    while(server.connect(serverAddress, port) != sf::Socket::Done)
+    while(server.connect(serverAddress, port, sf::seconds(1)) != sf::Socket::Done)
     {
         countRetries++;
 

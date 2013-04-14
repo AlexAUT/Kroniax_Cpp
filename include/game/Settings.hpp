@@ -4,6 +4,16 @@
 #include <vector>
 #include <string>
 
+enum GameMode
+{
+    ARCADE,
+    SPEED_CHALLENGE,
+    TOURNAMENT,
+    HEAD_TO_HEAD
+};
+
+
+
 namespace settings
 {
     // Load & Save
@@ -25,8 +35,8 @@ namespace settings
     int GetTimeForTracer();
 
     //Settings from the current level
-    void SetGamemode(int value);
-    int GetGamemode();
+    void SetGamemode(const GameMode& gamemode);
+    GameMode GetGamemode();
 
     std::vector<std::string> &GetLevelList();
     int GetUnlockedLevel();

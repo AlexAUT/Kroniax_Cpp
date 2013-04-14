@@ -20,7 +20,7 @@ GuiBaseElement::GuiBaseElement(GuiType type, const std::string& ID, const sf::Ve
 {
     m_body.setString(text);
     m_body.setPosition(position);
-    m_body.setCharacterSize(20);
+    m_body.setCharacterSize(16);
     m_activeEntry = -1;
 }
 
@@ -235,6 +235,13 @@ void GuiBaseElement::SetCharacterSize(unsigned int size)
     CreateSelectionVertices();
 }
 
+void GuiBaseElement::SetObjectToCenter(int windowWidth)
+{
+    m_position.x = (windowWidth / 2) - (m_body.getGlobalBounds().width / 2);
+
+    SetPosition(m_position);
+}
+
 
 
 //
@@ -248,11 +255,11 @@ void GuiBaseElement::CreateSelectionVertices()
     float width = m_body.getGlobalBounds().width;
     float height = m_body.getGlobalBounds().height;
 
-    float distance = 10.f;
+    float distance = 8.f;
     float triWidth = 10;
     float triheight = 10;
 
-    float offset = 7.f;
+    float offset = 3.f;
 
     if(m_type == GUI_BUTTON)
     {

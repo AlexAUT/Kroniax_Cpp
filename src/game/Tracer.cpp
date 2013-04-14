@@ -16,6 +16,7 @@ void Tracer::Reset()
 {
     m_timeSinceLastAdd = 0;
     m_points.clear();
+    m_points.reserve(250);
 }
 
 bool Tracer::Update(float frameTime)

@@ -104,31 +104,27 @@ void Menu::HandleEvents()
 
         if(e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Return)
         {
-            if(m_gui.GetSelectedElement()->GetID() == "arcade")
+            //
+            // Main Menu
+            //
+            if(m_gui.GetSelectedElement()->GetID() == "singleplayer")
             {
                 m_gui.SetActiveLayer(4);
             }
-
-            else if(m_gui.GetSelectedElement()->GetID() == "custommaps")
+            else if(m_gui.GetSelectedElement()->GetID() == "multiplayer")
             {
-                m_gui.SetActiveLayer(5);
-                m_underlay.setPosition(150,120);
-                m_underlay.setSize(sf::Vector2f(600,325));
+                db::DialogOK(m_window, "In progress");
             }
-
-
-            else if(m_gui.GetSelectedElement()->GetID() == "start")
+            else if(m_gui.GetSelectedElement()->GetID() == "help")
             {
-                StartGame(m_gui.GetSelectedLayer()->GetElement(0)->GetText());
+                db::DialogOK(m_window, "In progress");
             }
-
             else if(m_gui.GetSelectedElement()->GetID() == "exit")
             {
                 settings::Save();
                 m_running = false;
                 m_returnValue = "exit";
             }
-
             else if(m_gui.GetSelectedElement()->GetID() == "credits")
             {
                 m_gui.SetActiveLayer(2);
@@ -140,7 +136,9 @@ void Menu::HandleEvents()
                 m_gui.SetActiveLayer(3);
                 m_gui.GetSelectedLayer()->SetActiveElement(1);
             }
-
+            //
+            // Back button
+            //
             else if(m_gui.GetSelectedElement()->GetID() == "back")
             {
 
@@ -161,39 +159,64 @@ void Menu::HandleEvents()
 
             }
 
+            //
+            //Singleplayer Layer
+            //
+            else if(m_gui.GetSelectedElement()->GetID() == "arcade layer")
+            {
+                m_gui.SetActiveLayer(5);
+                settings::SetGamemode(ARCADE);
+            }
+            else if(m_gui.GetSelectedElement()->GetID() == "speedchallenge layer")
+            {
+                m_gui.SetActiveLayer(5);
+                settings::SetGamemode(SPEED_CHALLENGE);
+            }
+            //
+            // Arcade & Speed Challenge modes
             else if(m_gui.GetSelectedElement()->GetID() == "startArcade")
             {
                 std::string lvlname = m_gui.GetSelectedLayer()->GetElement(0)->GetText();
-                settings::SetGamemode(0);
                 StartGame(lvlname);
             }
 
-            else if(m_gui.GetSelectedElement()->GetID() == "lvl")
+            else if(m_gui.GetSelectedElement()->GetID() == "lvl arcade")
             {
                 std::string lvlname = m_gui.GetSelectedLayer()->GetElement(0)->GetText();
-                settings::SetGamemode(0);
                 StartGame(lvlname);
             }
 
 
             else if(m_gui.GetSelectedElement()->GetID() == "helparcade")
             {
-                db::DialogOK(m_window, "Complete the newest Level\nto unlock more levels");
+                //Show the right Help depending on the selected gamemode!
+                if(settings::GetGamemode() == ARCADE)
+                    db::DialogOK(m_window, "Complete the newest Level\nto unlock more levels");
+                else if(settings::GetGamemode() == SPEED_CHALLENGE)
+                    db::DialogOK(m_window, "In this game mode you cancontrol your speed\nwith the arrow keys\n\n\nSpeed ups and slow downs are disabled\n\n\nIf you complete a level you can upload your time\nto an online highscore\n\n\nComplete the newest Levelin the arcade mode\nto unlock more levels");
             }
+            //
             //Custom maps
+            //
+            else if(m_gui.GetSelectedElement()->GetID() == "custommaps")
+            {
+                m_gui.SetActiveLayer(6);
+                m_underlay.setPosition(150,120);
+                m_underlay.setSize(sf::Vector2f(600,325));
+            }
             else if(m_gui.GetSelectedElement()->GetID() == "updatelevellist")
             {
                 if(m_mapManager.UpdateMapList())
                 {
                     m_mapManager.LoadMapList();
 
-                    m_gui.GetElement(5, 0)->ClearEntries();
+                    m_gui.GetElement(6, 0)->ClearEntries();
 
                     for(unsigned int i = 0; i < m_mapManager.GetMapCount(); i++)
                     {
-                        m_gui.GetElement(5, 0)->AddEntry(m_mapManager.GetMap(i)->name);
+                        m_gui.GetElement(6, 0)->AddEntry(m_mapManager.GetMap(i)->name);
                     }
-                    m_gui.GetElement(5, 0)->SetText("Select a level");
+                    m_gui.GetElement(6, 0)->SetText("Select a level");
 
                     db::DialogOK(m_window, "Successfully updated the levellist");
                 }
@@ -206,7 +229,7 @@ void Menu::HandleEvents()
             {
                 if(m_gui.GetSelectedElement()->GetText() == "Download")
                 {
-                    if(m_mapManager.DownloadMapDescription(m_gui.GetElement(5,0)->GetText()) && m_mapManager.DownloadMap(m_gui.GetElement(5,0)->GetText()))
+                    if(m_mapManager.DownloadMapDescription(m_gui.GetElement(6,0)->GetText()) && m_mapManager.DownloadMap(m_gui.GetElement(6,0)->GetText()))
                     {
                         db::DialogOK(m_window, "Downloaded the map!\nHave fun with it =)");
                     }
@@ -218,20 +241,20 @@ void Menu::HandleEvents()
                 else if(m_gui.GetSelectedElement()->GetText() == "Play")
                 {
                     Map *currentMap = nullptr;
-                    currentMap = m_mapManager.GetMap(m_gui.GetElement(5,0)->GetText());
+                    currentMap = m_mapManager.GetMap(m_gui.GetElement(6,0)->GetText());
 
                     if(currentMap)
                     {
                         if(currentMap->gameMode == "arcade")
                         {
-                            settings::SetGamemode(0);
-                            StartGame(m_gui.GetElement(5,0)->GetText());
+                            settings::SetGamemode(ARCADE);
+                            StartGame(m_gui.GetElement(6,0)->GetText());
                         }
                         else if(currentMap->gameMode == "speed challenge")
                         {
                             if(m_mapManager.DownloadMap(currentMap->name))
                             {
-                                settings::SetGamemode(1);
+                                settings::SetGamemode(SPEED_CHALLENGE);
                                 StartGame(currentMap->name);
                             }
                             else
@@ -243,9 +266,17 @@ void Menu::HandleEvents()
                 }
             }
         }
+        //
+        // Lists Events (All in 1 if to save some performance
+        //
         else if (e.type == sf::Event::KeyPressed &&
             (e.key.code == sf::Keyboard::Right || e.key.code == sf::Keyboard::Left))
         {
+            if(m_gui.GetSelectedElement()->GetID() == "lvl arcade")
+            {
+                m_gui.GetSelectedElement()->SetObjectToCenter(m_window.getView().getSize().x);
+            }
+
             if(m_gui.GetSelectedElement()->GetID() == "vol")
             {
                 // Apply new music volume setting
@@ -327,23 +358,23 @@ void Menu::Draw()
 void Menu::UpdateCustomMapScreen()
 {
     Map* currentMap = nullptr;
-    currentMap = m_mapManager.GetMap(m_gui.GetElement(5,0)->GetText());
+    currentMap = m_mapManager.GetMap(m_gui.GetElement(6,0)->GetText());
 
     if(currentMap)
     {
-        m_gui.GetElement(5, 1)->SetText("Author: "+currentMap->author);
-        m_gui.GetElement(5, 2)->SetText("Gamemode: "+currentMap->gameMode);
-        m_gui.GetElement(5, 3)->SetText("Difficulty: "+currentMap->difficulty);
-        m_gui.GetElement(5, 4)->SetText("SpeedX: "+ aw::conv::ToString(currentMap->speedX));
-        m_gui.GetElement(5, 5)->SetText("Length: "+ aw::conv::ToString(currentMap->length));
+        m_gui.GetElement(6, 1)->SetText("Author: "+currentMap->author);
+        m_gui.GetElement(6, 2)->SetText("Gamemode: "+currentMap->gameMode);
+        m_gui.GetElement(6, 3)->SetText("Difficulty: "+currentMap->difficulty);
+        m_gui.GetElement(6, 4)->SetText("SpeedX: "+ aw::conv::ToString(currentMap->speedX));
+        m_gui.GetElement(6, 5)->SetText("Length: "+ aw::conv::ToString(currentMap->length));
 
         if(currentMap->speedX != 0)
         {
-            m_gui.GetElement(5, 6)->SetText("Play");
+            m_gui.GetElement(6, 6)->SetText("Play");
         }
         else
         {
-            m_gui.GetElement(5, 6)->SetText("Download");
+            m_gui.GetElement(6, 6)->SetText("Download");
         }
     }
 
@@ -361,15 +392,19 @@ void Menu::InitGui()
 {
     m_gui.AddLayer();
 
-    m_gui.AddButton(0, "arcade", sf::Vector2f(325,150), "Arcade");
+    m_gui.AddButton(0, "singleplayer", sf::Vector2f(300,155), "Singleplayer");
 
-    m_gui.AddButton(0, "custommaps", sf::Vector2f(300,185), "Custom Maps");
+    m_gui.AddButton(0, "multiplayer", sf::Vector2f(310,185), "Multiplayer");
 
-    m_gui.AddButton(0, "options", sf::Vector2f(325,270), "Options");
 
-    m_gui.AddButton(0, "credits", sf::Vector2f(327,310), "Credits");
 
-    m_gui.AddButton(0, "exit", sf::Vector2f(355,360), "Exit");
+    m_gui.AddButton(0, "help", sf::Vector2f(364,260), "Help");
+
+    m_gui.AddButton(0, "options", sf::Vector2f(341,290), "Options");
+
+    m_gui.AddButton(0, "credits", sf::Vector2f(342,320), "Credits");
+
+    m_gui.AddButton(0, "exit", sf::Vector2f(355,365), "Close");
 
 ///////////////////////////////////////////////////////////////
 
@@ -487,12 +522,23 @@ void Menu::InitGui()
 
     //////////////////////////////////////////////////////////////////
 
+    m_gui.AddLayer(); // 4 Singleplayer layer
 
-    m_gui.AddLayer();// 4 Arcade Mode
+    m_gui.AddButton(4, "arcade layer", sf::Vector2f(346,170), "Arcade");
 
 
-    m_gui.AddList(4, "lvl", sf::Vector2f(335,150), "Select a level");
+    m_gui.AddButton(4, "speedchallenge layer", sf::Vector2f(271,220), "Speed Challenge");
 
+    m_gui.AddButton(4, "custommaps", sf::Vector2f(302,270), "Custom Maps");
+
+    m_gui.AddButton(4, "back", sf::Vector2f(355,360), "Back");
+
+    //////////////////////////////////////////////////////////////////
+
+    m_gui.AddLayer();// 5 Arcade Mode
+
+
+    m_gui.AddList(5, "lvl arcade", sf::Vector2f(335,170), "Select a level");
 
     for(int i = 0; i < settings::GetUnlockedLevel(); i++)
     {
@@ -503,17 +549,19 @@ void Menu::InitGui()
     {
         m_gui.GetLastLayer()->GetLastElement()->SetActiveEntry(settings::GetUnlockedLevel()-1);
     }
+    m_gui.GetLastLayer()->GetLastElement()->SetObjectToCenter(m_window.getView().getSize().x);
 
-    m_gui.AddButton(4, "startArcade", sf::Vector2f(345,220), "Start");
-
-    m_gui.AddButton(4, "helparcade", sf::Vector2f(355,255), "Help");
+    m_gui.AddButton(5, "startArcade", sf::Vector2f(353,220), "Start");
 
 
-    m_gui.AddButton(4, "back", sf::Vector2f(355,360), "Back");
+    m_gui.AddButton(5, "helparcade", sf::Vector2f(364,255), "Help");
 
+
+    m_gui.AddButton(5, "back", sf::Vector2f(363,360), "Back");
+       // std::cout << std::endl << 400 - m_gui.GetLastLayer()->GetLastElement()->GetTextObj().getLocalBounds().width / 2  << std::endl;
     ///////////////////////////////////////////////////////////////////////
 
-    m_gui.AddLayer(); // 5 Custommap mode
+    m_gui.AddLayer(); //6 Custommap mode
 
     m_mapManager.LoadMapList();
 
@@ -521,11 +569,11 @@ void Menu::InitGui()
 
     if(m_mapManager.GetMapCount() == 0)
     {
-        m_gui.AddList(5, "levellist", sf::Vector2f(xPos,140), "No levels found,\nplease update the list");
+        m_gui.AddList(6, "levellist", sf::Vector2f(xPos,140), "No levels found,\nplease update the list");
     }
     else
     {
-        m_gui.AddList(5, "levellist", sf::Vector2f(xPos,140), "Select a level");
+        m_gui.AddList(6, "levellist", sf::Vector2f(xPos,140), "Select a level");
 
         for(unsigned int i = 0; i < m_mapManager.GetMapCount(); i++)
         {
@@ -533,16 +581,16 @@ void Menu::InitGui()
         }
     }
 
-    m_gui.AddLabel(5, "author", sf::Vector2f(xPos,190), "Author: ");
-    m_gui.AddLabel(5, "gamemmode", sf::Vector2f(xPos,220), "Gamemode: ");
-    m_gui.AddLabel(5, "difficulty", sf::Vector2f(xPos,250), "Difficulty: ");
-    m_gui.AddLabel(5, "speedxdisplay", sf::Vector2f(xPos, 290), "SpeedX: ");
-    m_gui.AddLabel(5, "lengthdisplay", sf::Vector2f(xPos,310), "Length: ");
+    m_gui.AddLabel(6, "author", sf::Vector2f(xPos,190), "Author: ");
+    m_gui.AddLabel(6, "gamemmode", sf::Vector2f(xPos,220), "Gamemode: ");
+    m_gui.AddLabel(6, "difficulty", sf::Vector2f(xPos,250), "Difficulty: ");
+    m_gui.AddLabel(6, "speedxdisplay", sf::Vector2f(xPos, 290), "SpeedX: ");
+    m_gui.AddLabel(6, "lengthdisplay", sf::Vector2f(xPos,310), "Length: ");
 
-    m_gui.AddButton(5, "play", sf::Vector2f(xPos, 350), "Download");
+    m_gui.AddButton(6, "play", sf::Vector2f(xPos, 350), "Download");
 
-    m_gui.AddButton(5, "updatelevellist", sf::Vector2f(xPos,390), "Update levellist");
-    m_gui.AddButton(5, "back", sf::Vector2f(xPos,420), "Back");
+    m_gui.AddButton(6, "updatelevellist", sf::Vector2f(xPos,390), "Update levellist");
+    m_gui.AddButton(6, "back", sf::Vector2f(xPos,420), "Back");
 
 }
 
@@ -602,9 +650,9 @@ void Menu::StartGame(std::string lvlname)
         m_levelName = lvlname;
 
         if(gameMode == "Normal")
-            settings::SetGamemode(0);
+            settings::SetGamemode(ARCADE);
         else if(gameMode == "Speed challenge")
-            settings::SetGamemode(1);
+            settings::SetGamemode(SPEED_CHALLENGE);
     }
 }
 

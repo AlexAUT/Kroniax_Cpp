@@ -5,7 +5,7 @@
 
 GuiController::GuiController() : m_activeLayer(0)
 {
-    m_font.loadFromFile("data/font/good times.ttf");
+    m_font.loadFromFile("data/font/terminator real nfi.ttf");
 }
 
 GuiController::~GuiController()

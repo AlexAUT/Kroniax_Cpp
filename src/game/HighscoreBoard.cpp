@@ -22,7 +22,7 @@ void ListHighscore(sf::RenderWindow &window, std::string lvlname, std::vector<Sc
     float startX = window.getView().getCenter().x - window.getView().getSize().x/2;
 
     sf::Font font;
-    font.loadFromFile("data/font/good times.ttf");
+    font.loadFromFile("data/font/terminator real nfi.ttf");
 
     std::string headlineText = "Highscore of " + lvlname;
 

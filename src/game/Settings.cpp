@@ -7,15 +7,16 @@ namespace settings
 {
     namespace
     {
+        // Game settings
         bool m_music = true;
         int  m_musicVolume = 100;
         unsigned int m_antialiasing = 0;
         int m_timeForTracer = 800;
-
+        // Level progression
         std::vector<std::string> m_levelList;
         int m_unlocked;
-
-        int m_gamemode = 0;
+        // Settings for the current level
+        GameMode m_gamemode = ARCADE;
 
         float m_speedX;
         float m_speedY;
@@ -177,12 +178,12 @@ namespace settings
         return m_timeForTracer;
     }
 
-    void SetGamemode(int value)
+    void SetGamemode(const GameMode& value)
     {
         m_gamemode = value;
     }
 
-    int GetGamemode()
+    GameMode GetGamemode()
     {
         return m_gamemode;
     }

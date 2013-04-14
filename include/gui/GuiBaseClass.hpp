@@ -62,6 +62,8 @@ public:
     void SetActiveEntry(unsigned int index);
     void SetCharacterSize(unsigned int size);
 
+    void SetObjectToCenter(int windowWidth);
+
 protected:
 
     virtual void CreateSelectionVertices();

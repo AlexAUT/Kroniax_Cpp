@@ -150,7 +150,7 @@ void Game::HandleEvents()
 
     if(settings::GetGamemode() == 1)
     {
-        if(settings::GetSpeedX() < 750)
+        if(settings::GetSpeedX() < 1250)
         {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             {
@@ -158,7 +158,7 @@ void Game::HandleEvents()
             }
         }
 
-        if(settings::GetSpeedX() > -750)
+        if(settings::GetSpeedX() > -1250)
         {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             {
@@ -311,7 +311,7 @@ void Game::Init()
 
     m_window.setSize(sizeWin);
 
-    m_font.loadFromFile("data/font/good times.ttf");
+    m_font.loadFromFile("data/font/terminator real nfi.ttf");
 
     m_time.setFont(m_font);
     m_time.setPosition(m_window.mapPixelToCoords(sf::Vector2i(5,5)));
