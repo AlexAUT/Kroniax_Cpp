@@ -1,3 +1,9 @@
+#custom
+*.dll
+*.exe
+*.vcxproj
+*.filters
+
 # Some dll's
 sfml-audio-d-2.dll
 sfml-graphics-d-2.dll
