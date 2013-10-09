@@ -105,7 +105,7 @@ namespace aw
 				std::stringstream sstr(line);
 				sf::Vector2f startPosition;
 				sstr >> startPosition.x >> startPosition.y;
-				m_player.setPosition(startPosition);
+				m_player.setPosition(startPosition * 25.f); // *25 because of the block size...
 			}
 		}
 
