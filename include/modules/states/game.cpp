@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include <SFML/Graphics/RenderWindow.hpp>
+
 #include "../../messageBus/messageBus.hpp"
 
 namespace aw
@@ -22,14 +24,19 @@ namespace aw
 		m_active = true;
 
 		m_player.upate(frameTime);
+		m_camera.update(m_player.getPosition());
 	}
 
 	void Game::render(sf::RenderWindow &window)
 	{
+		//Set game view
+		window.setView(m_camera.getGameView());
 		//Render the map
 		m_mapRenderer.render(window);
 		//Player
 		m_player.render(window);
+		//Set gui view
+		window.setView(m_camera.getDefaultView());
 	}
 
 	void Game::receiveMessage(const Message &msg)

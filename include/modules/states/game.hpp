@@ -6,6 +6,7 @@
 
 #include "../game/mapRenderer.hpp"
 #include "../game/player.hpp" 
+#include "../game/camera.hpp"
 
 namespace aw
 {
@@ -46,6 +47,7 @@ namespace aw
 
 		MapRenderer m_mapRenderer;
 		Player m_player;
+		Camera m_camera;
 	};
 }
 
