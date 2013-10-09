@@ -24,6 +24,8 @@ namespace aw
 		void upate(const sf::Time &frameTime);
 		void render(sf::RenderWindow &window);
 
+		void loadInformation(const std::string &path);
+
 		void setPosition(const sf::Vector2f &position);
 		void setSpeedX(float xSpeed);
 		void setGravitation(float gravitation);
@@ -31,6 +33,7 @@ namespace aw
 
 		float getXPosition() const;
 		const sf::Vector2f &getPosition() const;
+		sf::Vector2f getVertexPosition(std::size_t index) const;
 
 	private:
 

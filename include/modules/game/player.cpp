@@ -6,6 +6,11 @@
 
 #include <iostream>
 
+#include <fstream>
+#include <sstream>
+
+#include <assert.h>
+
 namespace aw
 {
 	void Player::upate(const sf::Time &frameTime)
@@ -28,6 +33,44 @@ namespace aw
 	void Player::render(sf::RenderWindow &window)
 	{
 		window.draw(&m_body[0], 3, sf::Triangles);
+	}
+
+	void Player::loadInformation(const std::string &path)
+	{
+		std::fstream file(path.c_str(), std::ios::in);
+
+		std::string line;
+		while (std::getline(file, line))
+		{
+			if (line == "[Start speed]")
+			{
+				std::getline(file, line);
+				std::stringstream sstr(line);
+				float startSpeed;
+				sstr >> startSpeed;
+				m_speed.x = startSpeed;
+			}
+			else if (line == "[Start Gravitation]")
+			{
+				std::getline(file, line);
+				std::stringstream sstr(line);
+				float startGravitation;
+				sstr >> startGravitation;
+				m_gravitation = startGravitation;
+			}
+			else if (line == "[Start Position]")
+			{
+				std::getline(file, line);
+				std::stringstream sstr(line);
+				sf::Vector2f startPosition;
+				sstr >> startPosition.x >> startPosition.y;
+				m_position = startPosition * 25.f; // *25 because of the block size...
+			}
+		}
+
+		m_bodyColor = sf::Color::White;
+
+		file.close();
 	}
 
 	void Player::setPosition(const sf::Vector2f &position)
@@ -59,6 +102,15 @@ namespace aw
 		return m_position;
 	}
 
+	sf::Vector2f Player::getVertexPosition(std::size_t index) const
+	{
+		if (index < 3)
+		{
+			return m_body[index].position;
+		}
+		assert(index < 3);
+		return sf::Vector2f(-1,-1);
+	}
 
 	void Player::updateBody()
 	{
