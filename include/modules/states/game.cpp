@@ -22,18 +22,16 @@ namespace aw
 	void Game::update(const sf::Time &frameTime)
 	{
 		m_active = true;
+
 		//Update player position
 		m_player.upate(frameTime);
+
 		//check for collision or finish
 		auto result = m_collisionSystem.checkCollision(m_player);
-		if (result == CollisionType::WALL)
-		{
-			std::cout << "Wall!!";
-		}
-		else if (result == CollisionType::FINISH)
-		{
-			std::cout << "Finish!!";
-		}
+
+		//Check for Scriptactions
+		m_scriptManager.update(m_player, m_camera);
+
 		//update the camera position
 		m_camera.update(m_player.getPosition());
 	}
@@ -82,10 +80,11 @@ namespace aw
 			path = "data/levels/custom/" + m_levelName + ".cfg";
 		}
 		std::cout << "levelpath: " << path << std::endl;
-		//Load the mapRenderer
+		//Load all modules
 		m_mapRenderer.load(path);
 		m_collisionSystem.loadMap(path);
 		m_player.loadInformation(path);
+		m_scriptManager.load(path);
 	}
 
 }

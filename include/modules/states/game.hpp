@@ -8,6 +8,7 @@
 #include "../game/player.hpp" 
 #include "../game/camera.hpp"
 #include "../game/collisionSystem.hpp"
+#include "../game/scriptManager.hpp"
 
 namespace aw
 {
@@ -50,6 +51,7 @@ namespace aw
 		CollisionSystem m_collisionSystem;
 		Player m_player;
 		Camera m_camera;
+		ScriptManager m_scriptManager;
 		
 	};
 }
