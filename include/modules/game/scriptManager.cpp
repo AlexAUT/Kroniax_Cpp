@@ -17,15 +17,16 @@ namespace aw
 			{
 				if (player.getVertexPosition(0).x >= it.xPos * 25.f) //Front vertex
 				{
+					
 					it.used = true;
 
 					switch (it.type)
 					{
 					case CHECKPOINT: checkPointAction(player); break;
-					case CHANGE_SPEED: changeSpeedAction(player); break;
-					case CHANGE_GRAVITY: changeGravityAction(player); break;
+					case CHANGE_SPEED: changeSpeedAction(player, it.first); break;
+					case CHANGE_GRAVITY: changeGravityAction(player, it.first); break;
 					case FLIP_CAMERA: flipCameraAction(camera); break;
-					case ZOOM: zoomAction(camera); break;
+					case ZOOM: zoomAction(camera, it.first); break;
 					case FLICKERING: flickeringAction(camera); break;
 					case INVERT_COLOR: invertColorAction(camera); break;
 					case COLOR_OVERLAY: colorOverlayAction(camera); break;
@@ -38,11 +39,11 @@ namespace aw
 
 	void ScriptManager::load(const std::string &path)
 	{
-		std::fstream file;
+		std::fstream file(path.c_str(), std::ios::in);
 
 		if (!file.good())
 			return;
-
+		
 		std::string line;
 		while (std::getline(file, line))
 		{
@@ -54,14 +55,14 @@ namespace aw
 					{
 						break;
 					}
-					 
+					
 					int type;
 					int xPos;
 					float first, second, third;
 
 					std::stringstream sstr(line);
 					sstr >> type >> xPos >> first >> second >> third;
-
+					
 					m_scripts.push_back(Script(ScriptType(type), xPos, first, second, third));
 				}
 			}
@@ -78,19 +79,19 @@ namespace aw
 
 	}
 
-	void ScriptManager::changeSpeedAction(Player &player)
+	void ScriptManager::changeSpeedAction(Player &player, float first)
 	{
-
+		player.setSpeedX(first);
 	}
-	void ScriptManager::changeGravityAction(Player &player)
+	void ScriptManager::changeGravityAction(Player &player, float first)
 	{
-
+		player.setGravitation(first);
 	}
 	void ScriptManager::flipCameraAction(Camera &camera)
 	{
-
+		
 	}
-	void ScriptManager::zoomAction(Camera &camera)
+	void ScriptManager::zoomAction(Camera &camera, float first)
 	{
 
 	}

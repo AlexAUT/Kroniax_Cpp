@@ -79,7 +79,7 @@ namespace aw
 		{
 			path = "data/levels/custom/" + m_levelName + ".cfg";
 		}
-		std::cout << "levelpath: " << path << std::endl;
+
 		//Load all modules
 		m_mapRenderer.load(path);
 		m_collisionSystem.loadMap(path);

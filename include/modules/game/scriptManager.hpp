@@ -10,6 +10,7 @@ namespace aw
 
 	enum ScriptType
 	{
+		NOTHING,
 		CHECKPOINT,
 		CHANGE_SPEED,
 		CHANGE_GRAVITY,
@@ -42,10 +43,10 @@ namespace aw
 	private:
 
 		void checkPointAction(Player &player);
-		void changeSpeedAction(Player &player);
-		void changeGravityAction(Player &player);
+		void changeSpeedAction(Player &player, float first);
+		void changeGravityAction(Player &player, float first);
 		void flipCameraAction(Camera &camera);
-		void zoomAction(Camera &camera);
+		void zoomAction(Camera &camera, float first);
 		void flickeringAction(Camera &camera);
 		void invertColorAction(Camera &camera);
 		void colorOverlayAction(Camera &camera);
