@@ -1,5 +1,7 @@
 #include "application.hpp"
 
+#include <iostream>
+
 #include "messageBus\receiver.hpp"
 
 //Include states
@@ -51,6 +53,7 @@ namespace aw
 		}
 
 		m_settings.save();
+		std::cin.get();
 		return 0;
 	}
 
