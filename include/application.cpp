@@ -53,7 +53,7 @@ namespace aw
 		}
 
 		m_settings.save();
-		std::cin.get();
+
 		return 0;
 	}
 
