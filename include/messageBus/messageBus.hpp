@@ -9,7 +9,7 @@ namespace aw
 	class Receiver;
 	struct Message;
 }
-//Todo implement MessageBus functions
+
 namespace aw
 {
 	class MessageBus
