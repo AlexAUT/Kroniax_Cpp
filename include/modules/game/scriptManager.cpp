@@ -1,13 +1,14 @@
 #include "scriptManager.hpp"
 
-#include "player.hpp"
-#include "camera.hpp"
-
 #include <fstream>
 #include <sstream>
 
 namespace aw
 {
+	ScriptManager::ScriptManager() :
+		m_checkpoint(nullptr)
+	{}
+
 	void ScriptManager::update(Player &player, Camera &camera)
 	{
 		//Check for Scripts
@@ -22,7 +23,7 @@ namespace aw
 
 					switch (it.type)
 					{
-					case CHECKPOINT: checkPointAction(player); break;
+					case CHECKPOINT: checkPointAction(player, camera); break;
 					case CHANGE_SPEED: changeSpeedAction(player, it.first); break;
 					case CHANGE_GRAVITY: changeGravityAction(player, it.first); break;
 					case FLIP_CAMERA: flipCameraAction(camera); break;
@@ -72,11 +73,23 @@ namespace aw
 	}
 
 
+	Checkpoint *ScriptManager::getLastCheckPoint()
+	{
+		if (m_checkpoint)
+		{
+			return &*m_checkpoint;
+		}
+
+		return nullptr;
+	}
+
 	////////ACTION FUNCTIONS//////////////////////////////////////////////////////////
 
-	void ScriptManager::checkPointAction(Player &player)
+	void ScriptManager::checkPointAction(Player &player, Camera &camera)
 	{
-
+		m_checkpoint = std::unique_ptr<Checkpoint>(new Checkpoint());
+		m_checkpoint->savedPlayer = player;
+		m_checkpoint->savedCamera = camera;
 	}
 
 	void ScriptManager::changeSpeedAction(Player &player, float first)

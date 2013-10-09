@@ -47,7 +47,6 @@ namespace aw
 		//Optical Elements
 		std::array<sf::Vertex, 3> m_body;
 		sf::Color m_bodyColor;
-
 	};
 }
 

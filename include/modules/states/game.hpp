@@ -36,8 +36,9 @@ namespace aw
 	private:
 
 		void loadLevel();
-
 		void loadPlayerInformation(const std::string &path);
+
+		void resetToLastCheckpoint();
 
 	private:
 		bool m_active; //Important. Is needed to turn of the gui after for example starting a game

@@ -28,6 +28,10 @@ namespace aw
 
 		//check for collision or finish
 		auto result = m_collisionSystem.checkCollision(m_player);
+		if (result == CollisionType::WALL)
+		{
+			resetToLastCheckpoint();
+		}
 
 		//Check for Scriptactions
 		m_scriptManager.update(m_player, m_camera);
@@ -87,4 +91,18 @@ namespace aw
 		m_scriptManager.load(path);
 	}
 
+
+	void Game::resetToLastCheckpoint()
+	{
+		auto ptr = m_scriptManager.getLastCheckPoint();
+		if (ptr)
+		{
+			m_player = ptr->savedPlayer;
+			m_camera = ptr->savedCamera;
+		}
+		else
+		{
+			//Restart Level
+		}
+	}
 }

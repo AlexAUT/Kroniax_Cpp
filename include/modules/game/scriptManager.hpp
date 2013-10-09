@@ -2,11 +2,22 @@
 #define AWSCRIPTMANAGER_HPP
 
 #include <vector>
+#include <memory>
+
+#include "player.hpp"
+#include "camera.hpp"
 
 namespace aw
 {
 	class Player;
 	class Camera;
+
+	struct Checkpoint
+	{
+		//It stores two copies of the elemets...
+		Player savedPlayer;
+		Camera savedCamera;
+	};
 
 	enum ScriptType
 	{
@@ -36,13 +47,17 @@ namespace aw
 	class ScriptManager
 	{
 	public:
+		ScriptManager();
+
 		void update(Player &player, Camera &camera);
 
 		void load(const std::string &path);
 
+		Checkpoint* getLastCheckPoint();
+
 	private:
 
-		void checkPointAction(Player &player);
+		void checkPointAction(Player &player, Camera &camera);
 		void changeSpeedAction(Player &player, float first);
 		void changeGravityAction(Player &player, float first);
 		void flipCameraAction(Camera &camera);
@@ -54,6 +69,8 @@ namespace aw
 
 	private:
 		std::vector<Script> m_scripts;
+
+		std::unique_ptr<Checkpoint> m_checkpoint;
 	};
 }
 
