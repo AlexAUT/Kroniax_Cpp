@@ -22,8 +22,19 @@ namespace aw
 	void Game::update(const sf::Time &frameTime)
 	{
 		m_active = true;
-
+		//Update player position
 		m_player.upate(frameTime);
+		//check for collision or finish
+		auto result = m_collisionSystem.checkCollision(m_player);
+		if (result == CollisionType::WALL)
+		{
+			std::cout << "Wall!!";
+		}
+		else if (result == CollisionType::FINISH)
+		{
+			std::cout << "Finish!!";
+		}
+		//update the camera position
 		m_camera.update(m_player.getPosition());
 	}
 
@@ -73,44 +84,8 @@ namespace aw
 		std::cout << "levelpath: " << path << std::endl;
 		//Load the mapRenderer
 		m_mapRenderer.load(path);
-		loadPlayerInformation(path);
+		m_collisionSystem.loadMap(path);
+		m_player.loadInformation(path);
 	}
 
-	void Game::loadPlayerInformation(const std::string &path)
-	{
-		std::fstream file(path.c_str(), std::ios::in);
-
-		std::string line;
-		while (std::getline(file, line))
-		{
-			if (line == "[Start speed]")
-			{
-				std::getline(file, line);
-				std::stringstream sstr(line);
-				float startSpeed;
-				sstr >> startSpeed;
-				m_player.setSpeedX(startSpeed);
-			}
-			else if (line == "[Start Gravitation]")
-			{
-				std::getline(file, line);
-				std::stringstream sstr(line);
-				float startGravitation;
-				sstr >> startGravitation;
-				m_player.setGravitation(startGravitation);
-			}
-			else if (line == "[Start Position]")
-			{
-				std::getline(file, line);
-				std::stringstream sstr(line);
-				sf::Vector2f startPosition;
-				sstr >> startPosition.x >> startPosition.y;
-				m_player.setPosition(startPosition * 25.f); // *25 because of the block size...
-			}
-		}
-
-		m_player.setColor(sf::Color::White);
-
-		file.close();
-	}
 }

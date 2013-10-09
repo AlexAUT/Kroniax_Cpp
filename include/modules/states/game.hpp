@@ -7,6 +7,7 @@
 #include "../game/mapRenderer.hpp"
 #include "../game/player.hpp" 
 #include "../game/camera.hpp"
+#include "../game/collisionSystem.hpp"
 
 namespace aw
 {
@@ -46,8 +47,10 @@ namespace aw
 		GameType m_gameType;
 
 		MapRenderer m_mapRenderer;
+		CollisionSystem m_collisionSystem;
 		Player m_player;
 		Camera m_camera;
+		
 	};
 }
 
