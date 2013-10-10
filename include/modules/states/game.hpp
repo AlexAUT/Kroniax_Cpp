@@ -3,12 +3,16 @@
 
 #include "state.hpp"
 #include "../../messageBus/receiver.hpp"
+#include "../../gui/guiController.hpp"
 
 #include "../game/mapRenderer.hpp"
 #include "../game/player.hpp" 
 #include "../game/camera.hpp"
 #include "../game/collisionSystem.hpp"
 #include "../game/scriptManager.hpp"
+
+#include <SFML/System/Clock.hpp>
+
 
 namespace aw
 {
@@ -18,6 +22,14 @@ namespace aw
 		OFFICIAL_TIMECHALLENGE,
 		ARCADE,
 		TIMECHALLENGE
+	};
+
+	enum class GameState
+	{
+		STOPPED,
+		PAUSED,
+		STARTING,
+		RUNNING
 	};
 
 	/////FORWARD DECL/////
@@ -47,13 +59,16 @@ namespace aw
 
 		std::string m_levelName;
 		GameType m_gameType;
+		GameState m_gameState;
 
 		MapRenderer m_mapRenderer;
 		CollisionSystem m_collisionSystem;
 		Player m_player;
 		Camera m_camera;
 		ScriptManager m_scriptManager;
-		
+
+		GuiController m_gui;//Will display different game screens
+		sf::Clock m_startingTimer;
 	};
 }
 

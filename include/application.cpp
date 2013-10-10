@@ -18,7 +18,7 @@ namespace aw
 		m_stateMachine.addState("intro", std::unique_ptr<State>(new Intro(m_stateMachine)));
 		m_stateMachine.addState("menu", std::unique_ptr<State>(new Menu(m_stateMachine, m_messageBus)));
 		m_stateMachine.addState("game", std::unique_ptr<State>(new Game(m_stateMachine, m_messageBus)));
-		
+
 		//Set intro as active State
 		m_stateMachine.changeActiveState("menu");
 	

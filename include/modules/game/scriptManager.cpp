@@ -72,7 +72,7 @@ namespace aw
 				}
 			}
 		}
-		std::cout << "SCripts: " << m_scripts.size() << std::endl;
+
 		file.close();
 	}
 
