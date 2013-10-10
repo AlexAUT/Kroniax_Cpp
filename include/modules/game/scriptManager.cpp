@@ -16,7 +16,7 @@ namespace aw
 		{
 			if (!it.used)
 			{
-				if (player.getVertexPosition(0).x >= it.xPos * 25.f) //Front vertex
+				if (player.getVertexPosition(0).x - 15 >= it.xPos * 25.f) //Front vertex
 				{
 					
 					it.used = true;
@@ -85,6 +85,19 @@ namespace aw
 		}
 
 		return nullptr;
+	}
+
+	void ScriptManager::deleteScripts()
+	{
+		m_scripts.clear();
+	}
+
+	void ScriptManager::resetScriptStates()
+	{
+		for (auto &it : m_scripts)
+		{
+			it.used = false;
+		}
 	}
 
 	////////ACTION FUNCTIONS//////////////////////////////////////////////////////////

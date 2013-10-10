@@ -27,9 +27,9 @@ namespace aw
 	enum class GameState
 	{
 		STOPPED,
-		PAUSED,
-		STARTING,
-		RUNNING
+		CRASHED,
+		RUNNING,
+		FINISHED
 	};
 
 	/////FORWARD DECL/////
@@ -51,6 +51,7 @@ namespace aw
 		void loadPlayerInformation(const std::string &path);
 
 		void resetToLastCheckpoint();
+		void resetToStart();
 
 	private:
 		bool m_active; //Important. Is needed to turn of the gui after for example starting a game

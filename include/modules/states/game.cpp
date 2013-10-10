@@ -35,8 +35,9 @@ namespace aw
 			auto result = m_collisionSystem.checkCollision(m_player);
 			if (result == CollisionType::WALL)
 			{
-				m_gameState = GameState::STOPPED;
-				resetToLastCheckpoint();
+				m_gameState = GameState::CRASHED;
+				m_gui.setActiveLayer(1);
+				return;
 			}
 
 			//Check for Scriptactions
@@ -96,9 +97,18 @@ namespace aw
 			{
 				if (event.key.code == sf::Keyboard::Return)
 				{
-					if (m_gameState == GameState::STOPPED)
+					if (m_gameState == GameState::STOPPED || m_gameState == GameState::CRASHED)
 					{
 						m_gameState = GameState::RUNNING;
+						resetToLastCheckpoint();
+					}
+				}
+				else if (event.key.code == sf::Keyboard::BackSpace)
+				{
+					if (m_gameState == GameState::CRASHED)
+					{
+						m_gameState = GameState::RUNNING;
+						resetToStart();
 					}
 				}
 			}
@@ -110,11 +120,17 @@ namespace aw
 
 	void Game::loadLevel()
 	{
-		//Reset all modules first
+		//Reset all members first
+		m_gameState = GameState::STOPPED;
 		m_mapRenderer = MapRenderer();
 		m_collisionSystem = CollisionSystem();
 		m_player = Player();
 		m_camera = Camera();
+		m_scriptManager.deleteScripts();
+
+		//Setup gamestate
+		m_gameState = GameState::STOPPED;
+		m_gui.setActiveLayer(0);
 
 		//Setup the path for the level modules
 		std::string path;
@@ -148,14 +164,27 @@ namespace aw
 		auto ptr = m_scriptManager.getLastCheckPoint();
 		if (ptr)
 		{
+			//Triggered checkpoint found -> reset to it
 			m_player = ptr->savedPlayer;
 			m_camera = ptr->savedCamera;
 		}
 		else
 		{
-			//Restart Level
-			loadLevel();
+			//No checkpoint triggered -> reset to start
+			resetToStart();
 		}
+	}
+
+	void Game::resetToStart()
+	{
+		//Reset player
+		m_player.resetToStartSettings();
+
+		//Reset Camera
+		m_camera = Camera();
+
+		//Reset scripts
+		m_scriptManager.resetScriptStates();;
 	}
 }
 
@@ -168,13 +197,22 @@ void initGui(aw::GuiController &gui)
 	//Stopped Layer
 	//How to start the game
 	gui.addLayer();
-
-	gui.addButton(0, "msg", sf::Vector2f(75, 135), "Enter: Start the Game from checkpoint");
+	gui.addButton(0, "msg", sf::Vector2f(227, 135), "Enter: Start the Game");
 	gui.getElement(0, 0)->setCharacterSize(30);
 	gui.getElement(0, 0)->setSelectable(false);
 	gui.getElement(0, 0)->setSelected(false);
-	gui.addButton(0, "msg2", sf::Vector2f(175, 250), "Delete: Start the game from Start");
+	gui.addButton(0, "msg2", sf::Vector2f(275, 250), "Escape: Return to menu");
 	gui.getElement(0, 1)->setCharacterSize(20);
 	gui.getElement(0, 1)->setSelectable(false);
 	gui.setActiveLayer(0);
+	//Layer after crashing into a wall
+	gui.addLayer();
+	gui.addButton(1, "msg", sf::Vector2f(75, 135), "Enter: Start the Game from checkpoint");
+	gui.getElement(1, 0)->setCharacterSize(30);
+	gui.getElement(1, 0)->setSelectable(false);
+	gui.getElement(1, 0)->setSelected(false);
+	gui.addButton(1, "msg2", sf::Vector2f(150, 250), "Back space: Start the game from Start");
+	gui.getElement(1, 1)->setCharacterSize(20);
+	gui.getElement(1, 1)->setSelectable(false);
+
 }

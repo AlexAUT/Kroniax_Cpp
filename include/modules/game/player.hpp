@@ -26,6 +26,8 @@ namespace aw
 
 		void loadInformation(const std::string &path);
 
+		void resetToStartSettings();
+
 		void setPosition(const sf::Vector2f &position);
 		void setSpeedX(float xSpeed);
 		void setGravitation(float gravitation);
@@ -47,6 +49,11 @@ namespace aw
 		//Optical Elements
 		std::array<sf::Vertex, 3> m_body;
 		sf::Color m_bodyColor;
+
+		//Default settings (used to reset to levelstart)
+		sf::Vector2f m_startPosition;
+		float m_startGravitation;
+		float m_startXSpeed;
 	};
 }
 

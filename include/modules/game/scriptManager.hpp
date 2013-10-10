@@ -55,6 +55,9 @@ namespace aw
 
 		Checkpoint* getLastCheckPoint();
 
+		void deleteScripts();
+		void resetScriptStates();
+
 	private:
 
 		void checkPointAction(Player &player, Camera &camera);

@@ -48,6 +48,7 @@ namespace aw
 				float startSpeed;
 				sstr >> startSpeed;
 				m_speed.x = startSpeed;
+				m_startXSpeed = m_speed.x;
 			}
 			else if (line == "[Start Gravitation]")
 			{
@@ -56,6 +57,7 @@ namespace aw
 				float startGravitation;
 				sstr >> startGravitation;
 				m_gravitation = startGravitation;
+				m_startGravitation = startGravitation;
 			}
 			else if (line == "[Start Position]")
 			{
@@ -64,12 +66,23 @@ namespace aw
 				sf::Vector2f startPosition;
 				sstr >> startPosition.x >> startPosition.y;
 				m_position = startPosition * 25.f; // *25 because of the block size...
+				m_startPosition = m_position;
 			}
 		}
 
 		m_bodyColor = sf::Color::White;
 
 		file.close();
+	}
+
+	void Player::resetToStartSettings()
+	{
+		m_position = m_startPosition;
+		m_speed.x = m_startXSpeed;
+		m_speed.y = 0;
+		m_gravitation = m_startGravitation;
+
+		updateBody();
 	}
 
 	void Player::setPosition(const sf::Vector2f &position)
