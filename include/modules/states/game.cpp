@@ -39,6 +39,13 @@ namespace aw
 				m_gui.setActiveLayer(1);
 				return;
 			}
+			else if (result == CollisionType::FINISH)
+			{
+				m_gameState = GameState::FINISHED;
+				m_gui.setActiveLayer(2);
+				m_active = false;
+				return;
+			}
 
 			//Check for Scriptactions
 			m_scriptManager.update(m_player, m_camera);
@@ -93,6 +100,10 @@ namespace aw
 		{
 			sf::Event event = *msg.getValue<sf::Event>(0);
 
+			//Give the event to gui
+			m_gui.handleEvent(event);
+
+			//Check for respawn etc.
 			if (event.type == sf::Event::KeyReleased)
 			{
 				if (event.key.code == sf::Keyboard::Return)
@@ -101,6 +112,23 @@ namespace aw
 					{
 						m_gameState = GameState::RUNNING;
 						resetToLastCheckpoint();
+					}
+					else if (m_gameState == GameState::FINISHED)
+					{
+						if (m_gui.getSelectedElement()->getID() == "next")
+						{
+							//Load next level
+						}
+						else if (m_gui.getSelectedElement()->getID() == "replay")
+						{
+							resetToStart();
+							m_gameState = GameState::STOPPED;
+							m_gui.setActiveLayer(0);
+						}
+						else if (m_gui.getSelectedElement()->getID() == "back")
+						{
+							changeActiveState("menu");
+						}
 					}
 				}
 				else if (event.key.code == sf::Keyboard::BackSpace)
@@ -197,22 +225,36 @@ void initGui(aw::GuiController &gui)
 	//Stopped Layer
 	//How to start the game
 	gui.addLayer();
+	//The gui needs at least one selectable object for each layer ->placeholder
+	gui.addButton(0, "placeholder", sf::Vector2f(-100, -100), "");
+	////////////////////////////////////////////////////////////////
 	gui.addButton(0, "msg", sf::Vector2f(227, 135), "Enter: Start the Game");
-	gui.getElement(0, 0)->setCharacterSize(30);
-	gui.getElement(0, 0)->setSelectable(false);
-	gui.getElement(0, 0)->setSelected(false);
-	gui.addButton(0, "msg2", sf::Vector2f(275, 250), "Escape: Return to menu");
-	gui.getElement(0, 1)->setCharacterSize(20);
+	gui.getElement(0, 1)->setCharacterSize(30);
 	gui.getElement(0, 1)->setSelectable(false);
+	gui.addButton(0, "msg2", sf::Vector2f(275, 250), "Escape: Return to menu");
+	gui.getElement(0, 2)->setCharacterSize(20);
+	gui.getElement(0, 2)->setSelectable(false);
 	gui.setActiveLayer(0);
 	//Layer after crashing into a wall
 	gui.addLayer();
+	//The gui needs at least one selectable object for each layer ->placeholder
+	gui.addButton(1, "placeholder", sf::Vector2f(-100, -100), "");
+	////////////////////////////////////////////////////////////////
 	gui.addButton(1, "msg", sf::Vector2f(75, 135), "Enter: Start the Game from checkpoint");
-	gui.getElement(1, 0)->setCharacterSize(30);
-	gui.getElement(1, 0)->setSelectable(false);
-	gui.getElement(1, 0)->setSelected(false);
-	gui.addButton(1, "msg2", sf::Vector2f(150, 250), "Back space: Start the game from Start");
-	gui.getElement(1, 1)->setCharacterSize(20);
+	gui.getElement(1, 1)->setCharacterSize(30);
 	gui.getElement(1, 1)->setSelectable(false);
+	gui.getElement(1, 1)->setSelected(false);
+	gui.addButton(1, "msg2", sf::Vector2f(150, 250), "Back space: Start the game from Start");
+	gui.getElement(1, 2)->setCharacterSize(20);
+	gui.getElement(1, 2)->setSelectable(false);
+
+	//Layer finish official_Arcade
+	gui.addLayer();
+	gui.addButton(2, "next", sf::Vector2f(250, 180), "Start next level");
+	gui.addButton(2, "replay", sf::Vector2f(250, 210), "Replay this level");
+	gui.addButton(2, "back", sf::Vector2f(250, 240), "Return to menu");
+	gui.addLabel(2, "headline", sf::Vector2f(80, 80), "Greate you completed this level!");
+	gui.getElement(2, 2)->setCharacterSize(35);
+	gui.addLabel(2, "question", sf::Vector2f(80, 180), "What to do: ");
 
 }
