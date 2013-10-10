@@ -1,6 +1,6 @@
 #include "application.hpp"
 
-#include "messageBus\receiver.hpp"
+#include "messageBus/receiver.hpp"
 
 //Include states
 #include "modules/states/state.hpp"

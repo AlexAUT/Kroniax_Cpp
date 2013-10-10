@@ -4,7 +4,7 @@
 #include <map>
 #include <memory>
 
-#include "states\state.hpp"
+#include "states/state.hpp"
 
 //Forward declaration
 namespace sf

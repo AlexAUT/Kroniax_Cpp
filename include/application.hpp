@@ -1,8 +1,8 @@
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
-#include "messageBus\messageBus.hpp"
-#include "modules\settings.hpp"
+#include "messageBus/messageBus.hpp"
+#include "modules/settings.hpp"
 #include "modules/windowHandler.hpp"
 #include "modules/stateMachine.hpp"
 
