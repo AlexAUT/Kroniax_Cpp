@@ -3,6 +3,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <iostream>
+
 namespace aw
 {
 	ScriptManager::ScriptManager() :
@@ -40,6 +42,10 @@ namespace aw
 
 	void ScriptManager::load(const std::string &path)
 	{
+		//Clear the script vector and the checkpoint pointer
+		m_scripts.clear();
+		m_checkpoint = nullptr;
+
 		std::fstream file(path.c_str(), std::ios::in);
 
 		if (!file.good())
@@ -68,7 +74,7 @@ namespace aw
 				}
 			}
 		}
-
+		std::cout << "SCripts: " << m_scripts.size() << std::endl;
 		file.close();
 	}
 
@@ -102,11 +108,13 @@ namespace aw
 	}
 	void ScriptManager::flipCameraAction(Camera &camera)
 	{
-		
+		std::cout << "Hier";
+        camera.flip();
 	}
 	void ScriptManager::zoomAction(Camera &camera, float first)
 	{
-
+		std::cout << "hier";
+		camera.zoom(first);
 	}
 	void ScriptManager::flickeringAction(Camera &camera)
 	{

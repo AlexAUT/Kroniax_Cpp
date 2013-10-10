@@ -23,9 +23,6 @@ namespace aw
 	{
 		m_active = true;
 
-		//Update player position
-		m_player.upate(frameTime);
-
 		//check for collision or finish
 		auto result = m_collisionSystem.checkCollision(m_player);
 		if (result == CollisionType::WALL)
@@ -35,6 +32,10 @@ namespace aw
 
 		//Check for Scriptactions
 		m_scriptManager.update(m_player, m_camera);
+		
+		//Update the position later, so the user see the crash
+		//Update player position
+		m_player.upate(frameTime);
 
 		//update the camera position
 		m_camera.update(m_player.getPosition());
@@ -85,9 +86,15 @@ namespace aw
 		}
 
 		//Load all modules
+		//Load the optical part of the map
 		m_mapRenderer.load(path);
+		//Load the collision map (Walls and Finish)
 		m_collisionSystem.loadMap(path);
+		//Load player information (speed, gravity, spawn)
 		m_player.loadInformation(path);
+		//Call player update with 0 frametime to prevent a instant death.
+		m_player.upate(sf::Time());
+		//Load all the scripts
 		m_scriptManager.load(path);
 	}
 
@@ -103,6 +110,7 @@ namespace aw
 		else
 		{
 			//Restart Level
+			loadLevel();
 		}
 	}
 }

@@ -15,6 +15,10 @@ namespace aw
 		const sf::View &getDefaultView() const;
 		const sf::View &getGameView() const;
 
+		//Script Actions
+		void flip();
+		void zoom(float factor);
+
 	private:
 
 	private:

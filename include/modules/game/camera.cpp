@@ -23,4 +23,16 @@ namespace aw
 	{
 		return m_gameView;
 	}
+
+	//Script Actions
+
+	void Camera::flip()
+	{
+		m_gameView.rotate(180);
+	}
+
+	void Camera::zoom(float factor)
+	{
+		m_gameView.zoom(factor);
+	}
 }
