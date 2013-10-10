@@ -109,16 +109,17 @@ namespace aw
 
 	void MapRenderer::render(sf::RenderWindow &window)
 	{
-		int colToDraw = 33;
+		int startCol = static_cast<int>((window.getView().getCenter().x - (window.getView().getSize().x / 2.f)) / 25.f);
 
-		int startCol = static_cast<int>((window.getView().getCenter().x - 400.f) / 25.f);
+
+		int colToDraw = startCol + static_cast<int>(window.getView().getSize().x / 25.f) + 1;
 
 		if (startCol < 0)
 		{
 			startCol = 0;
 		}
 		
-		for (auto i = startCol; i < startCol + colToDraw; i++)
+		for (auto i = startCol; i < colToDraw; i++)
 		{
 			if (i < static_cast<int>(m_collums.size()))
 				m_collums[i].render(window);

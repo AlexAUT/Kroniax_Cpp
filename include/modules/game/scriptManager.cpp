@@ -108,12 +108,10 @@ namespace aw
 	}
 	void ScriptManager::flipCameraAction(Camera &camera)
 	{
-		std::cout << "Hier";
         camera.flip();
 	}
 	void ScriptManager::zoomAction(Camera &camera, float first)
 	{
-		std::cout << "hier";
 		camera.zoom(first);
 	}
 	void ScriptManager::flickeringAction(Camera &camera)
