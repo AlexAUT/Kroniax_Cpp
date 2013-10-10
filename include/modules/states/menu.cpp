@@ -2,7 +2,6 @@
 
 #include "../../messageBus/messageBus.hpp"
 
-#include <iostream>
 #include <fstream>
 
 #include <SFML/Window/Event.hpp>

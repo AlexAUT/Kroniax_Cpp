@@ -2,6 +2,7 @@
 
 #include "states/state.hpp"
 
+//#define NDEBUG
 #include <assert.h>
 
 namespace aw

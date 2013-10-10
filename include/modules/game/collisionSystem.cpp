@@ -6,8 +6,6 @@
 
 #include "player.hpp"
 
-#include <iostream>
-
 namespace aw
 {
 	CollisionType CollisionSystem::checkCollision(const Player &player)

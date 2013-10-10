@@ -1,7 +1,5 @@
 #include "application.hpp"
 
-#include <iostream>
-
 #include "messageBus\receiver.hpp"
 
 //Include states

@@ -3,8 +3,6 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include <iostream>
-
 const float TIME_LIMIT = 3.5f; //in seconds
 
 

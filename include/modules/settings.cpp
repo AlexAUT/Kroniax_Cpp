@@ -3,7 +3,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <iostream>
 
 /////INCLUDE FORWARD DECLARATIONS/////
 #include "../messageBus/messageBus.hpp"

@@ -4,11 +4,10 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-#include <iostream>
-
 #include <fstream>
 #include <sstream>
 
+//#define NDEBUG
 #include <assert.h>
 
 namespace aw

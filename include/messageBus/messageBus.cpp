@@ -4,7 +4,6 @@
 
 //#define NDEBUG
 #include <assert.h>
-#include <iostream>
 
 namespace aw
 {
