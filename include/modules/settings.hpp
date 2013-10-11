@@ -45,8 +45,13 @@ namespace aw
 
 	private:
 
+		void sendArcadeSettings();
+
 		void loadWindowAndSoundSettings();
 		void loadArcadeSettings();
+
+		void unlockNewLevel(const std::string &name);
+		void sendNextLevel(const std::string &currentLevel);
 
 	private:
 		aw::MessageBus &m_messageBus;

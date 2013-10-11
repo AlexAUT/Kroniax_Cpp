@@ -21,6 +21,24 @@ namespace aw
 		loadArcadeSettings();
 	}
 
+	void Settings::sendArcadeSettings()
+	{
+		//Send the unlock information
+		Message msgUnlock;
+		msgUnlock.ID = std::hash<std::string>()("unlocked levels");
+		msgUnlock.push_back<unsigned int>(m_arcadeSettings.unlockValue);
+		m_messageBus.sendMessage(msgUnlock);
+
+		//Send level list
+		Message msgLvllist;
+		msgLvllist.ID = std::hash<std::string>()("arcade levellist");
+		for (auto &it : m_arcadeSettings.levelList)
+		{
+			msgLvllist.push_back<std::string>(it);
+		}
+		m_messageBus.sendMessage(msgLvllist);
+	}
+
 	void Settings::save()
 	{
 		std::fstream file("data/config.cfg", std::ios::out | std::ios::trunc);
@@ -44,6 +62,19 @@ namespace aw
 		//Save sound settings
 		file << "[Sound]\n";
 		file << m_soundSettings.masterVolume << std::endl;
+
+		file.close();
+
+		//Arcade levellist
+		file.open("data/arcade levellist.cfg", std::ios::out | std::ios::trunc);
+
+		file << m_arcadeSettings.unlockValue << "\n";
+		for (auto &it : m_arcadeSettings.levelList)
+		{
+			file << it << "\n";
+		}
+
+		file.close();
 	}
 
 	void Settings::loadWindowAndSoundSettings()
@@ -120,20 +151,46 @@ namespace aw
 			m_arcadeSettings.levelList.push_back(line);
 		}
 		file.close();
-		//Send the unlock information
-		Message msgUnlock;
-		msgUnlock.ID = std::hash<std::string>()("unlocked levels");
-		msgUnlock.push_back<unsigned int>(m_arcadeSettings.unlockValue);
-		m_messageBus.sendMessage(msgUnlock);
 
-		//Send level list
-		Message msgLvllist;
-		msgLvllist.ID = std::hash<std::string>()("arcade levellist");
-		for (auto &it : m_arcadeSettings.levelList)
+		//Send information
+		sendArcadeSettings();
+	}
+
+	void Settings::unlockNewLevel(const std::string &name)
+	{
+		for (std::size_t i = 0; i < m_arcadeSettings.levelList.size(); i++)
 		{
-			msgLvllist.push_back<std::string>(it);
+			if (name == m_arcadeSettings.levelList[i])
+			{
+				if (m_arcadeSettings.unlockValue <= i)
+				{
+					m_arcadeSettings.unlockValue = i + 1;
+				}
+				break;
+			}
 		}
-		m_messageBus.sendMessage(msgLvllist);
+
+		sendArcadeSettings();
+	}
+
+	void Settings::sendNextLevel(const std::string &currentLevel)
+	{
+		Message msg;
+		msg.ID = std::hash<std::string>()("start game");
+		
+
+		//Insert the next map
+		for (auto it = m_arcadeSettings.levelList.begin(); it != m_arcadeSettings.levelList.end(); ++it)
+		{
+			if (*it == currentLevel)
+			{
+				msg.push_back(*++it);
+			}
+		}
+		//Add gamemode
+		msg.push_back(static_cast<std::string>("official arcade"));
+		//Send message
+		m_messageBus.sendMessage(msg);
 	}
 
 	void Settings::receiveMessage(const Message &msg)
@@ -143,6 +200,20 @@ namespace aw
 		{
 			m_windowSettings.windowSizeX = *msg.getValue<unsigned int>(0);
 			m_windowSettings.windowSizeY = *msg.getValue<unsigned int>(1);
+		}
+		else if (msg.ID == std::hash<std::string>()("level complete"))
+		{
+			//Update unlocked levels
+			unlockNewLevel(*msg.getValue<std::string>(0));
+			//Save the progress
+			save();
+
+			//Check if the game modules wants to start the next level
+			if (*msg.getValue<bool>(1))
+			{
+				//Send command to load the next level
+				sendNextLevel(*msg.getValue<std::string>(0));
+			}
 		}
 	}
 }

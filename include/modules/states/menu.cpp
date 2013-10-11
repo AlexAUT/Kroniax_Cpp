@@ -107,7 +107,7 @@ namespace aw
 		}
 		else if (msg.ID == std::hash<std::string>()("arcade levellist"))
 		{
-			m_gui.getElement(1, 1)->clearEntries();
+			m_gui.getElement(1, 0)->clearEntries();
 			//Fill the level selection list, with the unlocked levels
 			for (std::size_t i = 0; i <= m_unlockedLevels; i++)
 			{

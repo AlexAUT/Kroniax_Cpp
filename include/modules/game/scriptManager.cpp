@@ -18,7 +18,6 @@ namespace aw
 			{
 				if (player.getVertexPosition(0).x - 15 >= it.xPos * 25.f) //Front vertex
 				{
-					
 					it.used = true;
 
 					switch (it.type)

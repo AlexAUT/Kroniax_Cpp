@@ -53,6 +53,9 @@ namespace aw
 		void resetToLastCheckpoint();
 		void resetToStart();
 
+		//Send the message for completing a level to unlcoka new one and save the progress
+		void sendInformationLevelFinished(bool startNextLevel);
+
 	private:
 		bool m_active; //Important. Is needed to turn of the gui after for example starting a game
 

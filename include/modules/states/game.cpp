@@ -116,18 +116,23 @@ namespace aw
 					{
 						if (m_gui.getSelectedElement()->getID() == "next")
 						{
-							//Load next level
+							//To inform the settings... unlock new/save progress + start next level
+							sendInformationLevelFinished(true);
 						}
 						else if (m_gui.getSelectedElement()->getID() == "replay")
 						{
 							resetToStart();
 							m_gameState = GameState::STOPPED;
 							m_gui.setActiveLayer(0);
+							//To inform the settings... unlock new/save progress
+							sendInformationLevelFinished(false);
 						}
 						else if (m_gui.getSelectedElement()->getID() == "back")
 						{
 							changeActiveState("menu");
 							m_active = false;
+							//To inform the settings... unlock new/save progress
+							sendInformationLevelFinished(false);
 						}
 					}
 				}
@@ -213,6 +218,15 @@ namespace aw
 
 		//Reset scripts
 		m_scriptManager.resetScriptStates();;
+	}
+
+	void Game::sendInformationLevelFinished(bool startNextLevel)
+	{
+		Message msg;
+		msg.ID = std::hash<std::string>()("level complete");
+		msg.push_back(m_levelName);
+		msg.push_back(startNextLevel);
+		m_messageBus.sendMessage(msg);
 	}
 }
 
