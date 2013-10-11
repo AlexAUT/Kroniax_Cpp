@@ -144,6 +144,11 @@ namespace aw
 						resetToStart();
 					}
 				}
+				else if (event.key.code == sf::Keyboard::Escape)
+				{
+					changeActiveState("menu");
+					m_active = false;
+				}
 			}
 		}
 	}
