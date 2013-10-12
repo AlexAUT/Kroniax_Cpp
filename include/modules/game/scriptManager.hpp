@@ -7,6 +7,11 @@
 #include "player.hpp"
 #include "camera.hpp"
 
+namespace sf
+{
+	class RenderWindow;
+}
+
 namespace aw
 {
 	class Player;
@@ -52,6 +57,8 @@ namespace aw
 		void update(Player &player, Camera &camera);
 
 		void load(const std::string &path);
+
+		void render(sf::RenderWindow &window);
 
 		Checkpoint* getLastCheckPoint();
 

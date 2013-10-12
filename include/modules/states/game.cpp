@@ -64,10 +64,13 @@ namespace aw
 		window.setView(m_camera.getGameView());
 		//Render the map
 		m_mapRenderer.render(window);
+		//Draw script notification
+		m_scriptManager.render(window);
 		//Player
 		m_player.render(window);
 		//Set gui view
 		window.setView(m_camera.getDefaultView());
+
 
 		//Draw different screens
 		if (m_gameState != GameState::RUNNING)

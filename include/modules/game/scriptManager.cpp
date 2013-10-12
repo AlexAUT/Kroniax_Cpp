@@ -3,6 +3,9 @@
 #include <fstream>
 #include <sstream>
 
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+
 namespace aw
 {
 	ScriptManager::ScriptManager() :
@@ -73,6 +76,37 @@ namespace aw
 		}
 
 		file.close();
+	}
+
+	void ScriptManager::render(sf::RenderWindow &window)
+	{
+		int screenStartX = static_cast<int>(window.getView().getCenter().x - (window.getView().getSize().x / 2.f));
+		int screenEndX = static_cast<int>(window.getView().getCenter().x + (window.getView().getSize().x / 2.f));
+
+		sf::RectangleShape toDraw; 
+		 
+		for (auto &it : m_scripts)
+		{
+			if (it.xPos * 25.f >= screenStartX && it.xPos * 25.f <= screenEndX)
+			{
+				//The script is visible
+				//update position of toDraw
+				toDraw.setPosition(sf::Vector2f((it.xPos * 25.f) + 10.f, window.getView().getCenter().y - (window.getView().getSize().y / 2.f)));
+				toDraw.setSize(sf::Vector2f(5, window.getView().getSize().y));
+
+				//Color depends on the script type
+				switch (it.type)
+				{
+				case ScriptType::CHECKPOINT: toDraw.setFillColor(sf::Color(255, 127, 36)); break;
+				case ScriptType::CHANGE_GRAVITY: toDraw.setFillColor(sf::Color(138, 43, 226)); break;
+				case ScriptType::CHANGE_SPEED: toDraw.setFillColor(sf::Color(138, 43, 226)); break;
+				default: toDraw.setFillColor(sf::Color(0, 238, 238)); break;
+				}
+
+				//Draw it
+				window.draw(toDraw);
+			}
+		}
 	}
 
 
