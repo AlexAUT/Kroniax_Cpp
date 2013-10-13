@@ -38,6 +38,7 @@ namespace aw
 		void buttonAction();
 		void mainLayer();
 		void arcadeLayer();
+		void tutorial1Layer();
 
 
 	private:

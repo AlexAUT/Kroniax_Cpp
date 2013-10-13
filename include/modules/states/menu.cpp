@@ -185,6 +185,7 @@ namespace aw
 		{
 		case 0: mainLayer(); break;
 		case 1: arcadeLayer(); break;
+		case 2: tutorial1Layer(); break;
 		default: break;
 		}
 	}
@@ -226,7 +227,7 @@ namespace aw
 			//Handle the different Tutorials... (show a unique gui layer...
 			if (m_levelInformation.name == "Tutorial1")
 			{
-
+				m_gui.setActiveLayer(2);
 			}
 			else
 			{
@@ -245,6 +246,29 @@ namespace aw
 		else if (m_gui.getSelectedElement()->getID() == "back arcade")
 		{
 			m_gui.setActiveLayer(0);
+		}
+	}
+
+	void Menu::tutorial1Layer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "start level1")
+		{
+			//start level1
+			//Send message... So the game will start...
+			Message msg;
+			msg.ID = std::hash<std::string>()("start game");
+			std::string name = "Level1";
+			msg.push_back(name);
+			msg.push_back(static_cast<std::string>("official arcade"));
+			m_messageBus.sendMessage(msg);
+			changeActiveState("game");
+			m_music.stop();
+			m_active = false;
+			m_gui.setActiveLayer(1);
+		}
+		else if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(1);
 		}
 	}
 }
@@ -277,5 +301,10 @@ void initArcadeLayer(aw::GuiController &gui)
 
 void initTutorialLayers(aw::GuiController &gui)
 {
+	//Tutorial1 = layer(2)
+	gui.addLayer();
+	gui.addButton(2, "start level1", sf::Vector2f(300, 345), "Start Level1");
+	gui.addButton(2, "back", sf::Vector2f(297, 375), "Back to menu");
+	gui.addLabel(2, "text", sf::Vector2f(50, 110), "The target of the game is to steer the ship through\nthe level without touching the walls.\n\n\nYou can steer up your ship by pressing the spacebar.\n\n\nOrange vertical Lines are checkpoints\nWhen you hit a wall you will respawn there");
 
 }
