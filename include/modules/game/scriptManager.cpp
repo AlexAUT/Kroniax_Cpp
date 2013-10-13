@@ -105,6 +105,10 @@ namespace aw
 
 				//Draw it
 				window.draw(toDraw);
+				if (m_checkpoint)
+				{
+					m_checkpoint->savedPlayer.render(window);
+				}
 			}
 		}
 	}
@@ -125,11 +129,19 @@ namespace aw
 		m_scripts.clear();
 	}
 
-	void ScriptManager::resetScriptStates()
+	void ScriptManager::resetScriptStates(bool resetCheckpoints)
 	{
+		if (resetCheckpoints)
+		{
+			m_checkpoint = nullptr;
+		}
+
 		for (auto &it : m_scripts)
 		{
-			it.used = false;
+			if (it.type != ScriptType::CHECKPOINT || resetCheckpoints)
+			{
+				it.used = false;
+			}
 		}
 	}
 

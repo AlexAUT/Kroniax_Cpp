@@ -63,7 +63,9 @@ namespace aw
 		Checkpoint* getLastCheckPoint();
 
 		void deleteScripts();
-		void resetScriptStates();
+		//Set resetCheckpoints to false if you do not want to reset their states
+		//(when respawning the player to a checkpoint)
+		void resetScriptStates(bool resetCheckpoints = true);
 
 	private:
 

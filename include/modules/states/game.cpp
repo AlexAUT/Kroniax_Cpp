@@ -110,7 +110,12 @@ namespace aw
 			{
 				if (event.key.code == sf::Keyboard::Return)
 				{
-					if (m_gameState == GameState::STOPPED || m_gameState == GameState::CRASHED)
+					if (m_gameState == GameState::STOPPED) 
+					{
+						m_gameState = GameState::RUNNING;
+						resetToStart();
+					}
+					else if (m_gameState == GameState::CRASHED)
 					{
 						m_gameState = GameState::RUNNING;
 						resetToLastCheckpoint();
@@ -208,6 +213,8 @@ namespace aw
 			//Triggered checkpoint found -> reset to it
 			m_player = ptr->savedPlayer;
 			m_camera = ptr->savedCamera;
+			//Reset scripts except checkpoint = parameter(false)
+			m_scriptManager.resetScriptStates(false);
 		}
 		else
 		{
