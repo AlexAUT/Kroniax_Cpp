@@ -87,7 +87,8 @@ namespace aw
 		 
 		for (auto &it : m_scripts)
 		{
-			if (it.xPos * 25.f >= screenStartX && it.xPos * 25.f <= screenEndX)
+			//+16 to prevent the script to disappear too early (position + 10, size +5, +1 because i can xD ) 
+			if (it.xPos * 25.f + 16 >= screenStartX && it.xPos * 25.f <= screenEndX)
 			{
 				//The script is visible
 				//update position of toDraw
