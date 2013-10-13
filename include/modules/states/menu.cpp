@@ -7,6 +7,11 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
+//Global gui init function, to make the code easier to read
+void initMainLayer(aw::GuiController &gui);
+void initArcadeLayer(aw::GuiController &gui);
+void initTutorialLayers(aw::GuiController &gui);
+
 namespace aw
 {
 	Menu::Menu(StateMachine &stateMachine, MessageBus &messageBus):
@@ -34,6 +39,18 @@ namespace aw
 		m_music.openFromFile("data/music/Power Fight - Electro Techno Beat.ogg");
 	}
 
+	void Menu::initGui()
+	{
+		m_gui.loadFont("data/fonts/visitor1.ttf");
+
+		//Layer 0
+		initMainLayer(m_gui);
+		//Layer1
+		initArcadeLayer(m_gui);
+		//Layer2
+		initTutorialLayers(m_gui);
+	}
+
 	void Menu::update(const sf::Time &frameTime)
 	{
 		m_active = true;
@@ -58,29 +75,6 @@ namespace aw
 		window.draw(m_overlay);
 		window.draw(m_logo);
 		m_gui.render(window);
-	}
-
-
-	void Menu::initGui()
-	{
-		m_gui.loadFont("data/fonts/visitor1.ttf");
-		//Mainlayer = 0
-		m_gui.addLayer();
-		m_gui.setActiveLayer(0);
-		m_gui.addButton(0, "arcade", sf::Vector2f(275, 125), "Arcade");
-		m_gui.addButton(0, "time challenge", sf::Vector2f(275, 165), "Time Challenge");
-		m_gui.addButton(0, "multiplayer", sf::Vector2f(275, 205), "Multiplayer");
-		m_gui.addButton(0, "options", sf::Vector2f(275, 275), "Options");
-		m_gui.addButton(0, "credits", sf::Vector2f(275, 305), "Credits");
-		m_gui.addButton(0, "exit", sf::Vector2f(275, 375), "Close");
-		//Arcadelayer = 1,2
-		m_gui.addLayer();
-		m_gui.addList(1, "select level", sf::Vector2f(275, 165), "Select a level");
-		m_gui.addLabel(1, "name", sf::Vector2f(275, 220), "Name: ");
-		m_gui.addLabel(1, "difficulty", sf::Vector2f(275, 255), "Difficulty: ");
-		m_gui.addLabel(1, "lentgh", sf::Vector2f(275, 290), "Length: ");
-		m_gui.addLabel(1, "author", sf::Vector2f(275, 325), "Author: ");
-		m_gui.addButton(1, "back arcade", sf::Vector2f(300, 385), "Back");
 	}
 
 
@@ -253,4 +247,35 @@ namespace aw
 			m_gui.setActiveLayer(0);
 		}
 	}
+}
+
+
+void initMainLayer(aw::GuiController &gui)
+{
+	//Mainlayer = 0
+	gui.addLayer();
+	gui.setActiveLayer(0);
+	gui.addButton(0, "arcade", sf::Vector2f(275, 125), "Arcade");
+	gui.addButton(0, "time challenge", sf::Vector2f(275, 165), "Time Challenge");
+	gui.addButton(0, "multiplayer", sf::Vector2f(275, 205), "Multiplayer");
+	gui.addButton(0, "options", sf::Vector2f(275, 275), "Options");
+	gui.addButton(0, "credits", sf::Vector2f(275, 305), "Credits");
+	gui.addButton(0, "exit", sf::Vector2f(275, 375), "Close");
+}
+
+void initArcadeLayer(aw::GuiController &gui)
+{
+	//Arcadelayer = 1
+	gui.addLayer();
+	gui.addList(1, "select level", sf::Vector2f(275, 165), "Select a level");
+	gui.addLabel(1, "name", sf::Vector2f(275, 220), "Name: ");
+	gui.addLabel(1, "difficulty", sf::Vector2f(275, 255), "Difficulty: ");
+	gui.addLabel(1, "lentgh", sf::Vector2f(275, 290), "Length: ");
+	gui.addLabel(1, "author", sf::Vector2f(275, 325), "Author: ");
+	gui.addButton(1, "back arcade", sf::Vector2f(300, 385), "Back");
+}
+
+void initTutorialLayers(aw::GuiController &gui)
+{
+
 }
