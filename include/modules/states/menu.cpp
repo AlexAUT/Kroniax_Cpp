@@ -158,7 +158,17 @@ namespace aw
 				}
 				else
 				{
-					if (name != "Select a level")
+					//Failed to load
+					if (name.substr(0, 8) == "Tutorial")
+					{
+						//Set name and author
+						m_levelInformation.name = name;
+						m_levelInformation.author = "AlexAUT";
+						//A tutorial has no difficulty or length
+						m_levelInformation.difficulty = "";
+						m_levelInformation.lentgh = "";
+					}
+					else if (name != "Select a level")
 					{
 						m_levelInformation.name = "Failed to load";
 						m_levelInformation.author = "Failed to load";
