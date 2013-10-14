@@ -90,7 +90,7 @@ namespace aw
 
 			m_gui.handleEvent(event);
 
-			if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Return))
+			if (event.type == sf::Event::KeyReleased && (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Return))
 			{
 				buttonAction();
 			}
