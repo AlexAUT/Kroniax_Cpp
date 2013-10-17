@@ -191,7 +191,7 @@ namespace aw
 			// 2 = level 6-10
 			// 3 = level 11-15
 
-			if (levelnumber < 5 && openMusic != 0)
+			if (levelnumber < 6 && openMusic != 0)
 			{
 				m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg");
 				openMusic = 0;
