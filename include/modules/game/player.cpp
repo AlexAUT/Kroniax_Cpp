@@ -24,7 +24,9 @@ namespace aw
 			m_speed.y += (m_gravitation * frameTime.asSeconds());
 		}
 		//update the position
-		m_position += (m_speed * frameTime.asSeconds());
+		sf::Vector2f unitSpeed = m_speed / std::sqrt((m_speed.x * m_speed.x) + (m_speed.y * m_speed.y));
+		m_position.x += (m_speed.x * frameTime.asSeconds() * unitSpeed.x);
+		m_position.y += (m_speed.x * frameTime.asSeconds() * unitSpeed.y);
 		//update the body
 		updateBody();
 	}
