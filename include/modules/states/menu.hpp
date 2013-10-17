@@ -41,6 +41,7 @@ namespace aw
 		void arcadeLayer();
 		void tutorial1Layer();
 		void optionsLayer();
+		void creditsLayer();
 
 
 	private:

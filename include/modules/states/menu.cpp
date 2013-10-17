@@ -4,7 +4,6 @@
 
 #include <fstream>
 #include <sstream>
-#include <iostream>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -14,6 +13,7 @@ void initMainLayer(aw::GuiController &gui);
 void initArcadeLayer(aw::GuiController &gui);
 void initTutorialLayers(aw::GuiController &gui);
 void initOptionsLayer(aw::GuiController &gui);
+void initCreditsLayer(aw::GuiController &gui);
 
 namespace aw
 {
@@ -54,6 +54,8 @@ namespace aw
 		initTutorialLayers(m_gui);
 		//Layer5
 		initOptionsLayer(m_gui);
+		//Layer6
+		initCreditsLayer(m_gui);
 	}
 
 	void Menu::update(const sf::Time &frameTime)
@@ -115,7 +117,6 @@ namespace aw
 				m_gui.getElement(5, 3)->setActiveEntry(0);
 			}
 			//Antialiasinglevel
-			std::cout << *msg.getValue<unsigned int>(4);
 			switch (*msg.getValue<unsigned int>(4))
 			{
 			case 0: m_gui.getElement(5, 2)->setActiveEntry(0); break;
@@ -239,6 +240,7 @@ namespace aw
 		case 1: arcadeLayer(); break;
 		case 2: tutorial1Layer(); break;
 		case 5: optionsLayer(); break;
+		case 6: creditsLayer(); break;
 		default: break;
 		}
 	}
@@ -263,7 +265,7 @@ namespace aw
 		}
 		else if (m_gui.getSelectedElement()->getID() == "credits")
 		{
-
+			m_gui.setActiveLayer(6);
 		}
 		else if (m_gui.getSelectedElement()->getID() == "exit")
 		{
@@ -349,6 +351,14 @@ namespace aw
 			m_gui.setActiveLayer(0);
 		}
 		else if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(0);
+		}
+	}
+
+	void Menu::creditsLayer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "back")
 		{
 			m_gui.setActiveLayer(0);
 		}
@@ -442,4 +452,17 @@ void initOptionsLayer(aw::GuiController &gui)
 	//Save+back and only back...
 	gui.addButton(5, "apply", sf::Vector2f(275, 350), "Apply");
 	gui.addButton(5, "back", sf::Vector2f(275, 385), "Back without saving");
+}
+
+void initCreditsLayer(aw::GuiController &gui)
+{
+	//Layer 6
+	gui.addLayer();
+	gui.addButton(6, "back", sf::Vector2f(175, 385), "Back");
+
+	gui.addLabel(6, "credit", sf::Vector2f(50, 145), "Developed by Alexander Weinrauch (AlexAUT).");
+	gui.addLabel(6, "credit", sf::Vector2f(50, 195), "Special Thanks to:");
+	gui.addLabel(6, "credit", sf::Vector2f(150, 235), "Laurent for SFML!");
+	gui.addLabel(6, "credit", sf::Vector2f(150, 265), "MafiaFLairBeatz for the music!");
+	gui.addLabel(6, "credit", sf::Vector2f(150, 295), "Machinimasound for the music!");
 }
