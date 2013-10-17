@@ -191,10 +191,19 @@ namespace aw
 			// 2 = level 6-10
 			// 3 = level 11-15
 
-			if (levelnumber < 6 && openMusic != 0)
+			if (levelnumber < 6)
 			{
-				m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg");
+				if (openMusic != 0)
+					m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg");
+
 				openMusic = 0;
+			}
+			else if (levelnumber < 11)
+			{
+				if (openMusic != 1)
+					m_music.openFromFile("data/music/MachinimaSound.com_-_After_Dark.ogg");
+
+				openMusic = 1;
 			}
 		}
 	}
@@ -319,7 +328,7 @@ void initGui(aw::GuiController &gui)
 	gui.addButton(2, "next", sf::Vector2f(250, 180), "Start next level");
 	gui.addButton(2, "replay", sf::Vector2f(250, 210), "Replay this level");
 	gui.addButton(2, "back", sf::Vector2f(250, 240), "Return to menu");
-	gui.addLabel(2, "headline", sf::Vector2f(80, 80), "Greate you completed this level!");
+	gui.addLabel(2, "headline", sf::Vector2f(80, 80), "Great you have completed this level!");
 	gui.getElement(2, 3)->setCharacterSize(35);
 	gui.addLabel(2, "question", sf::Vector2f(80, 180), "What to do: ");
 
