@@ -239,6 +239,7 @@ namespace aw
 		case 0: mainLayer(); break;
 		case 1: arcadeLayer(); break;
 		case 2: tutorial1Layer(); break;
+		case 3: tutorial2Layer(); break;
 		case 5: optionsLayer(); break;
 		case 6: creditsLayer(); break;
 		default: break;
@@ -284,6 +285,10 @@ namespace aw
 			{
 				m_gui.setActiveLayer(2);
 			}
+			else if (m_levelInformation.name == "Tutorial2")
+			{
+				m_gui.setActiveLayer(3);
+			}
 			else
 			{
 				//For all levels except tutorials
@@ -313,6 +318,29 @@ namespace aw
 			Message msg;
 			msg.ID = std::hash<std::string>()("start game");
 			std::string name = "Level1";
+			msg.push_back(name);
+			msg.push_back(static_cast<std::string>("official arcade"));
+			m_messageBus.sendMessage(msg);
+			changeActiveState("game");
+			m_music.stop();
+			m_active = false;
+			m_gui.setActiveLayer(1);
+		}
+		else if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(1);
+		}
+	}
+	
+	void Menu::tutorial2Layer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "start level6")
+		{
+			//start level6
+			//Send message... So the game will start...
+			Message msg;
+			msg.ID = std::hash<std::string>()("start game");
+			std::string name = "Level6";
 			msg.push_back(name);
 			msg.push_back(static_cast<std::string>("official arcade"));
 			m_messageBus.sendMessage(msg);
@@ -403,6 +431,9 @@ void initTutorialLayers(aw::GuiController &gui)
 	//Will be implemented when needed...
 	//Tutorial2 = layer(3)
 	gui.addLayer();
+	gui.addButton(3, "start level6", sf::Vector2f(300, 345), "Start Level6");
+	gui.addButton(3, "back", sf::Vector2f(297, 375), "Back to menu");
+	gui.addLabel(3, "text", sf::Vector2f(50, 120), "Some more Information:\n\n\nYellow horizontal lines will change your speed!\n\nOrange horizontal lines will change your gravity!\n\nBlue lines will affect your view!");
 
 	//Tutorial3 = layer(4)
 	gui.addLayer();

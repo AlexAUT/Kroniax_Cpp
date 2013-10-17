@@ -40,6 +40,7 @@ namespace aw
 		void mainLayer();
 		void arcadeLayer();
 		void tutorial1Layer();
+		void tutorial2Layer();
 		void optionsLayer();
 		void creditsLayer();
 
