@@ -29,10 +29,10 @@ namespace aw
 		m_overlay.setSize(sf::Vector2f(800.f, 450.f));
 		m_overlay.setFillColor(sf::Color(0, 0, 0, 180));
 
-		m_texLogo.loadFromFile("data/images/logo2.png");
+		m_texLogo.loadFromFile("data/images/kroniax.png");
 		m_logo.setTexture(m_texLogo);
-		m_logo.setScale(0.5f, 0.5f);
-		m_logo.setPosition(255.f, -40.f);
+		m_logo.setScale(0.6f, 0.6f);
+		m_logo.setPosition(215.f, -25.f);
 
 		resetView();
 
@@ -316,5 +316,13 @@ void initTutorialLayers(aw::GuiController &gui)
 	gui.addButton(2, "start level1", sf::Vector2f(300, 345), "Start Level1");
 	gui.addButton(2, "back", sf::Vector2f(297, 375), "Back to menu");
 	gui.addLabel(2, "text", sf::Vector2f(50, 110), "The target of the game is to steer the ship through\nthe level without touching the walls.\n\n\nYou can steer up your ship by pressing the spacebar.\n\n\nOrange horizontal lines are checkpoints\nWhen you hit a wall you will respawn there");
+
+
+	//Will be implemented when needed...
+	//Tutorial2 = layer(3)
+	gui.addLayer();
+
+	//Tutorial3 = layer(4)
+	gui.addLayer();
 
 }

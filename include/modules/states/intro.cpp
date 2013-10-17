@@ -11,7 +11,7 @@ namespace aw
 	Intro::Intro(StateMachine &stateMachine):
 		State(stateMachine), m_timeActive(0)
 	{
-		m_texLogo.loadFromFile("data/images/logo.png");
+		m_texLogo.loadFromFile("data/images/kroniax.png");
 		m_sprLogo.setTexture(m_texLogo);
 		m_sprLogo.setPosition(95, -40);
 		m_sprLogo.setColor(sf::Color(255, 255, 255, 255));

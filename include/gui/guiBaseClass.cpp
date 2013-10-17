@@ -20,7 +20,7 @@ namespace aw
 		m_selectable(type != GUI_LABEL), // Labels are not selectable
 		m_ID(ID),
 		m_position(position),
-		m_selectColor(sf::Color(0, 191, 255))
+		m_selectColor(sf::Color(255, 165, 0))
 	{
 		m_body.setString(text);
 		m_body.setPosition(position);
@@ -290,7 +290,7 @@ namespace aw
 			m_vertices[5] = sf::Vertex(sf::Vector2f(xPos + width + distance + triWidth, yPos + (height / 2.f) + offset), m_selectColor); // Left Edge
 		}
 
-		if (m_type == GUI_INPUT) // Recht surrounding the Text
+		if (m_type == GUI_INPUT) // Rect surrounding the Text
 		{
 			m_vertices[0] = sf::Vertex(sf::Vector2f(xPos - distance, yPos - distance / 3), sf::Color(165, 165, 165)); // LeftTop
 			m_vertices[1] = sf::Vertex(sf::Vector2f(xPos + width + distance, yPos - distance / 3), sf::Color(165, 165, 165)); // RightTop
