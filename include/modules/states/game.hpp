@@ -12,7 +12,7 @@
 #include "../game/scriptManager.hpp"
 
 #include <SFML/System/Clock.hpp>
-
+#include <SFML/Audio/Music.hpp>
 
 namespace aw
 {
@@ -47,6 +47,8 @@ namespace aw
 
 	private:
 
+		void initMusic();
+
 		void loadLevel();
 		void loadPlayerInformation(const std::string &path);
 
@@ -73,6 +75,9 @@ namespace aw
 
 		GuiController m_gui;//Will display different game screens
 		sf::Clock m_startingTimer;
+
+		//Background music
+		sf::Music m_music;
 	};
 }
 

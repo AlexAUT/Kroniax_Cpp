@@ -29,6 +29,11 @@ namespace aw
 	{
 		m_active = true;
 
+		if (m_music.getStatus() == sf::Music::Stopped)
+		{
+			m_music.play();
+		}
+
 		if (m_gameState == GameState::RUNNING)
 		{
 			//check for collision or finish
@@ -97,8 +102,13 @@ namespace aw
 			//Load the level
 			loadLevel();
 		}
+		//Set the volume of the music
+		else if (msg.ID == std::hash<std::string>()("sound settings"))
+		{
+			m_music.setVolume(*msg.getValue<float>(1));
+		}
 		//Starting the game
-		if (msg.ID == std::hash<std::string>()("event") && m_active)
+		else if (msg.ID == std::hash<std::string>()("event") && m_active)
 		{
 			sf::Event event = *msg.getValue<sf::Event>(0);
 
@@ -138,6 +148,7 @@ namespace aw
 						else if (m_gui.getSelectedElement()->getID() == "back")
 						{
 							changeActiveState("menu");
+							m_music.stop();
 							m_active = false;
 							//To inform the settings... unlock new/save progress
 							sendInformationLevelFinished(false);
@@ -155,6 +166,7 @@ namespace aw
 				else if (event.key.code == sf::Keyboard::Escape)
 				{
 					changeActiveState("menu");
+					m_music.stop();
 					m_active = false;
 				}
 			}
@@ -163,6 +175,29 @@ namespace aw
 
 
 	////////// PRIVATE FUNCS ////////////
+
+	void Game::initMusic()
+	{
+		if (m_gameType == GameType::OFFICIAL_ARCADE)
+		{
+			int levelnumber;
+			std::size_t pos = m_levelName.find_last_of('l');
+			std::string strlvlnumber = m_levelName.substr(pos + 1);
+			std::stringstream sstr(strlvlnumber);
+			sstr >> levelnumber;
+
+			static int openMusic = -1;
+			// 0 = level 1-5
+			// 2 = level 6-10
+			// 3 = level 11-15
+
+			if (levelnumber < 5 && openMusic != 0)
+			{
+				m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg");
+				openMusic = 0;
+			}
+		}
+	}
 
 	void Game::loadLevel()
 	{
@@ -202,6 +237,8 @@ namespace aw
 		m_camera.update(m_player.getPosition());
 		//Load all the scripts
 		m_scriptManager.load(path);
+		//Open the right Music
+		initMusic();
 	}
 
 
