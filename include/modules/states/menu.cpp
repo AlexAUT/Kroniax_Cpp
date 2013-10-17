@@ -3,6 +3,8 @@
 #include "../../messageBus/messageBus.hpp"
 
 #include <fstream>
+#include <sstream>
+#include <iostream>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -11,6 +13,7 @@
 void initMainLayer(aw::GuiController &gui);
 void initArcadeLayer(aw::GuiController &gui);
 void initTutorialLayers(aw::GuiController &gui);
+void initOptionsLayer(aw::GuiController &gui);
 
 namespace aw
 {
@@ -47,8 +50,10 @@ namespace aw
 		initMainLayer(m_gui);
 		//Layer1
 		initArcadeLayer(m_gui);
-		//Layer2
+		//Layer2,3,4
 		initTutorialLayers(m_gui);
+		//Layer5
+		initOptionsLayer(m_gui);
 	}
 
 	void Menu::update(const sf::Time &frameTime)
@@ -83,6 +88,43 @@ namespace aw
 		if (msg.ID == std::hash<std::string>()("sound settings"))
 		{
 			m_music.setVolume(*msg.getValue<float>(0));
+			//Update the gui to disply the right values
+			//check if the volume is in range
+			unsigned int index = static_cast<unsigned int>(*msg.getValue<float>(0));
+			if (index < 100)
+			{
+				m_gui.getElement(5, 0)->setActiveEntry(index);
+			}
+			//check if the volume is in range
+			index = static_cast<unsigned int>(*msg.getValue<float>(1));
+			if (index < 100)
+			{
+				m_gui.getElement(5, 1)->setActiveEntry(index);
+			}
+		}
+		else if (msg.ID == std::hash<std::string>()("window settings"))
+		{
+			//Update the gui to display correct information
+			//Fullscreen
+			if (*msg.getValue<bool>(3))
+			{
+				m_gui.getElement(5, 3)->setActiveEntry(1);
+			}
+			else
+			{
+				m_gui.getElement(5, 3)->setActiveEntry(0);
+			}
+			//Antialiasinglevel
+			std::cout << *msg.getValue<unsigned int>(4);
+			switch (*msg.getValue<unsigned int>(4))
+			{
+			case 0: m_gui.getElement(5, 2)->setActiveEntry(0); break;
+			case 2: m_gui.getElement(5, 2)->setActiveEntry(1); break;
+			case 4: m_gui.getElement(5, 2)->setActiveEntry(2); break;
+			case 8: m_gui.getElement(5, 2)->setActiveEntry(3); break;
+			case 16: m_gui.getElement(5, 2)->setActiveEntry(4); break;
+			default: m_gui.getElement(5, 2)->setActiveEntry(0); break;
+			}
 		}
 		else if (msg.ID == std::hash<std::string>()("event") && m_active)
 		{
@@ -196,6 +238,7 @@ namespace aw
 		case 0: mainLayer(); break;
 		case 1: arcadeLayer(); break;
 		case 2: tutorial1Layer(); break;
+		case 5: optionsLayer(); break;
 		default: break;
 		}
 	}
@@ -216,7 +259,7 @@ namespace aw
 		}
 		else if (m_gui.getSelectedElement()->getID() == "options")
 		{
-
+			m_gui.setActiveLayer(5);
 		}
 		else if (m_gui.getSelectedElement()->getID() == "credits")
 		{
@@ -281,6 +324,35 @@ namespace aw
 			m_gui.setActiveLayer(1);
 		}
 	}
+
+	void Menu::optionsLayer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "reset graphics")
+		{
+			Message msg(std::hash<std::string>()("reset resolution"));
+			m_messageBus.sendMessage(msg);
+		}
+		else if (m_gui.getSelectedElement()->getID() == "apply")
+		{
+			Message msgSound(std::hash<std::string>()("new sound settings"));
+			//Menu and game volume
+			msgSound.push_back(m_gui.getElement(5, 0)->getText());
+			msgSound.push_back(m_gui.getElement(5, 1)->getText());
+			m_messageBus.sendMessage(msgSound);
+
+			Message msgWindow(std::hash<std::string>()("new window settings"));
+			//Antialiasinglevel and fullscreen
+			msgWindow.push_back(m_gui.getElement(5, 2)->getText());
+			msgWindow.push_back(m_gui.getElement(5, 3)->getText());
+			m_messageBus.sendMessage(msgWindow);
+
+			m_gui.setActiveLayer(0);
+		}
+		else if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(0);
+		}
+	}
 }
 
 
@@ -325,4 +397,49 @@ void initTutorialLayers(aw::GuiController &gui)
 	//Tutorial3 = layer(4)
 	gui.addLayer();
 
+}
+
+void initOptionsLayer(aw::GuiController &gui)
+{
+	//Layer 5
+	gui.addLayer();
+	//Add list for changing the menu volume + fill the entries 0-100
+	gui.addList(5, "menu volume", sf::Vector2f(500, 125), "5");
+	for (int i = 0; i < 101; ++i)
+	{
+		std::stringstream sstr;
+		sstr << i;
+		gui.getElement(5, 0)->addEntry(sstr.str());
+	}
+	//Add list for changing the game volume + fill the entries 0-100
+	gui.addList(5, "game volume", sf::Vector2f(500, 155), "5");
+	for (int i = 0; i < 101; ++i)
+	{
+		std::stringstream sstr;
+		sstr << i;
+		gui.getElement(5, 1)->addEntry(sstr.str());
+	}
+	//Add list for changing the antialiasinglevel + fill the entries 0,2,4,8,16
+	gui.addList(5, "antialiasinglevel", sf::Vector2f(500, 200), "0");
+	gui.getElement(5, 2)->addEntry("0");
+	gui.getElement(5, 2)->addEntry("2");
+	gui.getElement(5, 2)->addEntry("4");
+	gui.getElement(5, 2)->addEntry("8");
+	gui.getElement(5, 2)->addEntry("16");
+	//Add list for changing fullscreen mode, entries = off and on
+	gui.addList(5, "fullscreen", sf::Vector2f(500, 230), "off");
+	gui.getElement(5, 3)->addEntry("off");
+	gui.getElement(5, 3)->addEntry("on");
+
+	//Add labels (description of the lists
+	gui.addLabel(5, "ssv", sf::Vector2f(250, 125), "Menu volume:");
+	gui.addLabel(5, "sgv", sf::Vector2f(250, 155), "Ingame volume:");
+	gui.addLabel(5, "ant", sf::Vector2f(250, 200), "Antialiasinglevel:");
+	gui.addLabel(5, "rs", sf::Vector2f(250, 230), "Fullscreen:");
+	//Will reset the resolution in windowmode
+	gui.addButton(5, "reset graphics", sf::Vector2f(250, 275), "Reset default resolution");
+
+	//Save+back and only back...
+	gui.addButton(5, "apply", sf::Vector2f(275, 350), "Apply");
+	gui.addButton(5, "back", sf::Vector2f(275, 385), "Back without saving");
 }

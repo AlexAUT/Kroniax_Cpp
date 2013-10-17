@@ -24,7 +24,8 @@ namespace aw
 		};
 		struct SoundSettings
 		{
-			float masterVolume;
+			float menuvolume;
+			float gamevolume;
 		};
 		struct ArcadeSettings
 		{
@@ -45,6 +46,8 @@ namespace aw
 
 	private:
 
+		void sendSoundSettings();
+		void sendWindowSettings();
 		void sendArcadeSettings();
 
 		void loadWindowAndSoundSettings();

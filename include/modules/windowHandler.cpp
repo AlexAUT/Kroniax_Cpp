@@ -4,6 +4,8 @@
 
 #include <SFML/Window/Event.hpp>
 
+#include <sstream>
+
 namespace aw
 {
 	WindowHandler::WindowHandler(MessageBus &msgBus) :

@@ -4,6 +4,8 @@
 #include <string>
 #include <sstream>
 
+#include <iostream>
+
 /////INCLUDE FORWARD DECLARATIONS/////
 #include "../messageBus/messageBus.hpp"
 
@@ -19,24 +21,6 @@ namespace aw
 	{
 		loadWindowAndSoundSettings();
 		loadArcadeSettings();
-	}
-
-	void Settings::sendArcadeSettings()
-	{
-		//Send the unlock information
-		Message msgUnlock;
-		msgUnlock.ID = std::hash<std::string>()("unlocked levels");
-		msgUnlock.push_back<unsigned int>(m_arcadeSettings.unlockValue);
-		m_messageBus.sendMessage(msgUnlock);
-
-		//Send level list
-		Message msgLvllist;
-		msgLvllist.ID = std::hash<std::string>()("arcade levellist");
-		for (auto &it : m_arcadeSettings.levelList)
-		{
-			msgLvllist.push_back<std::string>(it);
-		}
-		m_messageBus.sendMessage(msgLvllist);
 	}
 
 	void Settings::save()
@@ -59,9 +43,13 @@ namespace aw
 		file << m_windowSettings.viewWidth << " ";
 		file << m_windowSettings.viewHeight << std::endl;
 
-		//Save sound settings
-		file << "[Sound]\n";
-		file << m_soundSettings.masterVolume << std::endl;
+		//Save menu volume
+		file << "[Menu Volume]\n";
+		file << m_soundSettings.menuvolume << std::endl;
+
+		//Save game volume
+		file << "[Game Volume]\n";
+		file << m_soundSettings.gamevolume << std::endl;
 
 		file.close();
 
@@ -101,37 +89,26 @@ namespace aw
 				std::stringstream sstr(line);
 				sstr >> m_windowSettings.viewWidth >> m_windowSettings.viewHeight;
 			}
-			else if (line == "[Sound]")
+			else if (line == "[Menu Volume]")
 			{
-				//Sound settings
+				//Menu Volume
 				std::getline(file, line);
 				std::stringstream sstr(line);
-				sstr >> m_soundSettings.masterVolume;
+				sstr >> m_soundSettings.menuvolume;
+			}
+			else if (line == "[Game Volume]")
+			{
+				//Game volume
+				std::getline(file, line);
+				std::stringstream sstr(line);
+				sstr >> m_soundSettings.gamevolume;
 			}
 		}
 
 		file.close();
 
-		//Sending window properties to the MessageBus
-		Message msgWindow;
-		msgWindow.ID = std::hash<std::string>()("window settings");
-		msgWindow.push_back(m_windowSettings.name);
-		msgWindow.push_back(m_windowSettings.windowSizeX);
-		msgWindow.push_back(m_windowSettings.windowSizeY);
-		msgWindow.push_back(m_windowSettings.fullscreen);
-		msgWindow.push_back(m_windowSettings.antialiasingLevel);
-		msgWindow.push_back(m_windowSettings.majorVersion);
-		msgWindow.push_back(m_windowSettings.minorVersion);
-		msgWindow.push_back(m_windowSettings.viewWidth);
-		msgWindow.push_back(m_windowSettings.viewHeight);
-		m_messageBus.sendMessage(msgWindow);
-
-		//Sending sound settings to the MessageBus
-		Message msgSound;
-		msgSound.ID = std::hash<std::string>()("sound settings");
-		msgSound.push_back(m_soundSettings.masterVolume);
-		m_messageBus.sendMessage(msgSound);
-
+		sendWindowSettings();
+		sendSoundSettings();
 	}
 
 	void Settings::loadArcadeSettings()
@@ -154,6 +131,51 @@ namespace aw
 
 		//Send information
 		sendArcadeSettings();
+	}
+
+	void Settings::sendSoundSettings()
+	{
+		//Sending sound settings to the MessageBus
+		Message msgSound;
+		msgSound.ID = std::hash<std::string>()("sound settings");
+		msgSound.push_back(m_soundSettings.menuvolume);
+		msgSound.push_back(m_soundSettings.gamevolume);
+		m_messageBus.sendMessage(msgSound);
+	}
+
+	void Settings::sendWindowSettings()
+	{
+		//Sending window properties to the MessageBus
+		Message msgWindow;
+		msgWindow.ID = std::hash<std::string>()("window settings");
+		msgWindow.push_back(m_windowSettings.name);
+		msgWindow.push_back(m_windowSettings.windowSizeX);
+		msgWindow.push_back(m_windowSettings.windowSizeY);
+		msgWindow.push_back(m_windowSettings.fullscreen);
+		msgWindow.push_back(m_windowSettings.antialiasingLevel);
+		msgWindow.push_back(m_windowSettings.majorVersion);
+		msgWindow.push_back(m_windowSettings.minorVersion);
+		msgWindow.push_back(m_windowSettings.viewWidth);
+		msgWindow.push_back(m_windowSettings.viewHeight);
+		m_messageBus.sendMessage(msgWindow);
+	}
+
+	void Settings::sendArcadeSettings()
+	{
+		//Send the unlock information
+		Message msgUnlock;
+		msgUnlock.ID = std::hash<std::string>()("unlocked levels");
+		msgUnlock.push_back<unsigned int>(m_arcadeSettings.unlockValue);
+		m_messageBus.sendMessage(msgUnlock);
+
+		//Send level list
+		Message msgLvllist;
+		msgLvllist.ID = std::hash<std::string>()("arcade levellist");
+		for (auto &it : m_arcadeSettings.levelList)
+		{
+			msgLvllist.push_back<std::string>(it);
+		}
+		m_messageBus.sendMessage(msgLvllist);
 	}
 
 	void Settings::unlockNewLevel(const std::string &name)
@@ -214,6 +236,42 @@ namespace aw
 				//Send command to load the next level
 				sendNextLevel(*msg.getValue<std::string>(0));
 			}
+		}
+		else if (msg.ID == std::hash<std::string>()("new sound settings"))
+		{
+			std::stringstream sstr(*msg.getValue<std::string>(0));
+			sstr >> m_soundSettings.menuvolume;
+			sstr.str("");
+			
+			std::stringstream sstr2;
+			sstr2 << *msg.getValue<std::string>(1);
+			sstr2 >> m_soundSettings.gamevolume;
+
+			sendSoundSettings();
+		}
+		else if (msg.ID == std::hash<std::string>()("new window settings"))
+		{
+			//Antialiasinglevel
+			std::stringstream sstr(*msg.getValue<std::string>(0));
+			sstr >> m_windowSettings.antialiasingLevel;
+
+			//Fullscreen
+			if (*msg.getValue<std::string>(1) == "off")
+			{
+				m_windowSettings.fullscreen = false;
+			}
+			else
+			{
+				m_windowSettings.fullscreen = true;
+			}
+
+			sendWindowSettings();
+		}
+		else if (msg.ID == std::hash<std::string>()("reset resolution"))
+		{
+			m_windowSettings.windowSizeX = 800;
+			m_windowSettings.windowSizeY = 450;
+			sendWindowSettings();
 		}
 	}
 }

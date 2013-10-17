@@ -35,10 +35,12 @@ namespace aw
 
 		void updateLevelInformation();
 
+		//Gui action events (when a button is triggered etc.)
 		void buttonAction();
 		void mainLayer();
 		void arcadeLayer();
 		void tutorial1Layer();
+		void optionsLayer();
 
 
 	private:
