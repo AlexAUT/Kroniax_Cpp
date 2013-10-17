@@ -19,7 +19,7 @@ namespace aw
 			std::size_t xPosInTiles = static_cast<std::size_t>(player.getVertexPosition(i).x / 25.f);
 			std::size_t yPosInTiles = static_cast<std::size_t>(player.getVertexPosition(i).y / 25.f);
 
-			if (xPosInTiles < m_collisionCollums.size()-1)
+			if (xPosInTiles < m_collisionCollums.size())
 			{
 				auto result = m_collisionCollums[xPosInTiles].getCollision(yPosInTiles);
 
