@@ -79,6 +79,7 @@ namespace aw
 
 		//Background music
 		sf::Music m_music;
+		int m_openMusic;
 	};
 }
 

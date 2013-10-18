@@ -17,7 +17,8 @@ namespace aw
 		m_active(false),
 		State(statemachine), 
 		m_messageBus(messageBus),
-		m_gameState(GameState::STOPPED)
+		m_gameState(GameState::STOPPED),
+		m_openMusic(-1)
 	{
 		m_messageBus.addReceiver(this);
 		m_gui.loadFont("data/fonts/visitor1.ttf");
@@ -232,24 +233,24 @@ namespace aw
 			std::stringstream sstr(strlvlnumber);
 			sstr >> levelnumber;
 
-			static int openMusic = -1;
+			
 			// 0 = level 1-5
 			// 2 = level 6-10
 			// 3 = level 11-15
 
 			if (levelnumber < 6)
 			{
-				if (openMusic != 0)
+				if (m_openMusic != 0)
 					m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg");
 
-				openMusic = 0;
+				m_openMusic = 0;
 			}
 			else if (levelnumber < 11)
 			{
-				if (openMusic != 1)
+				if (m_openMusic != 1)
 					m_music.openFromFile("data/music/MachinimaSound.com_-_After_Dark.ogg");
 
-				openMusic = 1;
+				m_openMusic = 1;
 			}
 		}
 	}
