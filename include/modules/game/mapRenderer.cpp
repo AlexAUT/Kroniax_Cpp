@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>
 
-
 #include <SFML/Graphics/RenderWindow.hpp>
 
 const int TILESIZE = 25;
@@ -30,7 +29,16 @@ namespace aw
 		std::string line;
 		while (std::getline(file, line))
 		{
-			if (line == "[Colors]")
+			//Use the Length to reserve space in the vector to avoid copies
+			if (line == "[Length]")
+			{
+				std::getline(file, line);
+				std::stringstream sstr(line);
+				std::size_t sizeToAllocate;
+				sstr >> sizeToAllocate;
+				m_collums.reserve(sizeToAllocate);
+			}
+			else if (line == "[Colors]")
 			{
 				while (true)
 				{

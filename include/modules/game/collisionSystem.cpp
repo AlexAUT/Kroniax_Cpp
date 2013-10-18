@@ -43,7 +43,16 @@ namespace aw
 		std::string line;
 		while (std::getline(file, line))
 		{
-			if (line == "[Blocks]")
+			//Use Length to reserve space in the vector to avoid copies
+			if (line == "[Length]")
+			{
+				std::getline(file, line);
+				std::stringstream sstr(line);
+				std::size_t sizeToAllocate;
+				sstr >> sizeToAllocate;
+				m_collisionCollums.reserve(sizeToAllocate);
+			}
+			else if (line == "[Blocks]")
 			{
 				while (std::getline(file, line))
 				{
