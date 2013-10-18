@@ -383,6 +383,7 @@ void initGui(aw::GuiController &gui)
 	gui.addButton(3, "resume", sf::Vector2f(250, 200), "Continue");
 	gui.addButton(3, "back", sf::Vector2f(250, 250), "Back to menu");
 	gui.addLabel(3, "", sf::Vector2f(250, 100), "Game is paused");
+	gui.getElement(3, 2)->setCharacterSize(35);
 	
 
 }
