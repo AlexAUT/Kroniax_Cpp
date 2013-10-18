@@ -33,6 +33,8 @@ namespace aw
 		void initGui();
 		void resetView();
 
+		void loadRandomLevel();
+
 		void updateLevelInformation();
 
 		//Gui action events (when a button is triggered etc.)

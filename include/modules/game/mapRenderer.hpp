@@ -19,6 +19,8 @@ namespace aw
 
 		void render(sf::RenderWindow &window);
 
+		bool isOnTheEnd(std::size_t xPos);
+
 	private:
 
 	private:

@@ -133,4 +133,16 @@ namespace aw
 				m_collums[i].render(window);
 		}
 	}
+
+	bool MapRenderer::isOnTheEnd(std::size_t xPos)
+	{
+		if (xPos > m_collums.size() * 25)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

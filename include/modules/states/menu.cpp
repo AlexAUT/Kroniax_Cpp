@@ -5,9 +5,11 @@
 #include <fstream>
 #include <sstream>
 
+#include <random>
+
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-
+#include <iostream>
 //Global gui init function, to make the code easier to read
 void initMainLayer(aw::GuiController &gui);
 void initArcadeLayer(aw::GuiController &gui);
@@ -26,7 +28,7 @@ namespace aw
 
 		initGui();
 
-		m_mapRenderer.load("data/levels/official/Level1.cfg");
+		loadRandomLevel();
 
 		m_overlay.setPosition(sf::Vector2f(0.f, 0.f));
 		m_overlay.setSize(sf::Vector2f(800.f, 450.f));
@@ -65,7 +67,13 @@ namespace aw
 		if (m_music.getStatus() != sf::Music::Status::Playing)
 			m_music.play();
 
-		m_view.move(sf::Vector2f(200.f * frameTime.asSeconds(), 0.f));
+		m_view.move(sf::Vector2f(400.f * frameTime.asSeconds(), 0.f));
+
+		if (m_mapRenderer.isOnTheEnd(static_cast<std::size_t>(m_view.getCenter().x)))
+		{
+			loadRandomLevel();
+			m_view.setCenter(sf::Vector2f(400, 225));
+		}
 
 		//Update the levelinformation 
 		updateLevelInformation();
@@ -160,6 +168,22 @@ namespace aw
 	void Menu::resetView()
 	{
 		m_view = sf::View(sf::FloatRect(0, 0, 800, 450));
+	}
+
+	void Menu::loadRandomLevel()
+	{
+		//Random with level will be load from the brackground(old Levels)
+		// Seed with a real random value, if available
+		std::random_device rd;
+
+		// Choose a random range
+		std::default_random_engine e1(rd());
+		std::uniform_int_distribution<int> uniform_dist(1, 2);
+		int levelNumber = uniform_dist(e1);
+		std::stringstream sstr;
+		sstr << levelNumber;
+		std::string path = "data/levels/old levels/Level" + sstr.str() + "_old.cfg";
+		m_mapRenderer.load(path);
 	}
 
 
