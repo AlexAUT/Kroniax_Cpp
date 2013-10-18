@@ -29,7 +29,8 @@ namespace aw
 		STOPPED,
 		CRASHED,
 		RUNNING,
-		FINISHED
+		FINISHED,
+		PAUSED
 	};
 
 	/////FORWARD DECL/////

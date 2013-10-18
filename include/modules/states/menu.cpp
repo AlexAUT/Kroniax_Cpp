@@ -151,6 +151,10 @@ namespace aw
 				m_gui.getElement(1, 0)->addEntry(*msg.getValue<std::string>(i));
 			}
 		}
+		else if (msg.ID == std::hash<std::string>()("Tutorial2"))
+		{
+			m_gui.setActiveLayer(3);
+		}
 	}
 
 	void Menu::resetView()

@@ -94,6 +94,15 @@ namespace aw
 		{
 			//Set the name of the level
 			m_levelName = *msg.getValue<std::string>(0);
+			//Check if the Level is a tutorial
+			if (m_levelName == "Tutorial2")
+			{
+				m_active = false;
+				m_music.stop();
+				changeActiveState("menu");
+				Message msg(std::hash<std::string>()("Tutorial2"));
+				m_messageBus.sendMessage(msg);
+			}
 			//Set the gametype
 			if (*msg.getValue<std::string>(1) == "official arcade")
 			{
@@ -106,6 +115,17 @@ namespace aw
 		else if (msg.ID == std::hash<std::string>()("sound settings"))
 		{
 			m_music.setVolume(*msg.getValue<float>(1));
+		}
+		//Handling focus if lost = pause
+		else if (msg.ID == std::hash<std::string>()("lost focus"))
+		{
+			//Pause the game if it is running..
+			//In Start, Finish, Crash screen it's not needed to pause the game...
+			if (m_gameState == GameState::RUNNING)
+			{
+				m_gameState = GameState::PAUSED;
+				m_gui.setActiveLayer(3);
+			}
 		}
 		//Starting the game
 		else if (msg.ID == std::hash<std::string>()("event") && m_active)
@@ -154,6 +174,19 @@ namespace aw
 							sendInformationLevelFinished(false);
 						}
 					}
+					else if (m_gameState == GameState::PAUSED)
+					{
+						if (m_gui.getSelectedElement()->getID() == "resume")
+						{
+							m_gameState = GameState::RUNNING;
+						}
+						else if (m_gui.getSelectedElement()->getID() == "back")
+						{
+							changeActiveState("menu");
+							m_music.stop();
+							m_active = false;
+						}
+					}
 				}
 				else if (event.key.code == sf::Keyboard::BackSpace)
 				{
@@ -165,9 +198,22 @@ namespace aw
 				}
 				else if (event.key.code == sf::Keyboard::Escape)
 				{
-					changeActiveState("menu");
-					m_music.stop();
-					m_active = false;
+					//What happens when pressing ESC depends on the current gamestate
+
+					//Stopped or Crashed = back to menu
+					if (m_gameState == GameState::STOPPED || m_gameState == GameState::CRASHED)
+					{
+						changeActiveState("menu");
+						m_music.stop();
+						m_active = false;
+					}
+					//Running = pause the game
+					else if (m_gameState == GameState::RUNNING)
+					{
+						m_gameState = GameState::PAUSED;
+						m_gui.setActiveLayer(3);
+					}
+					//Finish screen do nothing...
 				}
 			}
 		}
@@ -331,5 +377,12 @@ void initGui(aw::GuiController &gui)
 	gui.addLabel(2, "headline", sf::Vector2f(80, 80), "Great you have completed this level!");
 	gui.getElement(2, 3)->setCharacterSize(35);
 	gui.addLabel(2, "question", sf::Vector2f(80, 180), "What to do: ");
+
+	//Pause Layer
+	gui.addLayer();
+	gui.addButton(3, "resume", sf::Vector2f(250, 200), "Continue");
+	gui.addButton(3, "back", sf::Vector2f(250, 250), "Back to menu");
+	gui.addLabel(3, "", sf::Vector2f(250, 100), "Game is paused");
+	
 
 }
