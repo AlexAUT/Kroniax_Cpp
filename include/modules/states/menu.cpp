@@ -453,7 +453,9 @@ void initTutorialLayers(aw::GuiController &gui)
 	gui.addLayer();
 	gui.addButton(2, "start level1", sf::Vector2f(300, 345), "Start Level1");
 	gui.addButton(2, "back", sf::Vector2f(297, 375), "Back to menu");
-	gui.addLabel(2, "text", sf::Vector2f(50, 110), "The target of the game is to steer the ship through\nthe level without touching the walls.\n\n\nYou can steer up your ship by pressing the spacebar.\n\n\nOrange horizontal lines are checkpoints\nWhen you hit a wall you will respawn there");
+	gui.addLabel(2, "text", sf::Vector2f(50, 110), "The target of the game is to steer the ship through\nthe" 
+		"level without touching the walls.\n\n\nYou can steer up your ship by pressing the spacebar.\n\n\nOrange" 
+		"horizontal lines are checkpoints\nWhen you hit a wall you will respawn there");
 
 
 	//Will be implemented when needed...
@@ -461,7 +463,8 @@ void initTutorialLayers(aw::GuiController &gui)
 	gui.addLayer();
 	gui.addButton(3, "start level6", sf::Vector2f(300, 345), "Start Level6");
 	gui.addButton(3, "back", sf::Vector2f(297, 375), "Back to menu");
-	gui.addLabel(3, "text", sf::Vector2f(50, 120), "Some more Information:\n\n\nYellow horizontal lines will change your speed!\n\nOrange horizontal lines will change your gravity!\n\nBlue lines will affect your view!");
+	gui.addLabel(3, "text", sf::Vector2f(50, 120), "Some more Information:\n\n\nYellow horizontal lines will" 
+		"change your speed!\n\nOrange horizontal lines will change your gravity!\n\nBlue lines will affect your view!");
 
 	//Tutorial3 = layer(4)
 	gui.addLayer();
