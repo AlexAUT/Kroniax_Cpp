@@ -9,6 +9,7 @@ Credits
 -------
 
 * *Music*: MafiaFLairBeatz
+* *Music*: MachinimaSound.com
 * *SFML*: Laurent
 
 Links
