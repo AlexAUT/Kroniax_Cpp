@@ -12,7 +12,7 @@
 
 namespace aw
 {
-	void Player::upate(const sf::Time &frameTime)
+	void Player::update(const sf::Time &frameTime)
 	{
 		//let the gravitation do his work
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))

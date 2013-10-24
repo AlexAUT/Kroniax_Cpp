@@ -16,6 +16,7 @@ void initArcadeLayer(aw::GuiController &gui);
 void initTutorialLayers(aw::GuiController &gui);
 void initOptionsLayer(aw::GuiController &gui);
 void initCreditsLayer(aw::GuiController &gui);
+void initMultiplayerLayers(aw::GuiController &gui);
 
 namespace aw
 {
@@ -58,6 +59,8 @@ namespace aw
 		initOptionsLayer(m_gui);
 		//Layer6
 		initCreditsLayer(m_gui);
+		//Layer7,8,9
+		initMultiplayerLayers(m_gui);
 	}
 
 	void Menu::update(const sf::Time &frameTime)
@@ -146,6 +149,12 @@ namespace aw
 				buttonAction();
 			}
 		}
+		else if (msg.ID == std::hash<std::string>()("start game"))
+		{
+			m_music.stop();
+			m_active = false;
+			changeActiveState("game");
+		}
 		else if (msg.ID == std::hash<std::string>()("unlocked levels"))
 		{
 			m_unlockedLevels = *msg.getValue<unsigned int>(0);
@@ -162,6 +171,41 @@ namespace aw
 		else if (msg.ID == std::hash<std::string>()("Tutorial2"))
 		{
 			m_gui.setActiveLayer(3);
+		}
+		////////////////////// MULTIPLAYER ACTIONS ////////////////////////////////
+		else if (msg.ID == std::hash<std::string>()("result connecting"))
+		{
+			if (*msg.getValue<bool>(0))
+			{
+				//Map Selection
+				m_gui.setActiveLayer(9);
+
+				Message msg(std::hash<std::string>()("request game list"));
+				m_messageBus.sendMessage(msg);
+			}
+			else
+			{
+				//Connection failed layer
+				m_gui.setActiveLayer(8);
+			}
+		}
+		else if (msg.ID == std::hash<std::string>()("game list"))
+		{
+			m_gui.getElement(9, 0)->clearEntries();
+
+			for (std::size_t i = 0;; ++i)
+			{
+				std::string *ptr = msg.getValue<std::string>(i);
+
+				if (ptr)
+				{
+					m_gui.getElement(9, 0)->addEntry(*ptr);
+				}
+				else
+				{
+					break;
+				}
+			}
 		}
 	}
 
@@ -270,6 +314,9 @@ namespace aw
 		case 3: tutorial2Layer(); break;
 		case 5: optionsLayer(); break;
 		case 6: creditsLayer(); break;
+		case 7: setUpConnectionLayer(); break;
+		case 8: connectionFailedLayer(); break;
+		case 9: mapSelectionLayer(); break;
 		default: break;
 		}
 	}
@@ -286,7 +333,7 @@ namespace aw
 		}
 		else if (m_gui.getSelectedElement()->getID() == "multiplayer")
 		{
-
+			m_gui.setActiveLayer(7);
 		}
 		else if (m_gui.getSelectedElement()->getID() == "options")
 		{
@@ -419,6 +466,45 @@ namespace aw
 			m_gui.setActiveLayer(0);
 		}
 	}
+
+	void Menu::setUpConnectionLayer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "submit")
+		{
+			Message msg;
+			msg.ID = std::hash<std::string>()("connect");
+			//Pushback the name of the player
+			msg.push_back(m_gui.getElement(7, 0)->getText());
+			
+			m_messageBus.sendMessage(msg);
+		}
+		else if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(0);
+		}
+	}
+
+	void Menu::connectionFailedLayer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(7);
+		}
+	}
+
+	void Menu::mapSelectionLayer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "select server")
+		{
+			Message msg(std::hash<std::string>()("join server"));
+			msg.push_back(m_gui.getSelectedElement()->getText());
+			m_messageBus.sendMessage(msg);
+		}
+		else if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(0);
+		}
+	}
 }
 
 
@@ -527,4 +613,28 @@ void initCreditsLayer(aw::GuiController &gui)
 	gui.addLabel(6, "credit", sf::Vector2f(150, 235), "Laurent for SFML!");
 	gui.addLabel(6, "credit", sf::Vector2f(150, 265), "MafiaFLairBeatz for the music!");
 	gui.addLabel(6, "credit", sf::Vector2f(150, 295), "Machinimasound for the music!");
+}
+
+void initMultiplayerLayers(aw::GuiController &gui)
+{
+	//Layer 7 // set up connection layer
+	gui.addLayer();
+	gui.addInput(7, "name", sf::Vector2f(345, 125), "Player");
+	gui.addLabel(7, "", sf::Vector2f(250, 125), "Name:");
+	gui.addButton(7, "submit", sf::Vector2f(325, 200), "Submit");
+	gui.addButton(7, "back", sf::Vector2f(325, 240), "Back");
+
+	//Layer 8 //Connection failed layer
+	gui.addLayer();
+	gui.addButton(8, "back", sf::Vector2f(325, 240), "Back");
+	gui.addLabel(8, "", sf::Vector2f(250, 125), "Couldn't connect to the server!");
+
+	//Layer 9 //MapSelection layer
+	gui.addLayer();
+	gui.addList(9, "select server", sf::Vector2f(275, 165), "Select a server");
+	gui.addLabel(9, "map", sf::Vector2f(275, 220), "Current map: ");
+	gui.addLabel(9, "player", sf::Vector2f(275, 255), "Player: ");
+	//gui.addLabel(9, "lentgh", sf::Vector2f(275, 290), "Length: ");
+	//gui.addLabel(9, "author", sf::Vector2f(275, 325), "Author: ");
+	gui.addButton(9, "back", sf::Vector2f(300, 385), "Back");
 }

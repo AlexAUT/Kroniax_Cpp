@@ -4,6 +4,7 @@
 #include "messageBus/messageBus.hpp"
 #include "modules/settings.hpp"
 #include "modules/windowHandler.hpp"
+#include "modules/networkHandler.hpp"
 #include "modules/stateMachine.hpp"
 
 #include <SFML/System/Clock.hpp>
@@ -25,6 +26,7 @@ namespace aw
 		//Modules//////////////////////
 		Settings m_settings;
 		WindowHandler m_windowHandler;
+		NetworkHandler m_networkHandler;
 		StateMachine m_stateMachine;
 		///////////////////////////////
 		sf::Clock m_frameTimer;

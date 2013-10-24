@@ -12,7 +12,7 @@ namespace aw
 {
 
 	Application::Application() :
-		m_settings(m_messageBus), m_windowHandler(m_messageBus)
+		m_settings(m_messageBus), m_windowHandler(m_messageBus), m_networkHandler(m_messageBus)
 	{
 		//Init Statemachine
 		m_stateMachine.addState("intro", std::unique_ptr<State>(new Intro(m_stateMachine)));
@@ -23,7 +23,6 @@ namespace aw
 		m_stateMachine.changeActiveState("menu");
 	
 		//Load settings afterwards, because it will send informations to the states
-		//Sound, window settings
 		m_settings.load();
 	}
 
@@ -36,6 +35,9 @@ namespace aw
 
 			//Check for Events (Will send them to the MessageBus)
 			m_windowHandler.checkEventQueue();
+
+			//Check for new network messages
+			m_networkHandler.update();
 
 			//Update active State
 			m_stateMachine.update(m_frameTime);

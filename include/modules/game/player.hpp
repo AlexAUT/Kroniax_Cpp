@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Color.hpp>
 
 #include <array>
+#include <string>
 
 //////FORWARD DECL//////
 namespace sf
@@ -21,7 +22,7 @@ namespace aw
 	{
 	public:
 
-		void upate(const sf::Time &frameTime);
+		void update(const sf::Time &frameTime);
 		void render(sf::RenderWindow &window);
 
 		void loadInformation(const std::string &path);

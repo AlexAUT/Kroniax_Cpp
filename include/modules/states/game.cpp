@@ -3,6 +3,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <iostream>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
@@ -32,13 +34,13 @@ namespace aw
 
 		if (m_music.getStatus() == sf::Music::Stopped)
 		{
-			m_music.play();
+		//	m_music.play();
 		}
 
 		if (m_gameState == GameState::RUNNING)
 		{
 			//check for collision or finish
-			auto result = m_collisionSystem.checkCollision(m_player);
+			auto result = m_collisionSystem.checkCollision(m_players[0]);
 			if (result == CollisionType::WALL)
 			{
 				m_gameState = GameState::CRASHED;
@@ -53,14 +55,20 @@ namespace aw
 			}
 
 			//Check for Scriptactions
-			m_scriptManager.update(m_player, m_camera);
+			m_scriptManager.update(m_players[0], m_camera);
 
 			//Update the position later, so the user see the crash
 			//Update player position
-			m_player.upate(frameTime);
+			for (auto &it : m_players)
+			{
+				it.update(frameTime);
+			}
 
 			//update the camera position
-			m_camera.update(m_player.getPosition());
+			m_camera.update(m_players[0].getPosition());
+
+			//update the game timer only when running
+			m_gameTimer.update(frameTime.asSeconds());
 		}
 	}
 
@@ -73,11 +81,14 @@ namespace aw
 		//Draw script notification
 		m_scriptManager.render(window);
 		//Player
-		m_player.render(window);
+		for (auto &it : m_players)
+		{
+			it.render(window);
+		}
 		//Set gui view
 		window.setView(m_camera.getDefaultView());
-
-
+		//Draw gameTimer
+		m_gameTimer.render(window);
 		//Draw different screens
 		if (m_gameState != GameState::RUNNING)
 		{
@@ -85,6 +96,15 @@ namespace aw
 			overlay.setFillColor(sf::Color(0, 0, 0, 180));
 			window.draw(overlay);
 			m_gui.render(window);
+		}
+
+		//Draw timetable when holding tab (only in online mode)
+		if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
+			{
+				m_timeTable.render(window);
+			}
 		}
 	}
 
@@ -95,6 +115,7 @@ namespace aw
 		{
 			//Set the name of the level
 			m_levelName = *msg.getValue<std::string>(0);
+			std::cout << "Mapname: " << m_levelName << std::endl;
 			//Check if the Level is a tutorial
 			if (m_levelName == "Tutorial2")
 			{
@@ -109,8 +130,48 @@ namespace aw
 			{
 				m_gameType = GameType::OFFICIAL_ARCADE;
 			}
+			else if (*msg.getValue<std::string>(1) == "online time challenge")
+			{
+				m_gameType = GameType::ONLINE_TIME_CHALLENGE;
+				//OnlineState
+				m_onlineState = OnlineState(*msg.getValue<int>(2));
+			}
+			
 			//Load the level
 			loadLevel();
+
+			if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+			{
+				//load players and times
+				for (std::size_t i = 3;; i += 2)
+				{
+					std::string *name = msg.getValue<std::string>(i);
+					float *time = msg.getValue<float>(i + 1);
+
+					if (name && time)
+					{
+						m_timeTable.addPlayer(*name, *time);
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+
+		}
+		//New player connected to the game = add player to m_players and m_timeTable
+		else if (msg.ID == std::hash<std::string>()("new player"))
+		{
+			m_players.push_back(Player());
+			m_timeTable.addPlayer(*msg.getValue<std::string>(0));
+		}
+		//Remove a player from m_players and timetable (same index)
+		else if (msg.ID == std::hash<std::string>()("remove player"))
+		{
+			std::size_t index = m_timeTable.getPlayerIndex(*msg.getValue<std::string>(0));
+			m_timeTable.removePlayer(index);
+			m_players.erase(m_players.begin() + index);
 		}
 		//Set the volume of the music
 		else if (msg.ID == std::hash<std::string>()("sound settings"))
@@ -252,6 +313,10 @@ namespace aw
 
 				m_openMusic = 1;
 			}
+			else
+			{
+				m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg");
+			}
 		}
 	}
 
@@ -261,7 +326,9 @@ namespace aw
 		m_gameState = GameState::STOPPED;
 		m_mapRenderer = MapRenderer();
 		m_collisionSystem = CollisionSystem();
-		m_player = Player();
+		//Push_back main player [0] is ALWAYS the you^^
+		m_players.clear();
+		m_players.push_back(Player());
 		m_camera = Camera();
 		m_scriptManager.deleteScripts();
 
@@ -286,11 +353,11 @@ namespace aw
 		//Load the collision map (Walls and Finish)
 		m_collisionSystem.loadMap(path);
 		//Load player information (speed, gravity, spawn)
-		m_player.loadInformation(path);
+		m_players[0].loadInformation(path);
 		//Call player update with 0 frametime to prevent a instant death.
-		m_player.upate(sf::Time());
+		m_players[0].update(sf::Time());
 		//Update Camera position
-		m_camera.update(m_player.getPosition());
+		m_camera.update(m_players[0].getPosition());
 		//Load all the scripts
 		m_scriptManager.load(path);
 		//Open the right Music
@@ -304,7 +371,7 @@ namespace aw
 		if (ptr)
 		{
 			//Triggered checkpoint found -> reset to it
-			m_player = ptr->savedPlayer;
+			m_players[0] = ptr->savedPlayer;
 			m_camera = ptr->savedCamera;
 			//Reset scripts except checkpoint = parameter(false)
 			m_scriptManager.resetScriptStates(false);
@@ -319,13 +386,16 @@ namespace aw
 	void Game::resetToStart()
 	{
 		//Reset player
-		m_player.resetToStartSettings();
+		m_players[0].resetToStartSettings();
 
 		//Reset Camera
 		m_camera = Camera();
 
 		//Reset scripts
-		m_scriptManager.resetScriptStates();;
+		m_scriptManager.resetScriptStates();
+
+		//Reset the gameTimer
+		m_gameTimer.restart();
 	}
 
 	void Game::sendInformationLevelFinished(bool startNextLevel)

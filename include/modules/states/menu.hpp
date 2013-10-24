@@ -45,6 +45,9 @@ namespace aw
 		void tutorial2Layer();
 		void optionsLayer();
 		void creditsLayer();
+		void setUpConnectionLayer();
+		void mapSelectionLayer();
+		void connectionFailedLayer();
 
 
 	private:

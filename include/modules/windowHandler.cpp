@@ -21,6 +21,9 @@ namespace aw
 		{
 			if (event.type == sf::Event::Closed)
 			{
+				Message msg;
+				msg.ID = std::hash<std::string>()("close game");
+				m_messageBus.sendMessage(msg);
 				m_window.close();
 			}
 			else if (event.type == sf::Event::Resized)
