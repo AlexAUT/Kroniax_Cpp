@@ -12,6 +12,7 @@
 #include "../game/scriptManager.hpp"
 #include "../game/timeTabel.hpp"
 #include "../game/gameTimer.hpp"
+#include "../game/countdown.hpp"
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Audio/Music.hpp>
@@ -69,6 +70,9 @@ namespace aw
 		//Send the message for completing a level to unlcoka new one and save the progress
 		void sendInformationLevelFinished(bool startNextLevel);
 
+		//Inform the server that you have quit a online game...
+		void quitOnlineGame();
+
 	private:
 		bool m_active; //Important. Is needed to turn of the gui after for example starting a game
 
@@ -86,6 +90,7 @@ namespace aw
 		ScriptManager m_scriptManager;
 		TimeTable m_timeTable;
 		GameTimer m_gameTimer;
+		Countdown m_countDownNextAction;
 
 		GuiController m_gui;//Will display different game screens
 		sf::Clock m_startingTimer;

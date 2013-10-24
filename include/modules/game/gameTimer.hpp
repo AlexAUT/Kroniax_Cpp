@@ -22,6 +22,8 @@ namespace aw
 
 		void render(sf::RenderWindow &window);
 
+		float getTime();
+
 	private:
 
 	private:

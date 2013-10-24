@@ -39,4 +39,10 @@ namespace aw
 	{
 		window.draw(m_text);
 	}
+
+
+	float GameTimer::getTime()
+	{
+		return m_elapsedTime;
+	}
 }

@@ -48,6 +48,10 @@ namespace aw
 					int gameState;
 					receivedData >> gameState;
 					msg.push_back(gameState);
+					//Time left until the next onlineState change
+					float timeLeft;
+					receivedData >> timeLeft;
+					msg.push_back(timeLeft);
 
 					while (!receivedData.endOfPacket())
 					{
@@ -78,6 +82,62 @@ namespace aw
 					msg.push_back(name);
 					m_messageBus.sendMessage(msg);
 				}
+				else if (command == std::hash<std::string>()("load map"))
+				{
+					Message msg;
+					msg.ID = std::hash<std::string>()("new map");
+					std::string mapName;
+					receivedData >> mapName;
+					msg.push_back(mapName);
+					m_messageBus.sendMessage(msg);
+				}
+				else if (command == std::hash<std::string>()("mode loading"))
+				{
+					Message msg;
+					msg.ID = std::hash<std::string>()("onlinemode loading");
+					float timeToNextAction;
+					receivedData >> timeToNextAction;
+					msg.push_back(timeToNextAction);
+					m_messageBus.sendMessage(msg);
+				}
+				else if (command == std::hash<std::string>()("mode running"))
+				{
+					Message msg;
+					msg.ID = std::hash<std::string>()("onlinemode running");
+					float timeToNextAction;
+					receivedData >> timeToNextAction;
+					msg.push_back(timeToNextAction);
+					m_messageBus.sendMessage(msg);
+				}
+				else if (command == std::hash<std::string>()("mode finish"))
+				{
+					Message msg;
+					msg.ID = std::hash<std::string>()("onlinemode finish");
+					float timeToNextAction;
+					receivedData >> timeToNextAction;
+					msg.push_back(timeToNextAction);
+					m_messageBus.sendMessage(msg);
+				}
+				else if (command == std::hash<std::string>()("new best time"))
+				{
+					Message msg;
+					msg.ID = std::hash<std::string>()("new best time");
+					std::string name;
+					receivedData >> name;
+					float time;
+					receivedData >> time;
+
+					msg.push_back(name);
+					msg.push_back(time);
+
+					m_messageBus.sendMessage(msg);
+				}
+				else if (command == std::hash<std::string>()("ping request"))
+				{
+					sf::Packet toSend;
+					toSend << std::hash<std::string>()("I am alive");
+					m_socket.send(toSend);
+				}
 			}
 		}
 	}
@@ -90,7 +150,7 @@ namespace aw
 			{
 				sf::Packet toSend;
 				toSend << std::hash<std::string>()("disconnect");
-				m_socket.send(toSend);
+				//m_socket.send(toSend);
 				
 				m_connected = false;
 				m_socket.disconnect();
@@ -114,6 +174,12 @@ namespace aw
 				m_socket.send(toSend);
 			}
 		}
+		else if (msg.ID == std::hash<std::string>()("quit online game"))
+		{
+			sf::Packet toSend;
+			toSend << std::hash<std::string>()("quit game");
+			m_socket.send(toSend);
+		}
 		else if (msg.ID == std::hash<std::string>()("join server"))
 		{
 			sf::Packet toSend;
@@ -122,7 +188,14 @@ namespace aw
 
 			m_socket.send(toSend);
 		}
-
+		else if (msg.ID == std::hash<std::string>()("new time"))
+		{
+			sf::Packet toSend;
+			toSend << std::hash<std::string>()("new time");
+			toSend << *msg.getValue<float>(0);
+			
+			m_socket.send(toSend);
+		}
 	}
 
 

@@ -43,12 +43,25 @@ namespace aw
 
 	void TimeTable::addTime(const std::string &name, float time)
 	{
-		for (auto it = m_players.begin(); it != m_players.end(); ++it)
+		//Serach the player
+		std::size_t index = getPlayerIndex(name);
+		//Add the new time
+		m_players[index].time = time;
+	}
+
+	void TimeTable::addTime(std::size_t index, float time)
+	{
+		if (index < m_players.size())
 		{
-			if (it->name == name)
-			{
-				it->time = time;
-			}
+			m_players[index].time = time;
+		}
+	}
+
+	void TimeTable::resetTimes()
+	{
+		for (auto &it : m_players)
+		{
+			it.time = 0;
 		}
 	}
 
@@ -68,10 +81,17 @@ namespace aw
 			}
 			else
 			{
-				toDraw.setPosition(sf::Vector2f(200.f, i * 25.f));
+				toDraw.setPosition(sf::Vector2f(200.f, 60 + i * 25.f));
 				std::stringstream sstr;
-				sstr << m_players[i].time;
-				toDraw.setString(m_players[i].name + sstr.str());
+				if (m_players[i].time > 0.5f)
+				{
+					sstr << m_players[i].time << "sec";
+				}
+				else
+				{
+					sstr << "no time";
+				}
+				toDraw.setString(m_players[i].name + "   " + sstr.str());
 				window.draw(toDraw);
 			}
 		}
@@ -89,5 +109,22 @@ namespace aw
 		}
 
 		return 0;
+	}
+
+	float TimeTable::getTime(std::size_t index)
+	{
+		if (index < m_players.size())
+		{
+			if (m_players[index].time < 1)
+			{
+				return 1000000;
+			}
+			else
+			{
+				return m_players[index].time;
+			}
+		}
+
+		return 1000000;
 	}
 }

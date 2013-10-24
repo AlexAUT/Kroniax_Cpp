@@ -36,8 +36,13 @@ namespace aw
 		{
 		//	m_music.play();
 		}
+		
+		//Update the online countdown
+		m_countDownNextAction.update(frameTime.asSeconds());
 
-		if (m_gameState == GameState::RUNNING)
+		//Check the onlinestate to prevent the game from wrong starts
+		//In singleplayer onlinemode is always Running
+		if (m_gameState == GameState::RUNNING && m_onlineState == OnlineState::RUNNING)
 		{
 			//check for collision or finish
 			auto result = m_collisionSystem.checkCollision(m_players[0]);
@@ -50,7 +55,24 @@ namespace aw
 			else if (result == CollisionType::FINISH)
 			{
 				m_gameState = GameState::FINISHED;
-				m_gui.setActiveLayer(2);
+				if (m_gameType == GameType::OFFICIAL_ARCADE)
+				{
+					m_gui.setActiveLayer(2);
+				}
+				else if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+				{
+					m_gameState = GameState::STOPPED;
+					//Send information to the server
+					Message msg;
+					msg.ID = std::hash<std::string>()("new time");
+					msg.push_back(m_gameTimer.getTime());
+					m_messageBus.sendMessage(msg);
+
+					resetToStart();
+					m_gui.setActiveLayer(0);
+				}
+				
+
 				return;
 			}
 
@@ -89,8 +111,8 @@ namespace aw
 		window.setView(m_camera.getDefaultView());
 		//Draw gameTimer
 		m_gameTimer.render(window);
-		//Draw different screens
-		if (m_gameState != GameState::RUNNING)
+		//Draw different screens 
+		if (m_gameState != GameState::RUNNING && m_onlineState == OnlineState::RUNNING)
 		{
 			sf::RectangleShape overlay(sf::Vector2f(800, 450));
 			overlay.setFillColor(sf::Color(0, 0, 0, 180));
@@ -98,8 +120,23 @@ namespace aw
 			m_gui.render(window);
 		}
 
+		//Draw online scrren depending on the onlinestate
+		if (m_onlineState == OnlineState::LOADING)
+		{
+			m_timeTable.render(window);
+			m_countDownNextAction.render(window, "until the game will start");
+		}
+		else if (m_onlineState == OnlineState::FINISHED)
+		{
+			m_timeTable.render(window);
+			m_countDownNextAction.render(window, "until the next level");
+		}
+		else if (m_onlineState == OnlineState::RUNNING)
+		{
+			m_countDownNextAction.render(window, "for this map!");
+		}
 		//Draw timetable when holding tab (only in online mode)
-		if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+		if (m_gameType == GameType::ONLINE_TIME_CHALLENGE && m_onlineState == OnlineState::RUNNING)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
 			{
@@ -122,6 +159,7 @@ namespace aw
 				m_active = false;
 				m_music.stop();
 				changeActiveState("menu");
+				quitOnlineGame();
 				Message msg(std::hash<std::string>()("Tutorial2"));
 				m_messageBus.sendMessage(msg);
 			}
@@ -129,21 +167,33 @@ namespace aw
 			if (*msg.getValue<std::string>(1) == "official arcade")
 			{
 				m_gameType = GameType::OFFICIAL_ARCADE;
+				m_onlineState = OnlineState::RUNNING;
 			}
 			else if (*msg.getValue<std::string>(1) == "online time challenge")
 			{
 				m_gameType = GameType::ONLINE_TIME_CHALLENGE;
 				//OnlineState
 				m_onlineState = OnlineState(*msg.getValue<int>(2));
+				m_countDownNextAction.setTime(*msg.getValue<float>(3));
 			}
-			
+			//Set up the player vector
+			//Push_back main player [0] is ALWAYS the you^^
+			//[0] is always the on this device
+			m_players.clear();
+			m_players.push_back(Player());
+
 			//Load the level
 			loadLevel();
 
 			if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
 			{
+				//Set up all online players
+				for (std::size_t i = 0; i < m_players.size(); ++i)
+				{
+					m_players[i] = m_players[0];
+				}
 				//load players and times
-				for (std::size_t i = 3;; i += 2)
+				for (std::size_t i = 4;; i += 2)
 				{
 					std::string *name = msg.getValue<std::string>(i);
 					float *time = msg.getValue<float>(i + 1);
@@ -151,6 +201,7 @@ namespace aw
 					if (name && time)
 					{
 						m_timeTable.addPlayer(*name, *time);
+						m_players.push_back(Player());
 					}
 					else
 					{
@@ -172,6 +223,41 @@ namespace aw
 			std::size_t index = m_timeTable.getPlayerIndex(*msg.getValue<std::string>(0));
 			m_timeTable.removePlayer(index);
 			m_players.erase(m_players.begin() + index);
+		}
+		//After onlinemode finish -> this should load a new map and reset map/player's time
+		else if (msg.ID == std::hash<std::string>()("new map"))
+		{
+			m_levelName = *msg.getValue<std::string>(0);
+			loadLevel();
+
+			//Reset online players
+			for (std::size_t i = 0; i < m_players.size(); ++i)
+			{
+				m_players[i] = m_players[0];
+			}
+			//Reset timeTable times
+			m_timeTable.resetTimes();
+		}
+		else if (msg.ID == std::hash<std::string>()("onlinemode loading"))
+		{
+			m_onlineState = OnlineState::LOADING;
+			m_countDownNextAction.setTime(*msg.getValue<float>(0));
+		}
+		else if (msg.ID == std::hash<std::string>()("onlinemode running"))
+		{
+			m_onlineState = OnlineState::RUNNING;
+			m_countDownNextAction.setTime(*msg.getValue<float>(0));
+		}
+		else if (msg.ID == std::hash<std::string>()("onlinemode finish"))
+		{
+			m_onlineState = OnlineState::FINISHED;
+			m_countDownNextAction.setTime(*msg.getValue<float>(0));
+		}
+		//A player got a new besttime, add to timetable
+		else if (msg.ID == std::hash<std::string>()("new best time"))
+		{
+			std::cout << "new time! : " << *msg.getValue<std::string>(0) << " | " << *msg.getValue<float>(1) << std::endl;
+			m_timeTable.addTime(*msg.getValue<std::string>(0), *msg.getValue<float>(1));
 		}
 		//Set the volume of the music
 		else if (msg.ID == std::hash<std::string>()("sound settings"))
@@ -197,10 +283,12 @@ namespace aw
 			//Give the event to gui
 			m_gui.handleEvent(event);
 
+			//Check if the online mode = running to prevnt the game from a wrong start
+			//In singelplayer onlinemode is always running
 			//Check for respawn etc.
 			if (event.type == sf::Event::KeyReleased)
 			{
-				if (event.key.code == sf::Keyboard::Return)
+				if (event.key.code == sf::Keyboard::Return && m_onlineState == OnlineState::RUNNING)
 				{
 					if (m_gameState == GameState::STOPPED) 
 					{
@@ -230,6 +318,7 @@ namespace aw
 						else if (m_gui.getSelectedElement()->getID() == "back")
 						{
 							changeActiveState("menu");
+							quitOnlineGame();
 							m_music.stop();
 							m_active = false;
 							//To inform the settings... unlock new/save progress
@@ -245,12 +334,13 @@ namespace aw
 						else if (m_gui.getSelectedElement()->getID() == "back")
 						{
 							changeActiveState("menu");
+							quitOnlineGame();
 							m_music.stop();
 							m_active = false;
 						}
 					}
 				}
-				else if (event.key.code == sf::Keyboard::BackSpace)
+				else if (event.key.code == sf::Keyboard::BackSpace && m_onlineState == OnlineState::RUNNING)
 				{
 					if (m_gameState == GameState::CRASHED)
 					{
@@ -266,6 +356,7 @@ namespace aw
 					if (m_gameState == GameState::STOPPED || m_gameState == GameState::CRASHED)
 					{
 						changeActiveState("menu");
+						quitOnlineGame();
 						m_music.stop();
 						m_active = false;
 					}
@@ -326,9 +417,6 @@ namespace aw
 		m_gameState = GameState::STOPPED;
 		m_mapRenderer = MapRenderer();
 		m_collisionSystem = CollisionSystem();
-		//Push_back main player [0] is ALWAYS the you^^
-		m_players.clear();
-		m_players.push_back(Player());
 		m_camera = Camera();
 		m_scriptManager.deleteScripts();
 
@@ -362,6 +450,8 @@ namespace aw
 		m_scriptManager.load(path);
 		//Open the right Music
 		initMusic();
+		//Reset the gameTimer
+		m_gameTimer.restart();
 	}
 
 
@@ -405,6 +495,17 @@ namespace aw
 		msg.push_back(m_levelName);
 		msg.push_back(startNextLevel);
 		m_messageBus.sendMessage(msg);
+	}
+
+	void Game::quitOnlineGame()
+	{
+		if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+		{
+			Message msg;
+			msg.ID = std::hash<std::string>()("quit online game");
+
+			m_messageBus.sendMessage(msg);
+		}
 	}
 }
 

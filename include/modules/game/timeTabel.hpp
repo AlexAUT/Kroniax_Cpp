@@ -41,10 +41,14 @@ namespace aw
 		void removePlayer(std::size_t index);
 
 		void addTime(const std::string &name, float time);
+		void addTime(std::size_t index, float time);
+
+		void resetTimes();
 
 		void render(sf::RenderWindow &window);
 
 		std::size_t getPlayerIndex(const std::string &name);
+		float getTime(std::size_t index);
 
 	private:
 
