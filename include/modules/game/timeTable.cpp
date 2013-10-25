@@ -1,4 +1,4 @@
-#include "timeTabel.hpp"
+#include "timeTable.hpp"
 
 #include <sstream>
 #include <iostream>

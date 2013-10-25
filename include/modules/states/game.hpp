@@ -10,7 +10,7 @@
 #include "../game/camera.hpp"
 #include "../game/collisionSystem.hpp"
 #include "../game/scriptManager.hpp"
-#include "../game/timeTabel.hpp"
+#include "../game/timeTable.hpp"
 #include "../game/gameTimer.hpp"
 #include "../game/countdown.hpp"
 
