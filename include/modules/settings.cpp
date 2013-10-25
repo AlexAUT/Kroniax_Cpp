@@ -1,7 +1,6 @@
 #include "settings.hpp"
 
 #include <fstream>
-#include <string>
 #include <sstream>
 
 #include "../utilities/hash.hpp"

@@ -36,11 +36,13 @@ namespace aw
 			}
 			else if (event.type == sf::Event::LostFocus)
 			{
-				m_messageBus.sendMessage(Message(aw::hash("lost focus")));
+				Message msg(Message(aw::hash("lost focus")));
+				m_messageBus.sendMessage(msg);
 			}
 			else if (event.type == sf::Event::GainedFocus)
 			{
-				m_messageBus.sendMessage(Message(aw::hash("gained focus")));
+				Message msg(aw::hash("gained focus"));
+				m_messageBus.sendMessage(msg);
 			}
 			else
 			{

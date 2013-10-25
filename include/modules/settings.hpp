@@ -3,6 +3,8 @@
 
 #include "../messageBus/receiver.hpp"
 
+#include <string>
+
 /////FORWARD DECLARATION/////
 namespace aw
 {
