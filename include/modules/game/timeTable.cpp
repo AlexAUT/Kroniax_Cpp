@@ -17,7 +17,6 @@ namespace aw
 
 	void TimeTable::addPlayer(const std::string &name, float time)
 	{
-		std::cout << "Added Player: " << name << std::endl;
 		m_players.push_back(priv::Player(name, time));
 		//Set up the array
 	}

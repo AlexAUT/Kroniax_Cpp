@@ -143,7 +143,6 @@ namespace aw
 
 	void Player::setSpacePressed(bool val)
 	{
-		std::cout << m_name << " changened Space State " << val << std::endl;
 		m_spacePressed = val;
 	}
 

@@ -179,50 +179,81 @@ namespace aw
 		//User input from toher Players
 		if (msg.ID == aw::hash("space pressed"))
 		{
-			std::cout << "Space pressed: " << *msg.getValue<std::string>(0) << std::endl;
 			auto it = searchPlayer(*msg.getValue<std::string>(0));
 
 			it->setSpacePressed(true);
+
+			if (msg.getValue<sf::Vector2f>(0)->x != 0)
+			{
+				it->setPosition(*msg.getValue<sf::Vector2f>(1));
+				it->setSpeed(*msg.getValue<sf::Vector2f>(2));
+				it->setGravitation(*msg.getValue<float>(3));
+			}
 		}
 		else if (msg.ID == aw::hash("space released"))
 		{
-			std::cout << "Space released: " << *msg.getValue<std::string>(0) << std::endl;
 			//Search for the iterator to the player and set the state
 			auto it = searchPlayer(*msg.getValue<std::string>(0));
 
 			it->setSpacePressed(false);
+			if (msg.getValue<sf::Vector2f>(0)->x != 0)
+			{
+				it->setPosition(*msg.getValue<sf::Vector2f>(1));
+				it->setSpeed(*msg.getValue<sf::Vector2f>(2));
+				it->setGravitation(*msg.getValue<float>(3));
+			}
 		}
 		if (msg.ID == aw::hash("left pressed"))
 		{
-			std::cout << "Left pressed: " << *msg.getValue<std::string>(0) << std::endl;
 			//Search for the iterator to the player and set the state
 			auto it = searchPlayer(*msg.getValue<std::string>(0));
 
 			it->setLeftPressed(true);
+			if (msg.getValue<sf::Vector2f>(0)->x != 0)
+			{
+				it->setPosition(*msg.getValue<sf::Vector2f>(1));
+				it->setSpeed(*msg.getValue<sf::Vector2f>(2));
+				it->setGravitation(*msg.getValue<float>(3));
+			}
 		}
 		else if (msg.ID == aw::hash("left released"))
 		{
-			std::cout << "Left released: " << *msg.getValue<std::string>(0) << std::endl;
 			//Search for the iterator to the player and set the state
 			auto it = searchPlayer(*msg.getValue<std::string>(0));
 
 			it->setLeftPressed(false);
+			if (msg.getValue<sf::Vector2f>(0)->x != 0)
+			{
+				it->setPosition(*msg.getValue<sf::Vector2f>(1));
+				it->setSpeed(*msg.getValue<sf::Vector2f>(2));
+				it->setGravitation(*msg.getValue<float>(3));
+			}
 		}
 		if (msg.ID == aw::hash("right pressed"))
 		{
-			std::cout << "Right pressed: " << *msg.getValue<std::string>(0) << std::endl;
 			//Search for the iterator to the player and set the state
 			auto it = searchPlayer(*msg.getValue<std::string>(0));
 
 			it->setRightPressed(true);
+			if (msg.getValue<sf::Vector2f>(0)->x != 0)
+			{
+				it->setPosition(*msg.getValue<sf::Vector2f>(1));
+				it->setSpeed(*msg.getValue<sf::Vector2f>(2));
+				it->setGravitation(*msg.getValue<float>(3));
+			}
 		}
 		else if (msg.ID == aw::hash("right released"))
 		{
-			std::cout << "Right released: " << *msg.getValue<std::string>(0) << std::endl;
 			//Search for the iterator to the player and set the state
 			auto it = searchPlayer(*msg.getValue<std::string>(0));
 
 			it->setRightPressed(false);
+			if (msg.getValue<sf::Vector2f>(0)->x != 0)
+			{
+				it->setPosition(*msg.getValue<sf::Vector2f>(1));
+				it->setSpeed(*msg.getValue<sf::Vector2f>(2));
+				it->setGravitation(*msg.getValue<float>(3));
+			}
 		}
 		//This will start a other player on this device...
 		else if (msg.ID == aw::hash("start online try"))
@@ -244,7 +275,6 @@ namespace aw
 		{
 			//Set the name of the level
 			m_levelName = *msg.getValue<std::string>(0);
-			std::cout << "Mapname: " << m_levelName << std::endl;
 			//Check if the Level is a tutorial
 			if (m_levelName == "Tutorial2")
 			{
@@ -364,7 +394,6 @@ namespace aw
 		//A player got a new besttime, add to timetable
 		else if (msg.ID == aw::hash("new best time"))
 		{
-			std::cout << "new time! : " << *msg.getValue<std::string>(0) << " | " << *msg.getValue<float>(1) << std::endl;
 			m_timeTable.addTime(*msg.getValue<std::string>(0), *msg.getValue<float>(1));
 		}
 		//Set the volume of the music
@@ -380,6 +409,7 @@ namespace aw
 			if (m_gameState == GameState::RUNNING)
 			{
 				m_gameState = GameState::PAUSED;
+				m_players[0].setPlayerState(PlayerState::STOPPED);
 				sendStopInformation();
 				m_gui.setActiveLayer(3);
 			}
@@ -649,6 +679,9 @@ namespace aw
 					{
 						Message msg;
 						msg.ID = aw::hash("p space pressed");
+						msg.push_back(m_players[0].getPosition());
+						msg.push_back(m_players[0].getSpeed());
+						msg.push_back(m_players[0].getGravitation());
 						m_messageBus.sendMessage(msg);
 					}
 				}
@@ -663,6 +696,9 @@ namespace aw
 					{
 						Message msg;
 						msg.ID = aw::hash("p space released");
+						msg.push_back(m_players[0].getPosition());
+						msg.push_back(m_players[0].getSpeed());
+						msg.push_back(m_players[0].getGravitation());
 						m_messageBus.sendMessage(msg);
 					}
 				}
@@ -681,6 +717,9 @@ namespace aw
 						{
 							Message msg;
 							msg.ID = aw::hash("p left pressed");
+							msg.push_back(m_players[0].getPosition());
+							msg.push_back(m_players[0].getSpeed());
+							msg.push_back(m_players[0].getGravitation());
 							m_messageBus.sendMessage(msg);
 						}
 					}
@@ -695,6 +734,9 @@ namespace aw
 						{
 							Message msg;
 							msg.ID = aw::hash("p left released");
+							msg.push_back(m_players[0].getPosition());
+							msg.push_back(m_players[0].getSpeed());
+							msg.push_back(m_players[0].getGravitation());
 							m_messageBus.sendMessage(msg);
 						}
 					}
@@ -710,6 +752,9 @@ namespace aw
 						{
 							Message msg;
 							msg.ID = aw::hash("p right pressed");
+							msg.push_back(m_players[0].getPosition());
+							msg.push_back(m_players[0].getSpeed());
+							msg.push_back(m_players[0].getGravitation());
 							m_messageBus.sendMessage(msg);
 						}
 					}
@@ -724,6 +769,9 @@ namespace aw
 						{
 							Message msg;
 							msg.ID = aw::hash("p right released");
+							msg.push_back(m_players[0].getPosition());
+							msg.push_back(m_players[0].getSpeed());
+							msg.push_back(m_players[0].getGravitation());
 							m_messageBus.sendMessage(msg);
 						}
 					}

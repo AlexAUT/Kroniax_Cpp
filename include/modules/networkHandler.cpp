@@ -35,9 +35,23 @@ namespace aw
 					std::string name;
 					receivedData >> name;
 
+					sf::Vector2f position;
+					sf::Vector2f speed;
+					float gravitation = 0;
+
+					if (!receivedData.endOfPacket())
+					{
+						receivedData >> position.x >> position.y;
+						receivedData >> speed.x >> speed.y;
+						receivedData >> gravitation;
+					}
+
 					Message msg;
 					msg.ID = command;
 					msg.push_back(name);
+					msg.push_back(position);
+					msg.push_back(speed);
+					msg.push_back(gravitation);
 
 					m_messageBus.sendMessage(msg);
 				}
@@ -46,9 +60,23 @@ namespace aw
 					std::string name;
 					receivedData >> name;
 
+					sf::Vector2f position;
+					sf::Vector2f speed;
+					float gravitation = 0;
+
+					if (!receivedData.endOfPacket())
+					{
+						receivedData >> position.x >> position.y;
+						receivedData >> speed.x >> speed.y;
+						receivedData >> gravitation;
+					}
+
 					Message msg;
 					msg.ID = command;
 					msg.push_back(name);
+					msg.push_back(position);
+					msg.push_back(speed);
+					msg.push_back(gravitation);
 
 					m_messageBus.sendMessage(msg);
 				}
@@ -57,9 +85,23 @@ namespace aw
 					std::string name;
 					receivedData >> name;
 
+					sf::Vector2f position;
+					sf::Vector2f speed;
+					float gravitation = 0;
+
+					if (!receivedData.endOfPacket())
+					{
+						receivedData >> position.x >> position.y;
+						receivedData >> speed.x >> speed.y;
+						receivedData >> gravitation;
+					}
+
 					Message msg;
 					msg.ID = command;
 					msg.push_back(name);
+					msg.push_back(position);
+					msg.push_back(speed);
+					msg.push_back(gravitation);
 
 					m_messageBus.sendMessage(msg);
 				}
@@ -68,9 +110,23 @@ namespace aw
 					std::string name;
 					receivedData >> name;
 
+					sf::Vector2f position;
+					sf::Vector2f speed;
+					float gravitation = 0;
+
+					if (!receivedData.endOfPacket())
+					{
+						receivedData >> position.x >> position.y;
+						receivedData >> speed.x >> speed.y;
+						receivedData >> gravitation;
+					}
+
 					Message msg;
 					msg.ID = command;
 					msg.push_back(name);
+					msg.push_back(position);
+					msg.push_back(speed);
+					msg.push_back(gravitation);
 
 					m_messageBus.sendMessage(msg);
 				}
@@ -79,9 +135,23 @@ namespace aw
 					std::string name;
 					receivedData >> name;
 
+					sf::Vector2f position;
+					sf::Vector2f speed;
+					float gravitation = 0;
+
+					if (!receivedData.endOfPacket())
+					{
+						receivedData >> position.x >> position.y;
+						receivedData >> speed.x >> speed.y;
+						receivedData >> gravitation;
+					}
+
 					Message msg;
 					msg.ID = command;
 					msg.push_back(name);
+					msg.push_back(position);
+					msg.push_back(speed);
+					msg.push_back(gravitation);
 
 					m_messageBus.sendMessage(msg);
 				}
@@ -90,9 +160,23 @@ namespace aw
 					std::string name;
 					receivedData >> name;
 
+					sf::Vector2f position;
+					sf::Vector2f speed;
+					float gravitation = 0;
+
+					if (!receivedData.endOfPacket())
+					{
+						receivedData >> position.x >> position.y;
+						receivedData >> speed.x >> speed.y;
+						receivedData >> gravitation;
+					}
+
 					Message msg;
 					msg.ID = command;
 					msg.push_back(name);
+					msg.push_back(position);
+					msg.push_back(speed);
+					msg.push_back(gravitation);
 
 					m_messageBus.sendMessage(msg);
 				}
@@ -253,36 +337,54 @@ namespace aw
 		{
 			sf::Packet toSend;
 			toSend << aw::hash("space pressed");
+			toSend << msg.getValue<sf::Vector2f>(0)->x << msg.getValue<sf::Vector2f>(0)->y;
+			toSend << msg.getValue<sf::Vector2f>(1)->x << msg.getValue<sf::Vector2f>(1)->y;
+			toSend << *msg.getValue<float>(2);
 			m_socket.send(toSend);
 		}
 		else if (msg.ID == aw::hash("p space released"))
 		{
 			sf::Packet toSend;
 			toSend << aw::hash("space released");
+			toSend << msg.getValue<sf::Vector2f>(0)->x << msg.getValue<sf::Vector2f>(0)->y;
+			toSend << msg.getValue<sf::Vector2f>(1)->x << msg.getValue<sf::Vector2f>(1)->y;
+			toSend << *msg.getValue<float>(2);
 			m_socket.send(toSend);
 		}
 		else if (msg.ID == aw::hash("p left pressed"))
 		{
 			sf::Packet toSend;
 			toSend << aw::hash("left pressed");
+			toSend << msg.getValue<sf::Vector2f>(0)->x << msg.getValue<sf::Vector2f>(0)->y;
+			toSend << msg.getValue<sf::Vector2f>(1)->x << msg.getValue<sf::Vector2f>(1)->y;
+			toSend << *msg.getValue<float>(2);
 			m_socket.send(toSend);
 		}
 		else if (msg.ID == aw::hash("p left released"))
 		{
 			sf::Packet toSend;
 			toSend << aw::hash("left released");
+			toSend << msg.getValue<sf::Vector2f>(0)->x << msg.getValue<sf::Vector2f>(0)->y;
+			toSend << msg.getValue<sf::Vector2f>(1)->x << msg.getValue<sf::Vector2f>(1)->y;
+			toSend << *msg.getValue<float>(2);
 			m_socket.send(toSend);
 		}
 		else if (msg.ID == aw::hash("p right pressed"))
 		{
 			sf::Packet toSend;
 			toSend << aw::hash("right pressed");
+			toSend << msg.getValue<sf::Vector2f>(0)->x << msg.getValue<sf::Vector2f>(0)->y;
+			toSend << msg.getValue<sf::Vector2f>(1)->x << msg.getValue<sf::Vector2f>(1)->y;
+			toSend << *msg.getValue<float>(2);
 			m_socket.send(toSend);
 		}
 		else if (msg.ID == aw::hash("p right released"))
 		{
 			sf::Packet toSend;
 			toSend << aw::hash("right released");
+			toSend << msg.getValue<sf::Vector2f>(0)->x << msg.getValue<sf::Vector2f>(0)->y;
+			toSend << msg.getValue<sf::Vector2f>(1)->x << msg.getValue<sf::Vector2f>(1)->y;
+			toSend << *msg.getValue<float>(2);
 			m_socket.send(toSend);
 		}
 		else if (msg.ID == aw::hash("p start online try"))
@@ -299,7 +401,6 @@ namespace aw
 		}
 		else if (msg.ID == aw::hash("p stop online try"))
 		{
-			std::cout << "Try stopped!!!!" << std::endl;
 			sf::Packet toSend;
 			toSend << aw::hash("stop online try");
 
@@ -311,7 +412,7 @@ namespace aw
 			{
 				sf::Packet toSend;
 				toSend << aw::hash("disconnect");
-				//m_socket.send(toSend);
+				m_socket.send(toSend);
 				
 				m_connected = false;
 				m_socket.disconnect();
@@ -364,8 +465,8 @@ namespace aw
 	{
 		m_socket.setBlocking(true);
 
-		sf::Socket::Status status = m_socket.connect("82.211.56.205", 12121, sf::seconds(1));
-		//sf::Socket::Status status = m_socket.connect("127.0.0.1", 12121, sf::seconds(1));
+		//sf::Socket::Status status = m_socket.connect("82.211.56.205", 12121, sf::seconds(1));
+		sf::Socket::Status status = m_socket.connect("127.0.0.1", 12121, sf::seconds(1));
 
 		if (status != sf::Socket::Done)
 		{
