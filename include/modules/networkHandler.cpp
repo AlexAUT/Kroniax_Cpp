@@ -26,7 +26,7 @@ namespace aw
 
 			if (m_socket.receive(receivedData) == sf::Socket::Done)
 			{
-				std::size_t command;
+				unsigned int command;
 				receivedData >> command;
 
 				//First check for key states updates ->they are called frequently

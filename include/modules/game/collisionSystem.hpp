@@ -3,6 +3,8 @@
 
 #include "collisionCollum.hpp"
 
+#include <string>
+
 namespace aw
 {
 	//////FORWARD DECL /////
