@@ -90,6 +90,11 @@ namespace aw
 		return &m_layers[m_layers.size() - 1];
 	}
 
+	const sf::Font &GuiController::getFont() const
+	{
+		return m_font;
+	}
+
 	GuiLayer* GuiController::getLayer(unsigned int index)
 	{
 		if (index < m_layers.size())

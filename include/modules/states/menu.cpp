@@ -1,6 +1,7 @@
 #include "menu.hpp"
 
 #include "../../messageBus/messageBus.hpp"
+#include "../../utilities/hash.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -93,12 +94,20 @@ namespace aw
 		window.draw(m_overlay);
 		window.draw(m_logo);
 		m_gui.render(window);
+
+		//Teamspeak ID
+		sf::Text ts;
+		ts.setFont(m_gui.getFont());
+		ts.setCharacterSize(15);
+		ts.setString("Teamspeak IP: 88.198.153.109 Channel: Kroniax");
+		ts.setPosition(10, 425);
+		window.draw(ts);
 	}
 
 
 	void Menu::receiveMessage(const Message &msg)
 	{
-		if (msg.ID == std::hash<std::string>()("sound settings"))
+		if (msg.ID == aw::hash("sound settings"))
 		{
 			m_music.setVolume(*msg.getValue<float>(0));
 			//Update the gui to disply the right values
@@ -115,7 +124,7 @@ namespace aw
 				m_gui.getElement(5, 1)->setActiveEntry(index);
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("window settings"))
+		else if (msg.ID == aw::hash("window settings"))
 		{
 			//Update the gui to display correct information
 			//Fullscreen
@@ -138,7 +147,7 @@ namespace aw
 			default: m_gui.getElement(5, 2)->setActiveEntry(0); break;
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("event") && m_active)
+		else if (msg.ID == aw::hash("event") && m_active)
 		{
 			sf::Event event = *msg.getValue<sf::Event>(0);
 
@@ -149,17 +158,17 @@ namespace aw
 				buttonAction();
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("start game"))
+		else if (msg.ID == aw::hash("start game"))
 		{
 			m_music.stop();
 			m_active = false;
 			changeActiveState("game");
 		}
-		else if (msg.ID == std::hash<std::string>()("unlocked levels"))
+		else if (msg.ID == aw::hash("unlocked levels"))
 		{
 			m_unlockedLevels = *msg.getValue<unsigned int>(0);
 		}
-		else if (msg.ID == std::hash<std::string>()("arcade levellist"))
+		else if (msg.ID == aw::hash("arcade levellist"))
 		{
 			m_gui.getElement(1, 0)->clearEntries();
 			//Fill the level selection list, with the unlocked levels
@@ -168,19 +177,19 @@ namespace aw
 				m_gui.getElement(1, 0)->addEntry(*msg.getValue<std::string>(i));
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("Tutorial2"))
+		else if (msg.ID == aw::hash("Tutorial2"))
 		{
 			m_gui.setActiveLayer(3);
 		}
 		////////////////////// MULTIPLAYER ACTIONS ////////////////////////////////
-		else if (msg.ID == std::hash<std::string>()("result connecting"))
+		else if (msg.ID == aw::hash("result connecting"))
 		{
 			if (*msg.getValue<bool>(0))
 			{
 				//Map Selection
 				m_gui.setActiveLayer(9);
 
-				Message msg(std::hash<std::string>()("request game list"));
+				Message msg(aw::hash("request game list"));
 				m_messageBus.sendMessage(msg);
 			}
 			else
@@ -189,7 +198,7 @@ namespace aw
 				m_gui.setActiveLayer(8);
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("game list"))
+		else if (msg.ID == aw::hash("game list"))
 		{
 			m_gui.getElement(9, 0)->clearEntries();
 
@@ -346,7 +355,7 @@ namespace aw
 		else if (m_gui.getSelectedElement()->getID() == "exit")
 		{
 			Message msg;
-			msg.ID = std::hash<std::string>()("close game");
+			msg.ID = aw::hash("close game");
 			m_messageBus.sendMessage(msg);
 		}
 	}
@@ -369,7 +378,7 @@ namespace aw
 				//For all levels except tutorials
 				//Send message... So the game will start...
 				Message msg;
-				msg.ID = std::hash<std::string>()("start game");
+				msg.ID = aw::hash("start game");
 				msg.push_back(m_levelInformation.name);
 				msg.push_back(static_cast<std::string>("official arcade"));
 				m_messageBus.sendMessage(msg);
@@ -391,7 +400,7 @@ namespace aw
 			//start level1
 			//Send message... So the game will start...
 			Message msg;
-			msg.ID = std::hash<std::string>()("start game");
+			msg.ID = aw::hash("start game");
 			std::string name = "Level1";
 			msg.push_back(name);
 			msg.push_back(static_cast<std::string>("official arcade"));
@@ -414,7 +423,7 @@ namespace aw
 			//start level6
 			//Send message... So the game will start...
 			Message msg;
-			msg.ID = std::hash<std::string>()("start game");
+			msg.ID = aw::hash("start game");
 			std::string name = "Level6";
 			msg.push_back(name);
 			msg.push_back(static_cast<std::string>("official arcade"));
@@ -434,18 +443,18 @@ namespace aw
 	{
 		if (m_gui.getSelectedElement()->getID() == "reset graphics")
 		{
-			Message msg(std::hash<std::string>()("reset resolution"));
+			Message msg(aw::hash("reset resolution"));
 			m_messageBus.sendMessage(msg);
 		}
 		else if (m_gui.getSelectedElement()->getID() == "apply")
 		{
-			Message msgSound(std::hash<std::string>()("new sound settings"));
+			Message msgSound(aw::hash("new sound settings"));
 			//Menu and game volume
 			msgSound.push_back(m_gui.getElement(5, 0)->getText());
 			msgSound.push_back(m_gui.getElement(5, 1)->getText());
 			m_messageBus.sendMessage(msgSound);
 
-			Message msgWindow(std::hash<std::string>()("new window settings"));
+			Message msgWindow(aw::hash("new window settings"));
 			//Antialiasinglevel and fullscreen
 			msgWindow.push_back(m_gui.getElement(5, 2)->getText());
 			msgWindow.push_back(m_gui.getElement(5, 3)->getText());
@@ -472,7 +481,7 @@ namespace aw
 		if (m_gui.getSelectedElement()->getID() == "submit")
 		{
 			Message msg;
-			msg.ID = std::hash<std::string>()("connect");
+			msg.ID = aw::hash("connect");
 			//Pushback the name of the player
 			msg.push_back(m_gui.getElement(7, 0)->getText());
 			
@@ -496,7 +505,7 @@ namespace aw
 	{
 		if (m_gui.getSelectedElement()->getID() == "select server")
 		{
-			Message msg(std::hash<std::string>()("join server"));
+			Message msg(aw::hash("join server"));
 			msg.push_back(m_gui.getSelectedElement()->getText());
 			m_messageBus.sendMessage(msg);
 		}

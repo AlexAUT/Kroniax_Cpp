@@ -69,9 +69,16 @@ namespace aw
 
 		//Send the message for completing a level to unlcoka new one and save the progress
 		void sendInformationLevelFinished(bool startNextLevel);
-
+		//Check the keyboard to control the [0] player
+		void playerControl();
+		//Send information that player has started this ship
+		void sendStartInformation();
+		//Informs the server that the player crashed/paused/finished = PlayerState::Stopped
+		void sendStopInformation();
 		//Inform the server that you have quit a online game...
 		void quitOnlineGame();
+
+		std::vector<Player>::iterator searchPlayer(const std::string &name);
 
 	private:
 		bool m_active; //Important. Is needed to turn of the gui after for example starting a game

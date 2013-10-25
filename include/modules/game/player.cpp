@@ -7,26 +7,52 @@
 #include <fstream>
 #include <sstream>
 
+#include <iostream>
+
 //#define NDEBUG
 #include <assert.h>
 
 namespace aw
 {
-	void Player::update(const sf::Time &frameTime)
+	Player::Player(const std::string &name) :
+		m_name(name),
+		m_playerState(PlayerState::STOPPED),
+		m_spacePressed(false),
+		m_leftPressed(false),
+		m_rightPressed(false)
 	{
-		//let the gravitation do his work
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+
+	}
+
+	void Player::update(const sf::Time &frameTime, bool timeChallenge)
+	{
+		if (m_playerState == PlayerState::FLYING)
 		{
-			m_speed.y -= 1.5f * (m_gravitation * frameTime.asSeconds());
+			//let the gravitation do his work
+			if (m_spacePressed)
+			{
+				m_speed.y -= 1.5f * (m_gravitation * frameTime.asSeconds());
+			}
+			else
+			{
+				m_speed.y += (m_gravitation * frameTime.asSeconds());
+			}
+			if (timeChallenge)
+			{
+				if (m_leftPressed)
+				{
+					m_speed.x -= 200.f * frameTime.asSeconds();
+				}
+				if (m_rightPressed)
+				{
+					m_speed.x += 200.f * frameTime.asSeconds();
+				}
+			}
+			//update the position
+			m_position += (m_speed * frameTime.asSeconds());
+			//update the body
+			updateBody();
 		}
-		else
-		{
-			m_speed.y += (m_gravitation * frameTime.asSeconds());
-		}
-		//update the position
-		m_position += (m_speed * frameTime.asSeconds());
-		//update the body
-		updateBody();
 	}
 
 	void Player::render(sf::RenderWindow &window)
@@ -95,6 +121,11 @@ namespace aw
 		m_speed.x = xSpeed;
 	}
 
+	void Player::setSpeed(const sf::Vector2f speed)
+	{
+		m_speed = speed;
+	}
+
 	void Player::setGravitation(float gravitation)
 	{
 		m_gravitation = gravitation;
@@ -105,6 +136,42 @@ namespace aw
 		m_bodyColor = color;
 	}
 
+	void Player::setPlayerState(PlayerState val)
+	{
+		m_playerState = val;
+	}
+
+	void Player::setSpacePressed(bool val)
+	{
+		std::cout << m_name << " changened Space State " << val << std::endl;
+		m_spacePressed = val;
+	}
+
+	void Player::setLeftPressed(bool val)
+	{
+		m_leftPressed = val;
+	}
+
+	void Player::setRightPressed(bool val)
+	{
+		m_rightPressed = val;
+	}
+
+	bool Player::getSpacePressed()
+	{
+		return m_spacePressed;
+	}
+
+	bool Player::getLeftPressed()
+	{
+		return m_leftPressed;
+	}
+
+	bool Player::getRightPressed()
+	{
+		return m_rightPressed;
+	}
+
 	float Player::getXPosition() const
 	{
 		return m_position.x;
@@ -112,6 +179,14 @@ namespace aw
 	const sf::Vector2f &Player::getPosition() const
 	{
 		return m_position;
+	}
+	const sf::Vector2f &Player::getSpeed() const
+	{
+		return m_speed;
+	}
+	float Player::getGravitation() const
+	{
+		return m_gravitation;
 	}
 
 	sf::Vector2f Player::getVertexPosition(std::size_t index) const
@@ -122,6 +197,11 @@ namespace aw
 		}
 		assert(index < 3);
 		return sf::Vector2f(-1,-1);
+	}
+
+	const std::string &Player::getName()
+	{
+		return m_name;
 	}
 
 	void Player::updateBody()

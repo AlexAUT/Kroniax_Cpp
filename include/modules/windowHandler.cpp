@@ -1,6 +1,7 @@
 #include "windowHandler.hpp"
 
 #include "../messageBus/messageBus.hpp"
+#include "../utilities/hash.hpp"
 
 #include <SFML/Window/Event.hpp>
 
@@ -22,28 +23,28 @@ namespace aw
 			if (event.type == sf::Event::Closed)
 			{
 				Message msg;
-				msg.ID = std::hash<std::string>()("close game");
+				msg.ID = aw::hash("close game");
 				m_messageBus.sendMessage(msg);
 				m_window.close();
 			}
 			else if (event.type == sf::Event::Resized)
 			{
-				Message msg(std::hash<std::string>()("window resized"));
+				Message msg(aw::hash("window resized"));
 				msg.push_back(event.size.width);
 				msg.push_back(event.size.height);
 				m_messageBus.sendMessage(msg);
 			}
 			else if (event.type == sf::Event::LostFocus)
 			{
-				m_messageBus.sendMessage(Message(std::hash<std::string>()("lost focus")));
+				m_messageBus.sendMessage(Message(aw::hash("lost focus")));
 			}
 			else if (event.type == sf::Event::GainedFocus)
 			{
-				m_messageBus.sendMessage(Message(std::hash<std::string>()("gained focus")));
+				m_messageBus.sendMessage(Message(aw::hash("gained focus")));
 			}
 			else
 			{
-				Message msg(std::hash<std::string>()("event"));
+				Message msg(aw::hash("event"));
 				msg.push_back(event);
 				m_messageBus.sendMessage(msg);
 			}
@@ -52,7 +53,7 @@ namespace aw
 
 	void WindowHandler::receiveMessage(const Message &msg)
 	{
-		if (msg.ID == std::hash<std::string>()("window settings"))
+		if (msg.ID == aw::hash("window settings"))
 		{
 			std::string name = static_cast<Value<std::string>*>(&*msg.m_values[0])->m_value;
 
@@ -85,7 +86,7 @@ namespace aw
 			view.setCenter(view.getSize() / 2.f);
 			m_window.setView(view);
 		}
-		else if (msg.ID == std::hash<std::string>()("close game"))
+		else if (msg.ID == aw::hash("close game"))
 		{
 			m_window.close();
 		}

@@ -40,7 +40,7 @@ namespace aw
 		}
 	}
 
-	void ScriptManager::load(const std::string &path)
+	void ScriptManager::load(const std::string &path, bool online)
 	{
 		//Clear the script vector and the checkpoint pointer
 		m_scripts.clear();
@@ -70,6 +70,14 @@ namespace aw
 					std::stringstream sstr(line);
 					sstr >> type >> xPos >> first >> second >> third;
 					
+					//If in online-mode dont load checkpoints and speed-up/downs
+					if (online)
+					{
+						if (type == ScriptType::CHANGE_SPEED || type == ScriptType::CHECKPOINT)
+						{
+							continue;
+						}
+					}
 					m_scripts.push_back(Script(ScriptType(type), xPos, first, second, third));
 				}
 			}

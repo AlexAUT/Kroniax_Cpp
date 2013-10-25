@@ -1,7 +1,7 @@
 #ifndef AWGAMETIMER_HPP
 #define AWGAMETIMER_HPP
 
-#include <SFML\Graphics\Font.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 
 namespace sf

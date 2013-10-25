@@ -49,6 +49,8 @@ namespace aw
 		//
 		int getActiveLayerInt();
 
+		const sf::Font &getFont() const;
+
 		GuiLayer* getLastLayer();
 		GuiLayer* getLayer(unsigned int index);
 		GuiLayer* getSelectedLayer();

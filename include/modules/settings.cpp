@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 
-/////INCLUDE FORWARD DECLARATIONS/////
+#include "../utilities/hash.hpp"
 #include "../messageBus/messageBus.hpp"
 
 namespace aw
@@ -135,7 +135,7 @@ namespace aw
 	{
 		//Sending sound settings to the MessageBus
 		Message msgSound;
-		msgSound.ID = std::hash<std::string>()("sound settings");
+		msgSound.ID = aw::hash("sound settings");
 		msgSound.push_back(m_soundSettings.menuvolume);
 		msgSound.push_back(m_soundSettings.gamevolume);
 		m_messageBus.sendMessage(msgSound);
@@ -145,7 +145,7 @@ namespace aw
 	{
 		//Sending window properties to the MessageBus
 		Message msgWindow;
-		msgWindow.ID = std::hash<std::string>()("window settings");
+		msgWindow.ID = aw::hash("window settings");
 		msgWindow.push_back(m_windowSettings.name);
 		msgWindow.push_back(m_windowSettings.windowSizeX);
 		msgWindow.push_back(m_windowSettings.windowSizeY);
@@ -162,13 +162,13 @@ namespace aw
 	{
 		//Send the unlock information
 		Message msgUnlock;
-		msgUnlock.ID = std::hash<std::string>()("unlocked levels");
+		msgUnlock.ID = aw::hash("unlocked levels");
 		msgUnlock.push_back<unsigned int>(m_arcadeSettings.unlockValue);
 		m_messageBus.sendMessage(msgUnlock);
 
 		//Send level list
 		Message msgLvllist;
-		msgLvllist.ID = std::hash<std::string>()("arcade levellist");
+		msgLvllist.ID = aw::hash("arcade levellist");
 		for (auto &it : m_arcadeSettings.levelList)
 		{
 			msgLvllist.push_back<std::string>(it);
@@ -196,7 +196,7 @@ namespace aw
 	void Settings::sendNextLevel(const std::string &currentLevel)
 	{
 		Message msg;
-		msg.ID = std::hash<std::string>()("start game");
+		msg.ID = aw::hash("start game");
 		
 
 		//Insert the next map
@@ -216,12 +216,12 @@ namespace aw
 	void Settings::receiveMessage(const Message &msg)
 	{
 		//Window resize
-		if (msg.ID == std::hash<std::string>()("window resized"))
+		if (msg.ID == aw::hash("window resized"))
 		{
 			m_windowSettings.windowSizeX = *msg.getValue<unsigned int>(0);
 			m_windowSettings.windowSizeY = *msg.getValue<unsigned int>(1);
 		}
-		else if (msg.ID == std::hash<std::string>()("level complete"))
+		else if (msg.ID == aw::hash("level complete"))
 		{
 			//Update unlocked levels
 			unlockNewLevel(*msg.getValue<std::string>(0));
@@ -235,7 +235,7 @@ namespace aw
 				sendNextLevel(*msg.getValue<std::string>(0));
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("new sound settings"))
+		else if (msg.ID == aw::hash("new sound settings"))
 		{
 			std::stringstream sstr(*msg.getValue<std::string>(0));
 			sstr >> m_soundSettings.menuvolume;
@@ -247,7 +247,7 @@ namespace aw
 
 			sendSoundSettings();
 		}
-		else if (msg.ID == std::hash<std::string>()("new window settings"))
+		else if (msg.ID == aw::hash("new window settings"))
 		{
 			//Antialiasinglevel
 			std::stringstream sstr(*msg.getValue<std::string>(0));
@@ -265,7 +265,7 @@ namespace aw
 
 			sendWindowSettings();
 		}
-		else if (msg.ID == std::hash<std::string>()("reset resolution"))
+		else if (msg.ID == aw::hash("reset resolution"))
 		{
 			m_windowSettings.windowSizeX = 800;
 			m_windowSettings.windowSizeY = 450;

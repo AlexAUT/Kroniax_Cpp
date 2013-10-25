@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <random>
 
 #include <iostream>
 
@@ -9,6 +10,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "../../messageBus/messageBus.hpp"
+#include "../../utilities/hash.hpp"
 
 //Global Function
 void initGui(aw::GuiController &gui);
@@ -34,7 +36,8 @@ namespace aw
 
 		if (m_music.getStatus() == sf::Music::Stopped)
 		{
-		//	m_music.play();
+			initMusic();
+			m_music.play();
 		}
 		
 		//Update the online countdown
@@ -48,24 +51,32 @@ namespace aw
 			auto result = m_collisionSystem.checkCollision(m_players[0]);
 			if (result == CollisionType::WALL)
 			{
+				m_players[0].setPlayerState(PlayerState::STOPPED);
 				m_gameState = GameState::CRASHED;
+				sendStopInformation();
 				m_gui.setActiveLayer(1);
 				return;
 			}
 			else if (result == CollisionType::FINISH)
 			{
-				m_gameState = GameState::FINISHED;
+				m_players[0].setPlayerState(PlayerState::STOPPED);
+				
 				if (m_gameType == GameType::OFFICIAL_ARCADE)
 				{
+					m_gameState = GameState::FINISHED;
 					m_gui.setActiveLayer(2);
 				}
 				else if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
 				{
 					m_gameState = GameState::STOPPED;
 					//Send information to the server
+					sendStopInformation();
 					Message msg;
-					msg.ID = std::hash<std::string>()("new time");
-					msg.push_back(m_gameTimer.getTime());
+					msg.ID = aw::hash("new time");
+					float timeFloat = m_gameTimer.getTime();
+					int timeInt = static_cast<int>(timeFloat * 100.f);
+					timeFloat = static_cast<float>(timeInt) / 100.f;
+					msg.push_back(timeFloat);
 					m_messageBus.sendMessage(msg);
 
 					resetToStart();
@@ -79,19 +90,33 @@ namespace aw
 			//Check for Scriptactions
 			m_scriptManager.update(m_players[0], m_camera);
 
-			//Update the position later, so the user see the crash
-			//Update player position
-			for (auto &it : m_players)
-			{
-				it.update(frameTime);
-			}
-
-			//update the camera position
-			m_camera.update(m_players[0].getPosition());
 
 			//update the game timer only when running
 			m_gameTimer.update(frameTime.asSeconds());
 		}
+
+		////////////// EVERY FRAME /////////////////////////////
+
+		//Update the position later, so the user see the crash
+		//Check for key states
+		playerControl();
+		//Update player position
+		//True will activate the X speed control
+		bool online = m_gameType != GameType::OFFICIAL_ARCADE;
+		for (auto &it : m_players)
+		{
+			if (online)
+			{
+				it.update(frameTime, true);
+			}
+			else
+			{
+				it.update(frameTime);
+			}
+
+		}
+		//update the camera position
+		m_camera.update(m_players[0].getPosition());
 	}
 
 	void Game::render(sf::RenderWindow &window)
@@ -120,6 +145,17 @@ namespace aw
 			m_gui.render(window);
 		}
 
+		//Draw timetable when holding tab (only in online mode)
+		if (m_gameType == GameType::ONLINE_TIME_CHALLENGE && m_onlineState == OnlineState::RUNNING)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
+			{
+				sf::RectangleShape overlay(sf::Vector2f(800, 450));
+				overlay.setFillColor(sf::Color(0, 0, 0, 180));
+				window.draw(overlay);
+				m_timeTable.render(window);
+			}
+		}
 		//Draw online scrren depending on the onlinestate
 		if (m_onlineState == OnlineState::LOADING)
 		{
@@ -135,20 +171,76 @@ namespace aw
 		{
 			m_countDownNextAction.render(window, "for this map!");
 		}
-		//Draw timetable when holding tab (only in online mode)
-		if (m_gameType == GameType::ONLINE_TIME_CHALLENGE && m_onlineState == OnlineState::RUNNING)
-		{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
-			{
-				m_timeTable.render(window);
-			}
-		}
+
 	}
 
 	void Game::receiveMessage(const Message &msg)
 	{
+		//User input from toher Players
+		if (msg.ID == aw::hash("space pressed"))
+		{
+			std::cout << "Space pressed: " << *msg.getValue<std::string>(0) << std::endl;
+			auto it = searchPlayer(*msg.getValue<std::string>(0));
+
+			it->setSpacePressed(true);
+		}
+		else if (msg.ID == aw::hash("space released"))
+		{
+			std::cout << "Space released: " << *msg.getValue<std::string>(0) << std::endl;
+			//Search for the iterator to the player and set the state
+			auto it = searchPlayer(*msg.getValue<std::string>(0));
+
+			it->setSpacePressed(false);
+		}
+		if (msg.ID == aw::hash("left pressed"))
+		{
+			std::cout << "Left pressed: " << *msg.getValue<std::string>(0) << std::endl;
+			//Search for the iterator to the player and set the state
+			auto it = searchPlayer(*msg.getValue<std::string>(0));
+
+			it->setLeftPressed(true);
+		}
+		else if (msg.ID == aw::hash("left released"))
+		{
+			std::cout << "Left released: " << *msg.getValue<std::string>(0) << std::endl;
+			//Search for the iterator to the player and set the state
+			auto it = searchPlayer(*msg.getValue<std::string>(0));
+
+			it->setLeftPressed(false);
+		}
+		if (msg.ID == aw::hash("right pressed"))
+		{
+			std::cout << "Right pressed: " << *msg.getValue<std::string>(0) << std::endl;
+			//Search for the iterator to the player and set the state
+			auto it = searchPlayer(*msg.getValue<std::string>(0));
+
+			it->setRightPressed(true);
+		}
+		else if (msg.ID == aw::hash("right released"))
+		{
+			std::cout << "Right released: " << *msg.getValue<std::string>(0) << std::endl;
+			//Search for the iterator to the player and set the state
+			auto it = searchPlayer(*msg.getValue<std::string>(0));
+
+			it->setRightPressed(false);
+		}
+		//This will start a other player on this device...
+		else if (msg.ID == aw::hash("start online try"))
+		{
+			auto it = searchPlayer(*msg.getValue<std::string>(0));
+
+			it->setPosition(*msg.getValue<sf::Vector2f>(1));
+			it->setSpeed(*msg.getValue<sf::Vector2f>(2));
+			it->setGravitation(*msg.getValue<float>(3));
+			it->setPlayerState(PlayerState::FLYING);
+		}
+		else if (msg.ID == aw::hash("stop online try"))
+		{
+			auto it = searchPlayer(*msg.getValue<std::string>(0));
+			it->setPlayerState(PlayerState::STOPPED);
+		}
 		//Loading the map
-		if (msg.ID == std::hash<std::string>()("start game"))
+		else if (msg.ID == aw::hash("start game"))
 		{
 			//Set the name of the level
 			m_levelName = *msg.getValue<std::string>(0);
@@ -160,7 +252,7 @@ namespace aw
 				m_music.stop();
 				changeActiveState("menu");
 				quitOnlineGame();
-				Message msg(std::hash<std::string>()("Tutorial2"));
+				Message msg(aw::hash("Tutorial2"));
 				m_messageBus.sendMessage(msg);
 			}
 			//Set the gametype
@@ -192,6 +284,8 @@ namespace aw
 				{
 					m_players[i] = m_players[0];
 				}
+				//First clear the timeTable
+				m_timeTable.clear();
 				//load players and times
 				for (std::size_t i = 4;; i += 2)
 				{
@@ -201,10 +295,12 @@ namespace aw
 					if (name && time)
 					{
 						m_timeTable.addPlayer(*name, *time);
-						m_players.push_back(Player());
+						m_players.push_back(Player(*name));
+						m_players.back().loadInformation(m_levelName);
 					}
 					else
 					{
+						m_players.pop_back();
 						break;
 					}
 				}
@@ -212,20 +308,24 @@ namespace aw
 
 		}
 		//New player connected to the game = add player to m_players and m_timeTable
-		else if (msg.ID == std::hash<std::string>()("new player"))
+		else if (msg.ID == aw::hash("new player"))
 		{
-			m_players.push_back(Player());
+			m_players.push_back(Player(*msg.getValue<std::string>(0)));
+			m_players.back().loadInformation(m_levelName);
 			m_timeTable.addPlayer(*msg.getValue<std::string>(0));
 		}
 		//Remove a player from m_players and timetable (same index)
-		else if (msg.ID == std::hash<std::string>()("remove player"))
+		else if (msg.ID == aw::hash("remove player"))
 		{
 			std::size_t index = m_timeTable.getPlayerIndex(*msg.getValue<std::string>(0));
 			m_timeTable.removePlayer(index);
-			m_players.erase(m_players.begin() + index);
+
+			auto it = searchPlayer(*msg.getValue<std::string>(0));
+			if (it != m_players.end())
+				m_players.erase(it);
 		}
 		//After onlinemode finish -> this should load a new map and reset map/player's time
-		else if (msg.ID == std::hash<std::string>()("new map"))
+		else if (msg.ID == aw::hash("new map"))
 		{
 			m_levelName = *msg.getValue<std::string>(0);
 			loadLevel();
@@ -233,50 +333,59 @@ namespace aw
 			//Reset online players
 			for (std::size_t i = 0; i < m_players.size(); ++i)
 			{
-				m_players[i] = m_players[0];
+				m_players[i].setPlayerState(PlayerState::STOPPED);
 			}
 			//Reset timeTable times
 			m_timeTable.resetTimes();
 		}
-		else if (msg.ID == std::hash<std::string>()("onlinemode loading"))
+		else if (msg.ID == aw::hash("onlinemode loading"))
 		{
+			for (auto &it : m_players)
+			{
+				it.setPlayerState(PlayerState::STOPPED);
+			}
 			m_onlineState = OnlineState::LOADING;
 			m_countDownNextAction.setTime(*msg.getValue<float>(0));
 		}
-		else if (msg.ID == std::hash<std::string>()("onlinemode running"))
+		else if (msg.ID == aw::hash("onlinemode running"))
 		{
 			m_onlineState = OnlineState::RUNNING;
 			m_countDownNextAction.setTime(*msg.getValue<float>(0));
 		}
-		else if (msg.ID == std::hash<std::string>()("onlinemode finish"))
+		else if (msg.ID == aw::hash("onlinemode finish"))
 		{
+			for (auto &it : m_players)
+			{
+				it.setPlayerState(PlayerState::STOPPED);
+			}
 			m_onlineState = OnlineState::FINISHED;
 			m_countDownNextAction.setTime(*msg.getValue<float>(0));
 		}
 		//A player got a new besttime, add to timetable
-		else if (msg.ID == std::hash<std::string>()("new best time"))
+		else if (msg.ID == aw::hash("new best time"))
 		{
 			std::cout << "new time! : " << *msg.getValue<std::string>(0) << " | " << *msg.getValue<float>(1) << std::endl;
 			m_timeTable.addTime(*msg.getValue<std::string>(0), *msg.getValue<float>(1));
 		}
 		//Set the volume of the music
-		else if (msg.ID == std::hash<std::string>()("sound settings"))
+		else if (msg.ID == aw::hash("sound settings"))
 		{
 			m_music.setVolume(*msg.getValue<float>(1));
 		}
 		//Handling focus if lost = pause
-		else if (msg.ID == std::hash<std::string>()("lost focus"))
+		else if (msg.ID == aw::hash("lost focus"))
 		{
 			//Pause the game if it is running..
 			//In Start, Finish, Crash screen it's not needed to pause the game...
 			if (m_gameState == GameState::RUNNING)
 			{
 				m_gameState = GameState::PAUSED;
+				sendStopInformation();
 				m_gui.setActiveLayer(3);
 			}
 		}
 		//Starting the game
-		else if (msg.ID == std::hash<std::string>()("event") && m_active)
+		else if (msg.ID == aw::hash("event") && m_active)
 		{
 			sf::Event event = *msg.getValue<sf::Event>(0);
 
@@ -294,11 +403,15 @@ namespace aw
 					{
 						m_gameState = GameState::RUNNING;
 						resetToStart();
+						m_players[0].setPlayerState(PlayerState::FLYING);
+						sendStartInformation();
 					}
 					else if (m_gameState == GameState::CRASHED)
 					{
 						m_gameState = GameState::RUNNING;
 						resetToLastCheckpoint();
+						m_players[0].setPlayerState(PlayerState::FLYING);
+						sendStartInformation();
 					}
 					else if (m_gameState == GameState::FINISHED)
 					{
@@ -330,6 +443,8 @@ namespace aw
 						if (m_gui.getSelectedElement()->getID() == "resume")
 						{
 							m_gameState = GameState::RUNNING;
+							m_players[0].setPlayerState(PlayerState::FLYING);
+							sendStartInformation();
 						}
 						else if (m_gui.getSelectedElement()->getID() == "back")
 						{
@@ -346,6 +461,8 @@ namespace aw
 					{
 						m_gameState = GameState::RUNNING;
 						resetToStart();
+						m_players[0].setPlayerState(PlayerState::FLYING);
+						sendStartInformation();
 					}
 				}
 				else if (event.key.code == sf::Keyboard::Escape)
@@ -363,7 +480,9 @@ namespace aw
 					//Running = pause the game
 					else if (m_gameState == GameState::RUNNING)
 					{
+						m_players[0].setPlayerState(PlayerState::STOPPED);
 						m_gameState = GameState::PAUSED;
+						sendStopInformation();
 						m_gui.setActiveLayer(3);
 					}
 					//Finish screen do nothing...
@@ -404,9 +523,26 @@ namespace aw
 
 				m_openMusic = 1;
 			}
-			else
+		}
+		else if (m_gameType == GameType::ONLINE_TIME_CHALLENGE && m_music.getStatus() != sf::Music::Playing)
+		{
+			//Random with level will be load from the brackground(old Levels)
+			// Seed with a real random value, if available
+			std::random_device rd;
+			// Choose a random range
+			std::default_random_engine e1(rd());
+			std::uniform_int_distribution<int> uniform_dist(0, 5);
+			int musicNumber = uniform_dist(e1);
+	
+			switch (musicNumber)
 			{
-				m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg");
+			case 0: m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg"); break;
+			case 1: m_music.openFromFile("data/music/Infinity - Techno Trance Project 2011 by MafiaFLairBeatz.ogg"); break;
+			case 2: m_music.openFromFile("data/music/MachinimaSound.com_-_After_Dark.ogg"); break;
+			case 3: m_music.openFromFile("data/music/MachinimaSound.com_-_Queen_of_the_Night.ogg"); break;
+			case 4: m_music.openFromFile("data/music/Power Fight - Electro Techno Beat.ogg"); break;
+			case 5: m_music.openFromFile("data/music/Return of the Electro by MafiaFLairBeatz.ogg"); break;
+			default: break;
 			}
 		}
 	}
@@ -414,7 +550,6 @@ namespace aw
 	void Game::loadLevel()
 	{
 		//Reset all members first
-		m_gameState = GameState::STOPPED;
 		m_mapRenderer = MapRenderer();
 		m_collisionSystem = CollisionSystem();
 		m_camera = Camera();
@@ -447,7 +582,9 @@ namespace aw
 		//Update Camera position
 		m_camera.update(m_players[0].getPosition());
 		//Load all the scripts
-		m_scriptManager.load(path);
+		//If in onlinemode do not load checkpoint/speed ups downs
+		bool online = m_gameType == GameType::ONLINE_TIME_CHALLENGE;
+		m_scriptManager.load(path, online);
 		//Open the right Music
 		initMusic();
 		//Reset the gameTimer
@@ -491,9 +628,126 @@ namespace aw
 	void Game::sendInformationLevelFinished(bool startNextLevel)
 	{
 		Message msg;
-		msg.ID = std::hash<std::string>()("level complete");
+		msg.ID = aw::hash("level complete");
 		msg.push_back(m_levelName);
 		msg.push_back(startNextLevel);
+		m_messageBus.sendMessage(msg);
+	}
+
+	void Game::playerControl()
+	{
+		if (m_gameState == GameState::RUNNING && m_onlineState == OnlineState::RUNNING)
+		{
+			//Handling Space Key
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			{
+				if (!m_players[0].getSpacePressed())
+				{
+					m_players[0].setSpacePressed(true);
+					//If online send the information about the new keystate
+					if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+					{
+						Message msg;
+						msg.ID = aw::hash("p space pressed");
+						m_messageBus.sendMessage(msg);
+					}
+				}
+			}
+			else
+			{
+				if (m_players[0].getSpacePressed())
+				{
+					m_players[0].setSpacePressed(false);
+
+					if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+					{
+						Message msg;
+						msg.ID = aw::hash("p space released");
+						m_messageBus.sendMessage(msg);
+					}
+				}
+			}
+
+			if (m_gameType == GameType::OFFICIAL_TIMECHALLENGE || m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+			{
+				//Left key, signal will only be send if the states changes....
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+				{
+					if (!m_players[0].getLeftPressed())
+					{
+						m_players[0].setLeftPressed(true);
+
+						if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+						{
+							Message msg;
+							msg.ID = aw::hash("p left pressed");
+							m_messageBus.sendMessage(msg);
+						}
+					}
+				}
+				else
+				{
+					if (m_players[0].getLeftPressed())
+					{
+						m_players[0].setLeftPressed(false);
+
+						if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+						{
+							Message msg;
+							msg.ID = aw::hash("p left released");
+							m_messageBus.sendMessage(msg);
+						}
+					}
+				}
+				//Right key, signal will only be send if the states changes....
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+				{
+					if (!m_players[0].getRightPressed())
+					{
+						m_players[0].setRightPressed(true);
+
+						if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+						{
+							Message msg;
+							msg.ID = aw::hash("p right pressed");
+							m_messageBus.sendMessage(msg);
+						}
+					}
+				}
+				else
+				{
+					if (m_players[0].getRightPressed())
+					{
+						m_players[0].setRightPressed(false);
+
+						if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
+						{
+							Message msg;
+							msg.ID = aw::hash("p right released");
+							m_messageBus.sendMessage(msg);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	void Game::sendStartInformation()
+	{
+		Message msg;
+		msg.ID = aw::hash("p start online try");
+		msg.push_back(m_players[0].getPosition());
+		msg.push_back(m_players[0].getSpeed());
+		msg.push_back(m_players[0].getGravitation());
+
+		m_messageBus.sendMessage(msg);
+	}
+
+	void Game::sendStopInformation()
+	{
+		Message msg;
+		msg.ID = aw::hash("p stop online try");
+
 		m_messageBus.sendMessage(msg);
 	}
 
@@ -502,10 +756,23 @@ namespace aw
 		if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
 		{
 			Message msg;
-			msg.ID = std::hash<std::string>()("quit online game");
+			msg.ID = aw::hash("quit online game");
 
 			m_messageBus.sendMessage(msg);
 		}
+	}
+
+	std::vector<Player>::iterator Game::searchPlayer(const std::string &name)
+	{
+		for (auto it = m_players.begin(); it != m_players.end(); ++it)
+		{
+			if (it->getName() == name)
+			{
+				return it;
+			}
+		}
+
+		return m_players.end();
 	}
 }
 

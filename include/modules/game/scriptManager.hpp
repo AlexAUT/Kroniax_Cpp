@@ -56,7 +56,7 @@ namespace aw
 
 		void update(Player &player, Camera &camera);
 
-		void load(const std::string &path);
+		void load(const std::string &path, bool online = false);
 
 		void render(sf::RenderWindow &window);
 

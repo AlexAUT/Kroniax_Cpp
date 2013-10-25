@@ -12,13 +12,14 @@ namespace aw
 {
 	TimeTable::TimeTable()
 	{
-		m_font.loadFromFile("data/fonts/DejaVuSans.ttf");
+		m_font.loadFromFile("data/fonts/visitor1.ttf");
 	}
 
 	void TimeTable::addPlayer(const std::string &name, float time)
 	{
 		std::cout << "Added Player: " << name << std::endl;
 		m_players.push_back(priv::Player(name, time));
+		//Set up the array
 	}
 
 	void TimeTable::removePlayer(const std::string &name)
@@ -73,15 +74,25 @@ namespace aw
 		sf::Text toDraw;
 		toDraw.setFont(m_font);
 
-		for (std::size_t i = 0; i < 10; ++i)
+		toDraw.setPosition(250, 50);
+		toDraw.setString("Scoreboard");
+		toDraw.setCharacterSize(45);
+		window.draw(toDraw);
+
+		toDraw.setCharacterSize(25);
+
+		for (std::size_t i = 0; i < 20; ++i)
 		{
 			if (i >= m_players.size())
 			{
-				break;
+				toDraw.setPosition(sf::Vector2f((static_cast<int>(i / 10) * 350) + 100.f, 120 + i * 25.f - (static_cast<int>(i / 10) * 250)));
+				toDraw.setString("Dummy");
+				window.draw(toDraw);
+				//break;
 			}
 			else
 			{
-				toDraw.setPosition(sf::Vector2f(200.f, 60 + i * 25.f));
+				toDraw.setPosition(sf::Vector2f((static_cast<int>(i / 10) * 300) + 100.f, 120 + i * 25.f));
 				std::stringstream sstr;
 				if (m_players[i].time > 0.5f)
 				{
@@ -95,6 +106,11 @@ namespace aw
 				window.draw(toDraw);
 			}
 		}
+	}
+
+	void TimeTable::clear()
+	{
+		m_players.clear();
 	}
 
 
@@ -126,5 +142,10 @@ namespace aw
 		}
 
 		return 1000000;
+	}
+
+	void TimeTable::orderTimeTable()
+	{
+		
 	}
 }

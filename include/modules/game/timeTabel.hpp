@@ -47,10 +47,14 @@ namespace aw
 
 		void render(sf::RenderWindow &window);
 
+		void clear();
+
 		std::size_t getPlayerIndex(const std::string &name);
 		float getTime(std::size_t index);
 
 	private:
+
+		void orderTimeTable();
 
 	private:
 		std::vector<priv::Player> m_players;
