@@ -3,6 +3,8 @@
 *.exe
 *.vcxproj
 *.filters
+debug static/
+release static/
 
 # Some dll's
 sfml-audio-d-2.dll
