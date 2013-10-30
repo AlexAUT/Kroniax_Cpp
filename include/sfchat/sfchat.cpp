@@ -52,7 +52,7 @@ const sf::Uint8 Chat::m_maxClients = 15u; //16 users including server
 //maximum length of username
 const sf::Uint8 Chat::m_maxNickLength = 30u;
 //number of seconds to try connecting before timing out
-const float Chat::m_connectTimeout = 10.f;
+const float Chat::m_connectTimeout = 3.f;
 //IMPORTANT// Change this to a value unique to your project. This is a basic attempt
 //at preventing unwanted clients joining your server by abusing this source code (it does happen).
 //This value is sent by the client upon connect and the server will kick clients which do not
