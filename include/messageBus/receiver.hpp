@@ -18,6 +18,11 @@ namespace aw
 			ID(pID)
 		{}
 
+		void clear()
+		{
+			m_values.clear();
+		}
+
 		template <class T>
 		void push_back(const T &value)
 		{

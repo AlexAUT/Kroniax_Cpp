@@ -10,7 +10,7 @@
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <iostream>
+
 //Global gui init function, to make the code easier to read
 void initMainLayer(aw::GuiController &gui);
 void initArcadeLayer(aw::GuiController &gui);
@@ -18,6 +18,7 @@ void initTutorialLayers(aw::GuiController &gui);
 void initOptionsLayer(aw::GuiController &gui);
 void initCreditsLayer(aw::GuiController &gui);
 void initMultiplayerLayers(aw::GuiController &gui);
+void initMultiplayerHelpLayer(aw::GuiController &gui);
 
 namespace aw
 {
@@ -62,6 +63,8 @@ namespace aw
 		initCreditsLayer(m_gui);
 		//Layer7,8,9
 		initMultiplayerLayers(m_gui);
+		//Layer10
+		initMultiplayerHelpLayer(m_gui);
 	}
 
 	void Menu::update(const sf::Time &frameTime)
@@ -94,14 +97,6 @@ namespace aw
 		window.draw(m_overlay);
 		window.draw(m_logo);
 		m_gui.render(window);
-
-		//Teamspeak ID
-		sf::Text ts;
-		ts.setFont(m_gui.getFont());
-		ts.setCharacterSize(15);
-		ts.setString("Teamspeak IP: 88.198.153.109 Channel: Kroniax");
-		ts.setPosition(10, 425);
-		window.draw(ts);
 	}
 
 
@@ -326,6 +321,7 @@ namespace aw
 		case 7: setUpConnectionLayer(); break;
 		case 8: connectionFailedLayer(); break;
 		case 9: mapSelectionLayer(); break;
+		case 10: helpMultiplayerLayer(); break;
 		default: break;
 		}
 	}
@@ -505,13 +501,24 @@ namespace aw
 	{
 		if (m_gui.getSelectedElement()->getID() == "select server")
 		{
-			Message msg(aw::hash("join server"));
-			msg.push_back(m_gui.getSelectedElement()->getText());
-			m_messageBus.sendMessage(msg);
+			//Store the information, the MultiplayerHelp layer will send the information
+			m_messageMutliplayerStart.ID = aw::hash("join server");
+			m_messageMutliplayerStart.clear();
+			m_messageMutliplayerStart.push_back(m_gui.getSelectedElement()->getText());
+			m_gui.setActiveLayer(10);
 		}
 		else if (m_gui.getSelectedElement()->getID() == "back")
 		{
 			m_gui.setActiveLayer(0);
+		}
+	}
+
+	void Menu::helpMultiplayerLayer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "start")
+		{
+			m_messageBus.sendMessage(m_messageMutliplayerStart);
+			m_gui.setActiveLayer(9);
 		}
 	}
 }
@@ -620,8 +627,9 @@ void initCreditsLayer(aw::GuiController &gui)
 	gui.addLabel(6, "credit", sf::Vector2f(50, 145), "Developed by Alexander Weinrauch (AlexAUT).");
 	gui.addLabel(6, "credit", sf::Vector2f(50, 195), "Special Thanks to:");
 	gui.addLabel(6, "credit", sf::Vector2f(150, 235), "Laurent for SFML!");
-	gui.addLabel(6, "credit", sf::Vector2f(150, 265), "MafiaFLairBeatz for the music!");
-	gui.addLabel(6, "credit", sf::Vector2f(150, 295), "Machinimasound for the music!");
+	gui.addLabel(6, "credit", sf::Vector2f(150, 265), "fallahn for sfChat (Chat system)");
+	gui.addLabel(6, "credit", sf::Vector2f(150, 295), "MafiaFLairBeatz for the music!");
+	gui.addLabel(6, "credit", sf::Vector2f(150, 325), "Machinimasound for the music!");
 }
 
 void initMultiplayerLayers(aw::GuiController &gui)
@@ -646,4 +654,17 @@ void initMultiplayerLayers(aw::GuiController &gui)
 	//gui.addLabel(9, "lentgh", sf::Vector2f(275, 290), "Length: ");
 	//gui.addLabel(9, "author", sf::Vector2f(275, 325), "Author: ");
 	gui.addButton(9, "back", sf::Vector2f(300, 385), "Back");
+}
+
+void initMultiplayerHelpLayer(aw::GuiController &gui)
+{
+	//Layer10
+	gui.addLayer();
+	gui.addButton(10, "start", sf::Vector2f(360, 350), "Start");
+
+	gui.addLabel(10, "", sf::Vector2f(80, 125), "Try to get the fastest time possible!\n\n\n"
+		"Use the arrow keys to control your speed\n\n"
+		"Hold tab to display the scoreboard\n\n"
+		"Press T to open the chat and Escape to close it");
+
 }

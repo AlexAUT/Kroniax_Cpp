@@ -48,12 +48,15 @@ namespace aw
 		void setUpConnectionLayer();
 		void mapSelectionLayer();
 		void connectionFailedLayer();
+		void helpMultiplayerLayer();
 
 
 	private:
 		bool m_active; //Important to turn of the receive message function in some cases
 
 		MessageBus &m_messageBus;
+		//This message will be send after reading the mutliplayer information
+		Message m_messageMutliplayerStart;
 
 		GuiController m_gui;
 		MapRenderer m_mapRenderer;

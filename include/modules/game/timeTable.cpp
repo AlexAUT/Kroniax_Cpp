@@ -1,7 +1,6 @@
 #include "timeTable.hpp"
 
 #include <sstream>
-#include <iostream>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>

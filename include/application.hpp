@@ -5,6 +5,7 @@
 #include "modules/settings.hpp"
 #include "modules/windowHandler.hpp"
 #include "modules/networkHandler.hpp"
+#include "modules/chatHandler.hpp"
 #include "modules/stateMachine.hpp"
 
 #include <SFML/System/Clock.hpp>
@@ -27,6 +28,7 @@ namespace aw
 		Settings m_settings;
 		WindowHandler m_windowHandler;
 		NetworkHandler m_networkHandler;
+		ChatHandler m_chatHandler;
 		StateMachine m_stateMachine;
 		///////////////////////////////
 		sf::Clock m_frameTimer;

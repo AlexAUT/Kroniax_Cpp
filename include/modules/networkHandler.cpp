@@ -8,8 +8,6 @@
 #include <SFML/Network/Packet.hpp>
 #include <SFML/Network/IpAddress.hpp>
 
-#include <iostream>
-
 namespace aw
 {
 	NetworkHandler::NetworkHandler(MessageBus &messageBus) :
@@ -254,6 +252,7 @@ namespace aw
 				}
 				else if (command == aw::hash("new player"))
 				{
+					//std::cout << "\a\a";
 					Message msg;
 					msg.ID = command; //command = hash("new player")
 					std::string name;

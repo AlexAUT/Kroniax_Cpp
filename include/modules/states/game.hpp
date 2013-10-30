@@ -34,7 +34,9 @@ namespace aw
 		CRASHED,
 		RUNNING,
 		FINISHED,
-		PAUSED
+		PAUSED,
+		CHAT,
+		HELP
 	};
 
 	enum OnlineState
@@ -85,9 +87,12 @@ namespace aw
 
 		MessageBus &m_messageBus;
 
+		bool m_ignoreNextKeyEvent;
+
 		std::string m_levelName;
 		GameType m_gameType;
 		GameState m_gameState;
+		GameState m_gameStateBeforeChatting;
 		OnlineState m_onlineState;
 
 		MapRenderer m_mapRenderer;

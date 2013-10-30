@@ -4,23 +4,25 @@
 #include <sstream>
 #include <random>
 
-#include <iostream>
+
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
 #include "../../messageBus/messageBus.hpp"
 #include "../../utilities/hash.hpp"
+#include "../../modules/chatHandler.hpp"
 
 //Global Function
 void initGui(aw::GuiController &gui);
 
 namespace aw
 {
-	Game::Game(StateMachine &statemachine, MessageBus &messageBus):
+	Game::Game(StateMachine &statemachine, MessageBus &messageBus) :
 		m_active(false),
-		State(statemachine), 
+		State(statemachine),
 		m_messageBus(messageBus),
+		m_ignoreNextKeyEvent(false),
 		m_gameState(GameState::STOPPED),
 		m_openMusic(-1)
 	{
@@ -170,6 +172,12 @@ namespace aw
 		else if (m_onlineState == OnlineState::RUNNING)
 		{
 			m_countDownNextAction.render(window, "for this map!");
+		}
+		else if (m_gameState == GameState::CHAT)
+		{
+			sf::RectangleShape overlay(sf::Vector2f(800, 450));
+			overlay.setFillColor(sf::Color(0, 0, 0, 180));
+			window.draw(overlay);
 		}
 
 	}
@@ -414,7 +422,16 @@ namespace aw
 				m_gui.setActiveLayer(3);
 			}
 		}
-		//Starting the game
+		else if (msg.ID == aw::hash("hide chat"))
+		{
+			m_gameState = m_gameStateBeforeChatting;
+			if (m_gameState == GameState::RUNNING)
+			{
+				m_gameState = GameState::PAUSED;
+			}
+
+			m_ignoreNextKeyEvent = true;
+		}
 		else if (msg.ID == aw::hash("event") && m_active)
 		{
 			sf::Event event = *msg.getValue<sf::Event>(0);
@@ -422,12 +439,30 @@ namespace aw
 			//Give the event to gui
 			m_gui.handleEvent(event);
 
-			//Check if the online mode = running to prevnt the game from a wrong start
-			//In singelplayer onlinemode is always running
-			//Check for respawn etc.
+			
 			if (event.type == sf::Event::KeyReleased)
 			{
-				if (event.key.code == sf::Keyboard::Return && m_onlineState == OnlineState::RUNNING)
+				if (m_ignoreNextKeyEvent)
+				{
+					m_ignoreNextKeyEvent = false;
+					return;
+				}
+
+				if (event.key.code == sf::Keyboard::T && m_gameType == GameType::ONLINE_TIME_CHALLENGE && m_gameState != GameState::CHAT)
+				{
+					m_gameStateBeforeChatting = m_gameState;
+					m_gameState = GameState::CHAT;
+					m_players[0].setPlayerState(PlayerState::STOPPED);
+					Message msg(aw::hash("show chat"));
+					m_messageBus.sendMessage(msg);
+					Message msgEvent(aw::hash("chat event"));
+					msgEvent.push_back(event);
+					m_messageBus.sendMessage(msgEvent);
+				}
+				//Check if the online mode = running to prevnt the game from a wrong start
+				//In singelplayer onlinemode is always running
+				//Check for respawn etc.
+				else if (event.key.code == sf::Keyboard::Return && m_onlineState == OnlineState::RUNNING)
 				{
 					if (m_gameState == GameState::STOPPED) 
 					{
@@ -587,6 +622,7 @@ namespace aw
 
 		//Setup gamestate
 		m_gameState = GameState::STOPPED;
+		m_gameStateBeforeChatting = GameState::STOPPED;
 		m_gui.setActiveLayer(0);
 
 		//Setup the path for the level modules
@@ -871,6 +907,4 @@ void initGui(aw::GuiController &gui)
 	gui.addButton(3, "back", sf::Vector2f(250, 250), "Back to menu");
 	gui.addLabel(3, "", sf::Vector2f(250, 100), "Game is paused");
 	gui.getElement(3, 2)->setCharacterSize(35);
-	
-
 }

@@ -12,7 +12,7 @@ namespace aw
 {
 
 	Application::Application() :
-		m_settings(m_messageBus), m_windowHandler(m_messageBus), m_networkHandler(m_messageBus)
+		m_settings(m_messageBus), m_windowHandler(m_messageBus), m_networkHandler(m_messageBus), m_chatHandler(m_messageBus)
 	{
 		//Init Statemachine
 		m_stateMachine.addState("intro", std::unique_ptr<State>(new Intro(m_stateMachine)));
@@ -42,11 +42,17 @@ namespace aw
 			//Update active State
 			m_stateMachine.update(m_frameTime);
 
+			//Update visual chat
+			m_chatHandler.updateVisual();
+
 			//Clear the rendertarget
 			m_windowHandler.getWindow().clear();
 
 			//Draw active State
 			m_stateMachine.render(m_windowHandler.getWindow());
+
+			//Draw chat
+			m_windowHandler.getWindow().draw(m_chatHandler);
 
 			//Display frame
 			m_windowHandler.getWindow().display();
