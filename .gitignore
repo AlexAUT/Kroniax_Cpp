@@ -5,6 +5,10 @@
 *.filters
 Debug static/
 Release static/
+*.tlog
+*.lastbuildstate
+*.idb
+*.log
 
 # Some dll's
 sfml-audio-d-2.dll
