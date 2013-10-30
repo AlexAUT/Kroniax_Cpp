@@ -1,5 +1,6 @@
 #include "application.hpp"
 
+
 int main()
 {
 	aw::Application application;

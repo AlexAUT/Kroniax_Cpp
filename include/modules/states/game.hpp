@@ -10,9 +10,14 @@
 #include "../game/camera.hpp"
 #include "../game/collisionSystem.hpp"
 #include "../game/scriptManager.hpp"
+#include "../game/timeTable.hpp"
+#include "../game/gameTimer.hpp"
+#include "../game/countdown.hpp"
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Audio/Music.hpp>
+
+#include <vector>
 
 namespace aw
 {
@@ -20,8 +25,7 @@ namespace aw
 	{
 		OFFICIAL_ARCADE,
 		OFFICIAL_TIMECHALLENGE,
-		ARCADE,
-		TIMECHALLENGE
+		ONLINE_TIME_CHALLENGE
 	};
 
 	enum class GameState
@@ -31,6 +35,13 @@ namespace aw
 		RUNNING,
 		FINISHED,
 		PAUSED
+	};
+
+	enum OnlineState
+	{
+		LOADING,
+		RUNNING,
+		FINISHED
 	};
 
 	/////FORWARD DECL/////
@@ -58,6 +69,16 @@ namespace aw
 
 		//Send the message for completing a level to unlcoka new one and save the progress
 		void sendInformationLevelFinished(bool startNextLevel);
+		//Check the keyboard to control the [0] player
+		void playerControl();
+		//Send information that player has started this ship
+		void sendStartInformation();
+		//Informs the server that the player crashed/paused/finished = PlayerState::Stopped
+		void sendStopInformation();
+		//Inform the server that you have quit a online game...
+		void quitOnlineGame();
+
+		std::vector<Player>::iterator searchPlayer(const std::string &name);
 
 	private:
 		bool m_active; //Important. Is needed to turn of the gui after for example starting a game
@@ -67,12 +88,16 @@ namespace aw
 		std::string m_levelName;
 		GameType m_gameType;
 		GameState m_gameState;
+		OnlineState m_onlineState;
 
 		MapRenderer m_mapRenderer;
 		CollisionSystem m_collisionSystem;
-		Player m_player;
+		std::vector<Player> m_players;
 		Camera m_camera;
 		ScriptManager m_scriptManager;
+		TimeTable m_timeTable;
+		GameTimer m_gameTimer;
+		Countdown m_countDownNextAction;
 
 		GuiController m_gui;//Will display different game screens
 		sf::Clock m_startingTimer;

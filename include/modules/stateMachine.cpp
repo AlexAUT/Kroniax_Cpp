@@ -23,7 +23,7 @@ namespace aw
 			m_activeState->render(window);
 	}
 
-	void StateMachine::addState(const std::string &name, std::unique_ptr<State> &ptr)
+	void StateMachine::addState(const std::string &name, std::unique_ptr<State> ptr)
 	{
 		m_states[name] = std::move(ptr);
 	}

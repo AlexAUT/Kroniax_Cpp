@@ -24,7 +24,7 @@ namespace aw
 		void render(sf::RenderWindow &window);
 
 		//Carefully! Will take the ownership of the parameter
-		void addState(const std::string &name, std::unique_ptr<State> &ptr);
+		void addState(const std::string &name, std::unique_ptr<State> ptr);
 		void removeState(const std::string &name);
 
 		void changeActiveState(const std::string &name);

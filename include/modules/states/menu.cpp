@@ -1,6 +1,7 @@
 #include "menu.hpp"
 
 #include "../../messageBus/messageBus.hpp"
+#include "../../utilities/hash.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -16,6 +17,7 @@ void initArcadeLayer(aw::GuiController &gui);
 void initTutorialLayers(aw::GuiController &gui);
 void initOptionsLayer(aw::GuiController &gui);
 void initCreditsLayer(aw::GuiController &gui);
+void initMultiplayerLayers(aw::GuiController &gui);
 
 namespace aw
 {
@@ -58,6 +60,8 @@ namespace aw
 		initOptionsLayer(m_gui);
 		//Layer6
 		initCreditsLayer(m_gui);
+		//Layer7,8,9
+		initMultiplayerLayers(m_gui);
 	}
 
 	void Menu::update(const sf::Time &frameTime)
@@ -90,12 +94,20 @@ namespace aw
 		window.draw(m_overlay);
 		window.draw(m_logo);
 		m_gui.render(window);
+
+		//Teamspeak ID
+		sf::Text ts;
+		ts.setFont(m_gui.getFont());
+		ts.setCharacterSize(15);
+		ts.setString("Teamspeak IP: 88.198.153.109 Channel: Kroniax");
+		ts.setPosition(10, 425);
+		window.draw(ts);
 	}
 
 
 	void Menu::receiveMessage(const Message &msg)
 	{
-		if (msg.ID == std::hash<std::string>()("sound settings"))
+		if (msg.ID == aw::hash("sound settings"))
 		{
 			m_music.setVolume(*msg.getValue<float>(0));
 			//Update the gui to disply the right values
@@ -112,7 +124,7 @@ namespace aw
 				m_gui.getElement(5, 1)->setActiveEntry(index);
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("window settings"))
+		else if (msg.ID == aw::hash("window settings"))
 		{
 			//Update the gui to display correct information
 			//Fullscreen
@@ -135,7 +147,7 @@ namespace aw
 			default: m_gui.getElement(5, 2)->setActiveEntry(0); break;
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("event") && m_active)
+		else if (msg.ID == aw::hash("event") && m_active)
 		{
 			sf::Event event = *msg.getValue<sf::Event>(0);
 
@@ -146,11 +158,17 @@ namespace aw
 				buttonAction();
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("unlocked levels"))
+		else if (msg.ID == aw::hash("start game"))
+		{
+			m_music.stop();
+			m_active = false;
+			changeActiveState("game");
+		}
+		else if (msg.ID == aw::hash("unlocked levels"))
 		{
 			m_unlockedLevels = *msg.getValue<unsigned int>(0);
 		}
-		else if (msg.ID == std::hash<std::string>()("arcade levellist"))
+		else if (msg.ID == aw::hash("arcade levellist"))
 		{
 			m_gui.getElement(1, 0)->clearEntries();
 			//Fill the level selection list, with the unlocked levels
@@ -159,9 +177,44 @@ namespace aw
 				m_gui.getElement(1, 0)->addEntry(*msg.getValue<std::string>(i));
 			}
 		}
-		else if (msg.ID == std::hash<std::string>()("Tutorial2"))
+		else if (msg.ID == aw::hash("Tutorial2"))
 		{
 			m_gui.setActiveLayer(3);
+		}
+		////////////////////// MULTIPLAYER ACTIONS ////////////////////////////////
+		else if (msg.ID == aw::hash("result connecting"))
+		{
+			if (*msg.getValue<bool>(0))
+			{
+				//Map Selection
+				m_gui.setActiveLayer(9);
+
+				Message msg(aw::hash("request game list"));
+				m_messageBus.sendMessage(msg);
+			}
+			else
+			{
+				//Connection failed layer
+				m_gui.setActiveLayer(8);
+			}
+		}
+		else if (msg.ID == aw::hash("game list"))
+		{
+			m_gui.getElement(9, 0)->clearEntries();
+
+			for (std::size_t i = 0;; ++i)
+			{
+				std::string *ptr = msg.getValue<std::string>(i);
+
+				if (ptr)
+				{
+					m_gui.getElement(9, 0)->addEntry(*ptr);
+				}
+				else
+				{
+					break;
+				}
+			}
 		}
 	}
 
@@ -270,6 +323,9 @@ namespace aw
 		case 3: tutorial2Layer(); break;
 		case 5: optionsLayer(); break;
 		case 6: creditsLayer(); break;
+		case 7: setUpConnectionLayer(); break;
+		case 8: connectionFailedLayer(); break;
+		case 9: mapSelectionLayer(); break;
 		default: break;
 		}
 	}
@@ -286,7 +342,7 @@ namespace aw
 		}
 		else if (m_gui.getSelectedElement()->getID() == "multiplayer")
 		{
-
+			m_gui.setActiveLayer(7);
 		}
 		else if (m_gui.getSelectedElement()->getID() == "options")
 		{
@@ -299,7 +355,7 @@ namespace aw
 		else if (m_gui.getSelectedElement()->getID() == "exit")
 		{
 			Message msg;
-			msg.ID = std::hash<std::string>()("close game");
+			msg.ID = aw::hash("close game");
 			m_messageBus.sendMessage(msg);
 		}
 	}
@@ -322,7 +378,7 @@ namespace aw
 				//For all levels except tutorials
 				//Send message... So the game will start...
 				Message msg;
-				msg.ID = std::hash<std::string>()("start game");
+				msg.ID = aw::hash("start game");
 				msg.push_back(m_levelInformation.name);
 				msg.push_back(static_cast<std::string>("official arcade"));
 				m_messageBus.sendMessage(msg);
@@ -344,7 +400,7 @@ namespace aw
 			//start level1
 			//Send message... So the game will start...
 			Message msg;
-			msg.ID = std::hash<std::string>()("start game");
+			msg.ID = aw::hash("start game");
 			std::string name = "Level1";
 			msg.push_back(name);
 			msg.push_back(static_cast<std::string>("official arcade"));
@@ -367,7 +423,7 @@ namespace aw
 			//start level6
 			//Send message... So the game will start...
 			Message msg;
-			msg.ID = std::hash<std::string>()("start game");
+			msg.ID = aw::hash("start game");
 			std::string name = "Level6";
 			msg.push_back(name);
 			msg.push_back(static_cast<std::string>("official arcade"));
@@ -387,18 +443,18 @@ namespace aw
 	{
 		if (m_gui.getSelectedElement()->getID() == "reset graphics")
 		{
-			Message msg(std::hash<std::string>()("reset resolution"));
+			Message msg(aw::hash("reset resolution"));
 			m_messageBus.sendMessage(msg);
 		}
 		else if (m_gui.getSelectedElement()->getID() == "apply")
 		{
-			Message msgSound(std::hash<std::string>()("new sound settings"));
+			Message msgSound(aw::hash("new sound settings"));
 			//Menu and game volume
 			msgSound.push_back(m_gui.getElement(5, 0)->getText());
 			msgSound.push_back(m_gui.getElement(5, 1)->getText());
 			m_messageBus.sendMessage(msgSound);
 
-			Message msgWindow(std::hash<std::string>()("new window settings"));
+			Message msgWindow(aw::hash("new window settings"));
 			//Antialiasinglevel and fullscreen
 			msgWindow.push_back(m_gui.getElement(5, 2)->getText());
 			msgWindow.push_back(m_gui.getElement(5, 3)->getText());
@@ -415,6 +471,45 @@ namespace aw
 	void Menu::creditsLayer()
 	{
 		if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(0);
+		}
+	}
+
+	void Menu::setUpConnectionLayer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "submit")
+		{
+			Message msg;
+			msg.ID = aw::hash("connect");
+			//Pushback the name of the player
+			msg.push_back(m_gui.getElement(7, 0)->getText());
+			
+			m_messageBus.sendMessage(msg);
+		}
+		else if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(0);
+		}
+	}
+
+	void Menu::connectionFailedLayer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "back")
+		{
+			m_gui.setActiveLayer(7);
+		}
+	}
+
+	void Menu::mapSelectionLayer()
+	{
+		if (m_gui.getSelectedElement()->getID() == "select server")
+		{
+			Message msg(aw::hash("join server"));
+			msg.push_back(m_gui.getSelectedElement()->getText());
+			m_messageBus.sendMessage(msg);
+		}
+		else if (m_gui.getSelectedElement()->getID() == "back")
 		{
 			m_gui.setActiveLayer(0);
 		}
@@ -527,4 +622,28 @@ void initCreditsLayer(aw::GuiController &gui)
 	gui.addLabel(6, "credit", sf::Vector2f(150, 235), "Laurent for SFML!");
 	gui.addLabel(6, "credit", sf::Vector2f(150, 265), "MafiaFLairBeatz for the music!");
 	gui.addLabel(6, "credit", sf::Vector2f(150, 295), "Machinimasound for the music!");
+}
+
+void initMultiplayerLayers(aw::GuiController &gui)
+{
+	//Layer 7 // set up connection layer
+	gui.addLayer();
+	gui.addInput(7, "name", sf::Vector2f(345, 125), "Player");
+	gui.addLabel(7, "", sf::Vector2f(250, 125), "Name:");
+	gui.addButton(7, "submit", sf::Vector2f(325, 200), "Submit");
+	gui.addButton(7, "back", sf::Vector2f(325, 240), "Back");
+
+	//Layer 8 //Connection failed layer
+	gui.addLayer();
+	gui.addButton(8, "back", sf::Vector2f(325, 240), "Back");
+	gui.addLabel(8, "", sf::Vector2f(250, 125), "Couldn't connect to the server!");
+
+	//Layer 9 //MapSelection layer
+	gui.addLayer();
+	gui.addList(9, "select server", sf::Vector2f(275, 165), "Select a server");
+	gui.addLabel(9, "map", sf::Vector2f(275, 220), "Current map: ");
+	gui.addLabel(9, "player", sf::Vector2f(275, 255), "Player: ");
+	//gui.addLabel(9, "lentgh", sf::Vector2f(275, 290), "Length: ");
+	//gui.addLabel(9, "author", sf::Vector2f(275, 325), "Author: ");
+	gui.addButton(9, "back", sf::Vector2f(300, 385), "Back");
 }
