@@ -428,6 +428,7 @@ namespace aw
 			if (m_gameState == GameState::RUNNING)
 			{
 				m_gameState = GameState::PAUSED;
+				m_gui.setActiveLayer(3);
 			}
 
 			m_ignoreNextKeyEvent = true;

@@ -135,7 +135,7 @@ namespace sfchat
 			: socket(std::unique_ptr<sf::TcpSocket>(new sf::TcpSocket)), uid(0)
 		{
 			//generate a unique ID from location in memory
-			uid = (sf::Uint32)socket.get();
+			uid = reinterpret_cast<uintptr_t>(socket.get());
 		}
 		std::unique_ptr<sf::TcpSocket> socket;
 		sf::Uint32 uid;

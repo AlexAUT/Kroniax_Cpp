@@ -76,11 +76,13 @@ set(
         ${INC_DIR}/modules/states/menu.hpp
         ${INC_DIR}/modules/states/state.hpp
         ${INC_DIR}/modules/networkHandler.hpp
+	${INC_DIR}/modules/chatHandler.hpp    
         ${INC_DIR}/modules/settings.hpp
         ${INC_DIR}/modules/stateMachine.hpp
         ${INC_DIR}/modules/windowHandler.hpp
         ${INC_DIR}/utilities/anyType.hpp
         ${INC_DIR}/utilities/hash.hpp
+	${INC_DIR}/sfchat/sfchat.h
         ${INC_DIR}/application.hpp
 	${INC_DIR}/gui/guiBaseClass.cpp
         ${INC_DIR}/gui/guiController.cpp
@@ -101,11 +103,13 @@ set(
         ${INC_DIR}/modules/states/menu.cpp
         ${INC_DIR}/modules/states/state.cpp
         ${INC_DIR}/modules/networkHandler.cpp
-        ${INC_DIR}/modules/settings.cpp
+	${INC_DIR}/modules/chatHandler.cpp        
+	${INC_DIR}/modules/settings.cpp
         ${INC_DIR}/modules/stateMachine.cpp
         ${INC_DIR}/modules/windowHandler.cpp
         ${INC_DIR}/utilities/hash.cpp
-        ${INC_DIR}/application.cpp
+	${INC_DIR}/sfchat/sfchat.cpp
+	${INC_DIR}/application.cpp
 	${INC_DIR}/main.cpp
 )
 
