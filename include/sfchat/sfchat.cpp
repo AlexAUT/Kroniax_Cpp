@@ -80,21 +80,22 @@ sf::Packet& operator >> (sf::Packet& packet, NetData& nd)
 ///***Chat class***///
 //ctor
 Chat::Chat()
-	: m_allowInput(false),
-	m_lastKey(sf::Keyboard::Unknown),
-	m_outputString(""), //uhm, what?
-	m_currentState(NotConnected),
-	m_loggingEnabled(false), //this value is overriden by Create and Connect, regardless
-	m_timestampEnabled(true),
-	m_runThread(false),
-	m_port(1000u),
-	m_localTime(0),
+    :
+	m_outputString(""), //uhm, what?   
 	m_username("ChatUser"),
-	m_uid(0u),
-	m_currentTeam(TEAM_ALL),
-	m_localNameChange(false),
-	m_sendToTeam(false),
-	m_motd("Welcome to sfchat! Commands available are: /nick, /me, /team, /connect, /disconnect and /play")
+    m_uid(0u),
+    m_currentTeam(TEAM_ALL),
+    m_motd("Welcome to sfchat! Commands available are: /nick, /me, /team, /connect, /disconnect and /play"),
+    m_allowInput(false),
+    m_lastKey(sf::Keyboard::Unknown),
+    m_currentState(NotConnected),
+    m_loggingEnabled(false), //this value is overriden by Create and Connect, regardless
+    m_timestampEnabled(true),
+    m_port(1000u),
+    m_localNameChange(false),
+    m_sendToTeam(false),
+    m_runThread(false),
+    m_localTime(0)
 {
 #ifdef SEED_RAND
 	srand((unsigned)time(0));
@@ -969,8 +970,8 @@ void Chat::m_Client(void)
 				//std::cout << "Received: " << nd.message << std::endl;
 #endif
 				//if message is new send to output buffer
-				if(m_outputBuffer.empty() || nd.message != m_outputBuffer.back().text
-					&& nd.uid == m_uid) //and message is not a server message
+                if(m_outputBuffer.empty() || (nd.message != m_outputBuffer.back().text
+                    && nd.uid == m_uid)) //and message is not a server message
 				{
 					sf::Lock lock(m_mutex);
 					m_OutputString(nd.message);

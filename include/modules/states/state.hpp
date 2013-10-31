@@ -22,6 +22,8 @@ namespace aw
 		virtual void update(const sf::Time &frameTime) = 0;
 		virtual void render(sf::RenderWindow &window) = 0;
 
+        virtual ~State();
+
 	protected:
 		void changeActiveState(const std::string &name);
 

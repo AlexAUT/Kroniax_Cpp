@@ -18,9 +18,9 @@ void initGui(aw::GuiController &gui);
 
 namespace aw
 {
-	Game::Game(StateMachine &statemachine, MessageBus &messageBus) :
-		m_active(false),
+	Game::Game(StateMachine &statemachine, MessageBus &messageBus) :		
 		State(statemachine),
+        m_active(false),
 		m_messageBus(messageBus),
 		m_ignoreNextKeyEvent(false),
 		m_gameState(GameState::STOPPED),

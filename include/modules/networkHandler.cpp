@@ -11,7 +11,8 @@
 namespace aw
 {
 	NetworkHandler::NetworkHandler(MessageBus &messageBus) :
-		m_messageBus(messageBus)
+        m_messageBus(messageBus),
+        m_connected(false)
 	{
 		m_messageBus.addReceiver(this);
 	}
