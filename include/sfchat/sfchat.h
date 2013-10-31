@@ -117,10 +117,10 @@ namespace sfchat
 	{
 		NetData(std::string name = "", std::string message = "", sf::Uint8 team = TEAM_ALL, sf::Uint32 uid = 0, std::string nickList = "")
 			: name(name),
-			message(message),
-			team(team),
-			uid(uid),
-			nickList(nickList) {};
+			message(message),						
+            nickList(nickList),
+            uid(uid),
+            team(team) {};
 
 		std::string name, message, nickList;
 		sf::Uint32 uid; //unique id of client

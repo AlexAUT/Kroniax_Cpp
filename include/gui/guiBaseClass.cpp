@@ -32,6 +32,7 @@ namespace aw
 	{
 		switch (m_type)
 		{
+        default:
 		case GUI_LIST:
 			if (e.type == sf::Event::KeyPressed)
 			{

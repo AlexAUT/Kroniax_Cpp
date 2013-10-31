@@ -22,9 +22,9 @@ void initMultiplayerHelpLayer(aw::GuiController &gui);
 
 namespace aw
 {
-	Menu::Menu(StateMachine &stateMachine, MessageBus &messageBus):
-		m_active(false),
+	Menu::Menu(StateMachine &stateMachine, MessageBus &messageBus):		
 		State(stateMachine),
+        m_active(false),
 		m_messageBus(messageBus)
 	{
 		m_messageBus.addReceiver(this);
