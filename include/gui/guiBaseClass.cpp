@@ -31,8 +31,7 @@ namespace aw
 	void GuiBaseElement::handleEvent(const sf::Event &e)
 	{
 		switch (m_type)
-		{
-        default:
+		{        
 		case GUI_LIST:
 			if (e.type == sf::Event::KeyPressed)
 			{
@@ -102,6 +101,7 @@ namespace aw
 				}
 			}
 			break;
+        default: break;
 		}
 	}
 
