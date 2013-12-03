@@ -209,7 +209,11 @@ void Chat::Create(sf::Uint16 port, bool log)
 	m_loggingEnabled = log;
 
 	m_timeNow = time(0);
+#if (_MSC_VER >= 1800)
 	localtime_s(m_localTime, &m_timeNow);
+#else
+	m_localTime = localtime(&m_timeNow);
+#endif
 	char buffer[20];
 	strftime(buffer, 20, "%x %X", m_localTime);
 	std::string str = buffer;
@@ -323,7 +327,11 @@ void Chat::EnableLogging(bool b)
 		if(m_logFile.good())
 		{
 			m_timeNow = time(0);
+#if (_MSC_VER >= 1800)
 			localtime_s(m_localTime, &m_timeNow);
+#else
+			m_localTime = localtime(&m_timeNow);
+#endif
 			//opened the file for logging so add a date to say where we started
 			char buffer[40];
 			strftime(buffer, 40, "Log started on: %x %X", m_localTime);
@@ -417,7 +425,11 @@ void Chat::m_OutputString(std::string str, sf::Color colour)
 			if(m_timestampEnabled)
 			{
 				m_timeNow = time(0);
+#if (_MSC_VER >= 1800)
 				localtime_s(m_localTime, &m_timeNow);
+#else
+				m_localTime = localtime(&m_timeNow);
+#endif
 
 				char buffer[10];
 				strftime(buffer, 10, "%X", m_localTime);
@@ -544,7 +556,11 @@ std::string Chat::m_ParseCommand(std::string str)
 void Chat::m_RandName(std::string& name)
 {
 	char buffer[5];
+#if (_MSC_VER >= 1800)
 	sprintf_s(buffer, "%i", rand() % 9999);
+#else
+	sprintf(buffer, "%i", rand() % 9999);
+#endif
 	name += buffer;
 }
 
