@@ -2,8 +2,10 @@
 #define AWSCRIPTMANAGER_HPP
 
 #include <vector>
+#include <list>
 #include <memory>
 
+#include "scriptAction.hpp"
 #include "player.hpp"
 #include "camera.hpp"
 
@@ -22,23 +24,12 @@ namespace aw
 		//It stores two copies of the elemets...
 		Player savedPlayer;
 		Camera savedCamera;
-	};
-
-	enum ScriptType
-	{
-		NOTHING,
-		CHECKPOINT,
-		CHANGE_SPEED,
-		CHANGE_GRAVITY,
-		FLIP_CAMERA,
-		ZOOM,
-		FLICKERING,
-		INVERT_COLOR,
-		COLOR_OVERLAY
+		std::list<ScriptAction> savedScriptActions;
 	};
 
 	struct Script
 	{
+		//Scripttype included from scriptAction.hpp
 		ScriptType type;
 		int xPos;
 		float first, second, third;
@@ -54,7 +45,7 @@ namespace aw
 	public:
 		ScriptManager();
 
-		void update(Player &player, Camera &camera);
+		void update(const sf::Time &frameTime, Player &player, Camera &camera);
 
 		void load(const std::string &path, bool online = false);
 
@@ -63,15 +54,15 @@ namespace aw
 		Checkpoint* getLastCheckPoint();
 
 		void deleteScripts();
-		//Set resetCheckpoints to false if you do not want to reset their states
+		//Set resetCheckpoints to false if you do not want to reset their state
 		//(when respawning the player to a checkpoint)
 		void resetScriptStates(bool resetCheckpoints = true);
 
 	private:
 
 		void checkPointAction(Player &player, Camera &camera);
-		void changeSpeedAction(Player &player, float first);
-		void changeGravityAction(Player &player, float first);
+		void changeSpeedAction(float value, float duration);
+		void changeGravityAction(float value, float duration);
 		void flipCameraAction(Camera &camera);
 		void zoomAction(Camera &camera, float first);
 		void flickeringAction(Camera &camera);
@@ -81,6 +72,7 @@ namespace aw
 
 	private:
 		std::vector<Script> m_scripts;
+		std::list<ScriptAction> m_scriptActions;
 
 		std::unique_ptr<Checkpoint> m_checkpoint;
 	};

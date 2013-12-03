@@ -90,7 +90,7 @@ namespace aw
 			}
 
 			//Check for Scriptactions
-			m_scriptManager.update(m_players[0], m_camera);
+			m_scriptManager.update(frameTime, m_players[0], m_camera);
 
 
 			//update the game timer only when running

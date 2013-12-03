@@ -12,9 +12,19 @@ namespace aw
 		m_checkpoint(nullptr)
 	{}
 
-	void ScriptManager::update(Player &player, Camera &camera)
+	void ScriptManager::update(const sf::Time &frameTime, Player &player, Camera &camera)
 	{
-		//Check for Scripts
+		//Update the scriptActions, they got added through the scripts
+		for (auto &it : m_scriptActions)
+		{
+			it.upate(frameTime, player, camera);
+		}
+
+		//Remove scriptActions when they finished their work
+		m_scriptActions.remove_if( [] (ScriptAction &it) {return it.isFinished(); } );
+
+		//Check for not activated Scripts
+		//Some of them will add scriptActions to the list...
 		for (auto &it : m_scripts)
 		{
 			if (!it.used)
@@ -26,8 +36,8 @@ namespace aw
 					switch (it.type)
 					{
 					case CHECKPOINT: checkPointAction(player, camera); break;
-					case CHANGE_SPEED: changeSpeedAction(player, it.first); break;
-					case CHANGE_GRAVITY: changeGravityAction(player, it.first); break;
+					case CHANGE_SPEED: changeSpeedAction(it.first, it.second); break;
+					case CHANGE_GRAVITY: changeGravityAction(it.first, it.second); break;
 					case FLIP_CAMERA: flipCameraAction(camera); break;
 					case ZOOM: zoomAction(camera, it.first); break;
 					case FLICKERING: flickeringAction(camera); break;
@@ -44,6 +54,7 @@ namespace aw
 	{
 		//Clear the script vector and the checkpoint pointer
 		m_scripts.clear();
+		m_scriptActions.clear();
 		m_checkpoint = nullptr;
 
 		std::fstream file(path.c_str(), std::ios::in);
@@ -136,6 +147,7 @@ namespace aw
 	void ScriptManager::deleteScripts()
 	{
 		m_scripts.clear();
+		m_scriptActions.clear();
 	}
 
 	void ScriptManager::resetScriptStates(bool resetCheckpoints)
@@ -145,11 +157,25 @@ namespace aw
 			m_checkpoint = nullptr;
 		}
 
+		//Reset action scripts too
+		m_scriptActions.clear();
+
+		if (m_checkpoint)
+			m_scriptActions = m_checkpoint->savedScriptActions;
+
 		for (auto &it : m_scripts)
 		{
-			if (it.type != ScriptType::CHECKPOINT || resetCheckpoints)
+			if (resetCheckpoints || !m_checkpoint)
 			{
 				it.used = false;
+			}
+			else
+			{
+				if (m_checkpoint->savedPlayer.getVertexPosition(0).x - 15 < it.xPos * 25.f)
+				{
+					if (it.type != ScriptType::CHECKPOINT)
+						it.used = false;
+				}
 			}
 		}
 	}
@@ -161,15 +187,16 @@ namespace aw
 		m_checkpoint = std::unique_ptr<Checkpoint>(new Checkpoint());
 		m_checkpoint->savedPlayer = player;
 		m_checkpoint->savedCamera = camera;
+		m_checkpoint->savedScriptActions = m_scriptActions;
 	}
 
-	void ScriptManager::changeSpeedAction(Player &player, float first)
+	void ScriptManager::changeSpeedAction(float value, float duration)
 	{
-		player.setSpeedX(first);
+		m_scriptActions.push_back(ScriptAction(ScriptType::CHANGE_SPEED, sf::seconds(duration), value));
 	}
-	void ScriptManager::changeGravityAction(Player &player, float first)
+	void ScriptManager::changeGravityAction(float value, float duration)
 	{
-		player.setGravitation(first);
+		m_scriptActions.push_back(ScriptAction(ScriptType::CHANGE_GRAVITY, sf::seconds(duration), value));
 	}
 	void ScriptManager::flipCameraAction(Camera &camera)
 	{
