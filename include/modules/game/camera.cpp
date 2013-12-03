@@ -31,6 +31,11 @@ namespace aw
 		m_gameView.rotate(180);
 	}
 
+	void Camera::rotate(float angle)
+	{
+		m_gameView.rotate(angle);
+	}
+
 	void Camera::zoom(float factor)
 	{
 		m_gameView.zoom(factor);

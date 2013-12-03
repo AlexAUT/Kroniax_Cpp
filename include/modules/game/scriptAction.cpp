@@ -11,6 +11,7 @@ namespace aw
 	{
 		void changeSpeed(float percentage, float value, Player &player);
 		void changeGravity(float percentage, float value, Player &player);
+		void rotateCamera(float percentage, float value, Camera &camera);
 	}
 
 	//--------------------------------------------------------------------------------------------------------
@@ -51,6 +52,7 @@ namespace aw
 		{
 		case ScriptType::CHANGE_SPEED: priv::changeSpeed(percentage, m_value, player); break;
 		case ScriptType::CHANGE_GRAVITY: priv::changeGravity(percentage, m_value, player); break;
+		case ScriptType::ROTATE_CAMERA: priv::rotateCamera(percentage, m_value, camera); break;
 		default:
 			break;
 		}
@@ -68,13 +70,16 @@ namespace aw
 		void changeSpeed(float percentage, float value, Player &player)
 		{
 			player.setSpeedX(player.getSpeed().x + (value * percentage));
-			std::cout << "Player speed: " << player.getSpeed().x << std::endl;
+			//std::cout << "Player speed: " << player.getSpeed().x << std::endl;
 		}
 		void changeGravity(float percentage, float value, Player &player)
 		{
 			player.setGravitation(player.getGravitation() + (value * percentage));
-			std::cout << "Player gravity: " << player.getGravitation() << std::endl;
-			std::cout << "Player speed: " << player.getSpeed().x << std::endl;
+			//std::cout << "Player gravity: " << player.getGravitation() << std::endl;
+		}
+		void rotateCamera(float percentage, float value, Camera &camera)
+		{
+			camera.rotate(value * percentage);
 		}
 	}
 }

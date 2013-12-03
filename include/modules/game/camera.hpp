@@ -17,6 +17,7 @@ namespace aw
 
 		//Script Actions
 		void flip();
+		void rotate(float angle);
 		void zoom(float factor);
 
 	private:

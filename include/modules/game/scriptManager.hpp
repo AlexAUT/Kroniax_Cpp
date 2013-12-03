@@ -63,7 +63,7 @@ namespace aw
 		void checkPointAction(Player &player, Camera &camera);
 		void changeSpeedAction(float value, float duration);
 		void changeGravityAction(float value, float duration);
-		void flipCameraAction(Camera &camera);
+		void rotateCamera(float value, float duratio);
 		void zoomAction(Camera &camera, float first);
 		void flickeringAction(Camera &camera);
 		void invertColorAction(Camera &camera);
