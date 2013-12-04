@@ -117,10 +117,10 @@ namespace aw
 
 	void MapRenderer::render(sf::RenderWindow &window)
 	{
-		int startCol = static_cast<int>((window.getView().getCenter().x - (window.getView().getSize().x / 2.f)) / 25.f);
+		int startCol = static_cast<int>((window.getView().getCenter().x - (window.getView().getSize().x / 2.f)) / 25.f) - 2;
 
 
-		int colToDraw = startCol + static_cast<int>(window.getView().getSize().x / 25.f) + 1;
+		int colToDraw = startCol + static_cast<int>(window.getView().getSize().x / 25.f) + 5;
 
 		if (startCol < 0)
 		{

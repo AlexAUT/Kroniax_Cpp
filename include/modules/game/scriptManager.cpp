@@ -111,8 +111,8 @@ namespace aw
 			{
 				//The script is visible
 				//update position of toDraw
-				toDraw.setPosition(sf::Vector2f((it.xPos * 25.f) + 10.f, window.getView().getCenter().y - (window.getView().getSize().y / 2.f)));
-				toDraw.setSize(sf::Vector2f(5, window.getView().getSize().y));
+				toDraw.setPosition(sf::Vector2f((it.xPos * 25.f) + 10.f, window.getView().getCenter().y - (window.getView().getSize().y / 2.f) - 250.f));
+				toDraw.setSize(sf::Vector2f(5, window.getView().getSize().x + 500.f));
 
 				//Color depends on the script type
 				switch (it.type)
