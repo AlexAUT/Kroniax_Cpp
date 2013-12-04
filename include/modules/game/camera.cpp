@@ -1,8 +1,11 @@
 #include "camera.hpp"
 
+#include <iostream>
+
 namespace aw
 {
-	Camera::Camera()
+	Camera::Camera() :
+		m_zoomFactor(1.f)
 	{
 		m_defaultView = sf::View(sf::FloatRect(0, 0, 800, 450));
 		m_gameView = m_defaultView;
@@ -38,6 +41,8 @@ namespace aw
 
 	void Camera::zoom(float factor)
 	{
-		m_gameView.zoom(factor);
+		m_zoomFactor += factor;
+		m_gameView.setSize(sf::Vector2f(800, 450));
+		m_gameView.zoom(m_zoomFactor);
 	}
 }

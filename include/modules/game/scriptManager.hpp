@@ -64,7 +64,7 @@ namespace aw
 		void changeSpeedAction(float value, float duration);
 		void changeGravityAction(float value, float duration);
 		void rotateCamera(float value, float duratio);
-		void zoomAction(Camera &camera, float first);
+		void zoomAction(float value, float duration);
 		void flickeringAction(Camera &camera);
 		void invertColorAction(Camera &camera);
 		void colorOverlayAction(Camera &camera);

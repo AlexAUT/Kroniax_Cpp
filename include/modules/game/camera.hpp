@@ -25,6 +25,8 @@ namespace aw
 	private:
 		sf::View m_defaultView; //For gui etc
 		sf::View m_gameView; //For map/player/scripts etc
+
+		float m_zoomFactor;
 	};
 }
 

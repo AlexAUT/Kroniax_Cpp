@@ -12,6 +12,7 @@ namespace aw
 		void changeSpeed(float percentage, float value, Player &player);
 		void changeGravity(float percentage, float value, Player &player);
 		void rotateCamera(float percentage, float value, Camera &camera);
+		void zoomCamera(float percentage, float value, Camera &camera);
 	}
 
 	//--------------------------------------------------------------------------------------------------------
@@ -57,6 +58,7 @@ namespace aw
 		case ScriptType::CHANGE_SPEED: priv::changeSpeed(percentage, m_value, player); break;
 		case ScriptType::CHANGE_GRAVITY: priv::changeGravity(percentage, m_value, player); break;
 		case ScriptType::ROTATE_CAMERA: priv::rotateCamera(percentage, m_value, camera); break;
+		case ScriptType::ZOOM: priv::zoomCamera(percentage, m_value, camera); break;
 		default:
 			break;
 		}
@@ -84,6 +86,10 @@ namespace aw
 		void rotateCamera(float percentage, float value, Camera &camera)
 		{
 			camera.rotate(value * percentage);
+		}
+		void zoomCamera(float percentage, float value, Camera &camera)
+		{
+			camera.zoom(value * percentage);
 		}
 	}
 }
