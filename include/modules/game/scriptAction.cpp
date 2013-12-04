@@ -37,7 +37,11 @@ namespace aw
 		float percentage = 0.f;
 		m_elapsedTime += frameTime;
 		//Calculate the full frameTime of the "new" elapsed time < duration
-		if (m_elapsedTime <= m_duration)
+		if (m_duration == sf::Time::Zero)
+		{
+			percentage = 1.f;
+		}
+		else if (m_elapsedTime <= m_duration)
 		{
 			percentage = frameTime / m_duration;
 		}
