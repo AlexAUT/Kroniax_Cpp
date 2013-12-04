@@ -13,9 +13,8 @@ namespace aw
 		CHANGE_GRAVITY,
 		ROTATE_CAMERA,
 		ZOOM,
-		FLICKERING,
-		INVERT_COLOR,
-		COLOR_OVERLAY
+		CAMERA_OFFSET,
+		SHAKE_CAMERA
 	};
 
 	//Forward declaration
@@ -27,7 +26,7 @@ namespace aw
 	{
 	public:
 		ScriptAction();
-		ScriptAction(ScriptType type, const sf::Time &duration, float value);
+		ScriptAction(ScriptType type, const sf::Time &duration, float value1, float value2 = 0);
 
 		void upate(const sf::Time &frameTime, Player &player, Camera &camera);
 
@@ -40,7 +39,8 @@ namespace aw
 		ScriptType m_type;
 		sf::Time m_elapsedTime;
 		sf::Time m_duration;
-		float m_value;
+		float m_value1;
+		float m_value2;
 	};
 }
 

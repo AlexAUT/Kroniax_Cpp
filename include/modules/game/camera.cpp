@@ -14,7 +14,7 @@ namespace aw
 	void Camera::update(const sf::Vector2f &playerPosition)
 	{
 		//Automatic camera
-		m_gameView.setCenter(sf::Vector2f(playerPosition.x + 200, playerPosition.y));
+		m_gameView.setCenter(sf::Vector2f(playerPosition.x + 200 + m_offset.x, playerPosition.y + m_offset.y));
 	}
 
 	const sf::View &Camera::getDefaultView() const
@@ -44,5 +44,10 @@ namespace aw
 		m_zoomFactor += factor;
 		m_gameView.setSize(sf::Vector2f(800, 450));
 		m_gameView.zoom(m_zoomFactor);
+	}
+
+	void Camera::moveOffset(const sf::Vector2f &val)
+	{
+		m_offset += val;
 	}
 }

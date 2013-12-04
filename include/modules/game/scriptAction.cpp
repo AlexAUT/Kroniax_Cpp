@@ -13,21 +13,23 @@ namespace aw
 		void changeGravity(float percentage, float value, Player &player);
 		void rotateCamera(float percentage, float value, Camera &camera);
 		void zoomCamera(float percentage, float value, Camera &camera);
+		void cameraOffset(float percentage, float xValue, float yValue, Camera &camera);
 	}
 
 	//--------------------------------------------------------------------------------------------------------
 
 	ScriptAction::ScriptAction():
-		ScriptAction(ScriptType::NOTHING, sf::Time::Zero, 0)
+		ScriptAction(ScriptType::NOTHING, sf::Time::Zero, 0, 0)
 	{
 
 	}
 
-	ScriptAction::ScriptAction(ScriptType type, const sf::Time &duration, float value) :
+	ScriptAction::ScriptAction(ScriptType type, const sf::Time &duration, float value1, float value2) :
 		m_type(type),
 		m_elapsedTime(sf::Time::Zero),
 		m_duration(duration),
-		m_value(value)
+		m_value1(value1),
+		m_value2(value2)
 	{
 
 	}
@@ -55,10 +57,11 @@ namespace aw
 
 		switch (m_type)
 		{
-		case ScriptType::CHANGE_SPEED: priv::changeSpeed(percentage, m_value, player); break;
-		case ScriptType::CHANGE_GRAVITY: priv::changeGravity(percentage, m_value, player); break;
-		case ScriptType::ROTATE_CAMERA: priv::rotateCamera(percentage, m_value, camera); break;
-		case ScriptType::ZOOM: priv::zoomCamera(percentage, m_value, camera); break;
+		case ScriptType::CHANGE_SPEED: priv::changeSpeed(percentage, m_value1, player); break;
+		case ScriptType::CHANGE_GRAVITY: priv::changeGravity(percentage, m_value1, player); break;
+		case ScriptType::ROTATE_CAMERA: priv::rotateCamera(percentage, m_value1, camera); break;
+		case ScriptType::ZOOM: priv::zoomCamera(percentage, m_value1, camera); break;
+		case ScriptType::CAMERA_OFFSET: priv::cameraOffset(percentage, m_value1, m_value2, camera);
 		default:
 			break;
 		}
@@ -90,6 +93,10 @@ namespace aw
 		void zoomCamera(float percentage, float value, Camera &camera)
 		{
 			camera.zoom(value * percentage);
+		}
+		void cameraOffset(float percentage, float xValue, float yValue, Camera &camera)
+		{
+			camera.moveOffset(sf::Vector2f(xValue * percentage, yValue * percentage));
 		}
 	}
 }

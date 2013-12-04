@@ -40,9 +40,7 @@ namespace aw
 					case CHANGE_GRAVITY: changeGravityAction(it.first, it.second); break;
 					case ROTATE_CAMERA: rotateCamera(it.first, it.second); break;
 					case ZOOM: zoomAction(it.first, it.second); break;
-					case FLICKERING: flickeringAction(camera); break;
-					case INVERT_COLOR: invertColorAction(camera); break;
-					case COLOR_OVERLAY: colorOverlayAction(camera); break;
+					case CAMERA_OFFSET: cameraOffset(it.first, it.second, it.third); break;
 					default: break;
 					}
 				}
@@ -206,16 +204,8 @@ namespace aw
 	{
 		m_scriptActions.push_back(ScriptAction(ScriptType::ZOOM, sf::seconds(duration), value));
 	}
-	void ScriptManager::flickeringAction(Camera &camera)
+	void ScriptManager::cameraOffset(float xValue, float yValue, float duration)
 	{
-
-	}
-	void ScriptManager::invertColorAction(Camera &camera)
-	{
-
-	}
-	void ScriptManager::colorOverlayAction(Camera &camera)
-	{
-
+		m_scriptActions.push_back(ScriptAction(ScriptType::CAMERA_OFFSET, sf::seconds(duration), xValue, yValue));
 	}
 }
