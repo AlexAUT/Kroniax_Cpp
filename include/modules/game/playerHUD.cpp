@@ -23,13 +23,13 @@ namespace aw
 
 	void PlayerHUD::update(const Player &player)
 	{
-		//static_cast<int> to avoid showing ugly floating numbers...
+		//std::round to avoid showing ugly floating numbers...
 		std::stringstream sstr;
-		sstr << "Speed: " << static_cast<int>(player.getSpeed().x);
+		sstr << "Speed: " << std::round(player.getSpeed().x);
 		m_displaySpeed.setString(sstr.str());
 
 		sstr.str("");
-		sstr << "Gravity: " << static_cast<int>(player.getGravitation());
+		sstr << "Gravity: " << std::round(player.getGravitation());
 		m_displayGravity.setString(sstr.str());
 	}
 
