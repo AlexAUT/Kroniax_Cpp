@@ -159,27 +159,29 @@ namespace aw
 			}
 		}
 		//Draw online scrren depending on the onlinestate
-		if (m_onlineState == OnlineState::LOADING)
+		if (m_gameType == GameType::ONLINE_TIME_CHALLENGE)
 		{
-			m_timeTable.render(window);
-			m_countDownNextAction.render(window, "until the game will start");
+			if (m_onlineState == OnlineState::LOADING)
+			{
+				m_timeTable.render(window);
+				m_countDownNextAction.render(window, "until the game will start");
+			}
+			else if (m_onlineState == OnlineState::FINISHED)
+			{
+				m_timeTable.render(window);
+				m_countDownNextAction.render(window, "until the next level");
+			}
+			else if (m_onlineState == OnlineState::RUNNING)
+			{
+				m_countDownNextAction.render(window, "for this map!");
+			}
+			else if (m_gameState == GameState::CHAT)
+			{
+				sf::RectangleShape overlay(sf::Vector2f(800, 450));
+				overlay.setFillColor(sf::Color(0, 0, 0, 180));
+				window.draw(overlay);
+			}
 		}
-		else if (m_onlineState == OnlineState::FINISHED)
-		{
-			m_timeTable.render(window);
-			m_countDownNextAction.render(window, "until the next level");
-		}
-		else if (m_onlineState == OnlineState::RUNNING)
-		{
-			m_countDownNextAction.render(window, "for this map!");
-		}
-		else if (m_gameState == GameState::CHAT)
-		{
-			sf::RectangleShape overlay(sf::Vector2f(800, 450));
-			overlay.setFillColor(sf::Color(0, 0, 0, 180));
-			window.draw(overlay);
-		}
-
 	}
 
 	void Game::receiveMessage(const Message &msg)
