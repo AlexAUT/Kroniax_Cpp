@@ -72,6 +72,7 @@ set(
         ${INC_DIR}/modules/game/scriptManager.hpp
 	${INC_DIR}/modules/game/scriptAction.hpp
         ${INC_DIR}/modules/game/timeTable.hpp
+	${INC_DIR}/modules/game/playerHUD.hpp
         ${INC_DIR}/modules/states/game.hpp
         ${INC_DIR}/modules/states/intro.hpp
         ${INC_DIR}/modules/states/menu.hpp
@@ -100,6 +101,7 @@ set(
         ${INC_DIR}/modules/game/scriptManager.cpp
 	${INC_DIR}/modules/game/scriptAction.cpp
         ${INC_DIR}/modules/game/timeTable.cpp
+        ${INC_DIR}/modules/game/playerHUD.cpp
         ${INC_DIR}/modules/states/game.cpp
         ${INC_DIR}/modules/states/intro.cpp
         ${INC_DIR}/modules/states/menu.cpp
