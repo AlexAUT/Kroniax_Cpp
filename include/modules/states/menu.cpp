@@ -414,13 +414,13 @@ namespace aw
 	
 	void Menu::tutorial2Layer()
 	{
-		if (m_gui.getSelectedElement()->getID() == "start level6")
+		if (m_gui.getSelectedElement()->getID() == "start level4")
 		{
 			//start level6
 			//Send message... So the game will start...
 			Message msg;
 			msg.ID = aw::hash("start game");
-			std::string name = "Level6";
+			std::string name = "Level4";
 			msg.push_back(name);
 			msg.push_back(static_cast<std::string>("official arcade"));
 			m_messageBus.sendMessage(msg);
@@ -563,10 +563,10 @@ void initTutorialLayers(aw::GuiController &gui)
 	//Will be implemented when needed...
 	//Tutorial2 = layer(3)
 	gui.addLayer();
-	gui.addButton(3, "start level6", sf::Vector2f(300, 345), "Start Level6");
+	gui.addButton(3, "start level6", sf::Vector2f(300, 345), "Start Level4");
 	gui.addButton(3, "back", sf::Vector2f(297, 375), "Back to menu");
-	gui.addLabel(3, "text", sf::Vector2f(50, 120), "Some more Information:\n\n\nYellow horizontal lines will" 
-		"change your speed!\n\nOrange horizontal lines will change your gravity!\n\nBlue lines will affect your view!");
+	gui.addLabel(3, "text", sf::Vector2f(50, 120), "Some more Information:\n\n\nGreen horizontal lines will" 
+		"change your speed!\n\nYellow horizontal lines will change your gravity!\n\nBlue lines will affect your view!");
 
 	//Tutorial3 = layer(4)
 	gui.addLayer();
