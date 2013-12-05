@@ -115,10 +115,11 @@ namespace aw
 			{
 				it.update(frameTime);
 			}
-
 		}
 		//update the camera position
 		m_camera.update(m_players[0].getPosition());
+		//update the playerHUD
+		m_playerHUD.update(m_players[0]);
 	}
 
 	void Game::render(sf::RenderWindow &window)
@@ -182,6 +183,8 @@ namespace aw
 				window.draw(overlay);
 			}
 		}
+		//Draw the playerHUD (speed, gravity)
+		m_playerHUD.render(window);
 	}
 
 	void Game::receiveMessage(const Message &msg)

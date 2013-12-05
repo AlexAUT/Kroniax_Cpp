@@ -13,6 +13,7 @@
 #include "../game/timeTable.hpp"
 #include "../game/gameTimer.hpp"
 #include "../game/countdown.hpp"
+#include "../game/playerHUD.hpp"
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Audio/Music.hpp>
@@ -103,6 +104,7 @@ namespace aw
 		TimeTable m_timeTable;
 		GameTimer m_gameTimer;
 		Countdown m_countDownNextAction;
+		PlayerHUD m_playerHUD;
 
 		GuiController m_gui;//Will display different game screens
 		sf::Clock m_startingTimer;
