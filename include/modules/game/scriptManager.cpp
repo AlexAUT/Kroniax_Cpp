@@ -116,9 +116,9 @@ namespace aw
 				switch (it.type)
 				{
 				case ScriptType::CHECKPOINT: toDraw.setFillColor(sf::Color(255, 127, 36)); break;
-				case ScriptType::CHANGE_GRAVITY: toDraw.setFillColor(sf::Color(138, 43, 226)); break;
-				case ScriptType::CHANGE_SPEED: toDraw.setFillColor(sf::Color(138, 43, 226)); break;
-				default: toDraw.setFillColor(sf::Color(0, 238, 238)); break;
+				case ScriptType::CHANGE_GRAVITY: toDraw.setFillColor(sf::Color(255, 255, 0)); break;
+				case ScriptType::CHANGE_SPEED: toDraw.setFillColor(sf::Color(127, 250, 0)); break;
+				default: toDraw.setFillColor(sf::Color(0, 0, 205)); break;//Camera scripts
 				}
 
 				//Draw it
