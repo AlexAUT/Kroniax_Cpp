@@ -650,7 +650,7 @@ namespace aw
 		//Load player information (speed, gravity, spawn)
 		m_players[0].loadInformation(path);
 		//Call player update with 0 frametime to prevent a instant death.
-		m_players[0].update(sf::Time());
+		m_players[0].update(sf::Time::Zero);
 		//Update Camera position
 		m_camera.update(m_players[0].getPosition());
 		//Load all the scripts
