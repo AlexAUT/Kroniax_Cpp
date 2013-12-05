@@ -340,6 +340,7 @@ namespace aw
 						m_timeTable.addPlayer(*name, *time);
 						m_players.push_back(Player(*name));
 						m_players.back().loadInformation(m_levelName);
+						m_players.back().setColor(sf::Color(145, 145, 145));
 					}
 					else
 					{
