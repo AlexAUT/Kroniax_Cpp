@@ -482,8 +482,8 @@ namespace aw
 	{
 		m_socket.setBlocking(true);
 
-		//sf::Socket::Status status = m_socket.connect("82.211.56.205", 12121, sf::seconds(1));
-		sf::Socket::Status status = m_socket.connect("127.0.0.1", 12121, sf::seconds(1));
+		sf::Socket::Status status = m_socket.connect("82.211.56.205", 12121, sf::seconds(1));
+		//sf::Socket::Status status = m_socket.connect("127.0.0.1", 12121, sf::seconds(1));
 
 		if (status != sf::Socket::Done)
 		{
