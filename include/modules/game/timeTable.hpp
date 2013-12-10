@@ -19,12 +19,13 @@ namespace aw
 		{
 			std::string name;
 			float time;
+			sf::Color color;
 
-			Player() : Player("", 0)
+			Player() : Player("", 0, sf::Color::White)
 			{}
 
-			Player(const std::string &pName, float pTime):
-				name(pName), time(pTime)
+			Player(const std::string &pName, float pTime, const sf::Color &pColor):
+				name(pName), time(pTime), color(pColor)
 			{
 
 			}
@@ -36,12 +37,15 @@ namespace aw
 	public:
 		TimeTable();
 
-		void addPlayer(const std::string &name, float time = 0);
+		void addPlayer(const std::string &name, float time, const sf::Color &color);
 		void removePlayer(const std::string &name);
 		void removePlayer(std::size_t index);
 
 		void addTime(const std::string &name, float time);
 		void addTime(std::size_t index, float time);
+
+		void addLadderTime(const std::string &name, float time);
+		void clearLadder();
 
 		void resetTimes();
 
@@ -57,7 +61,8 @@ namespace aw
 		void orderTimeTable();
 
 	private:
-		std::vector<priv::Player> m_players;
+		std::vector<priv::Player> m_currentHighscore;
+		std::vector<priv::Player> m_ladder;
 
 		sf::Font m_font;
 

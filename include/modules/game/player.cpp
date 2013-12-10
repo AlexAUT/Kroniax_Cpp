@@ -109,6 +109,11 @@ namespace aw
 		updateBody();
 	}
 
+	void Player::setName(const std::string &name)
+	{
+		m_name = name;
+	}
+
 	void Player::setPosition(const sf::Vector2f &position)
 	{
 		m_position = position;

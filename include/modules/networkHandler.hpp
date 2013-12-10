@@ -28,6 +28,7 @@ namespace aw
 		MessageBus &m_messageBus;
 
 		bool m_connected;
+		std::string m_name;
 
 		sf::TcpSocket m_socket;
 	};

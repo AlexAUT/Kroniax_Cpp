@@ -37,6 +37,7 @@ namespace aw
 
 		void resetToStartSettings();
 
+		void setName(const std::string &name);
 		void setPosition(const sf::Vector2f &position);
 		void setSpeedX(float xSpeed);
 		void setSpeed(const sf::Vector2f speed);

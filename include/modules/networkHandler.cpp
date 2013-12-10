@@ -8,6 +8,8 @@
 #include <SFML/Network/Packet.hpp>
 #include <SFML/Network/IpAddress.hpp>
 
+#include <iostream>
+
 namespace aw
 {
 	NetworkHandler::NetworkHandler(MessageBus &messageBus) :
@@ -239,6 +241,7 @@ namespace aw
 					float timeLeft;
 					receivedData >> timeLeft;
 					msg.push_back(timeLeft);
+					msg.push_back(m_name);
 
 					while (!receivedData.endOfPacket())
 					{
@@ -318,6 +321,20 @@ namespace aw
 					msg.push_back(name);
 					msg.push_back(time);
 
+					m_messageBus.sendMessage(msg);
+				}
+				else if (command == aw::hash("global ladder"))
+				{
+					Message msg;
+					msg.ID = aw::hash("global ladder");
+					std::string name;
+					float time;
+					while (!receivedData.endOfPacket())
+					{
+						receivedData >> name >> time;
+						msg.push_back(name);
+						msg.push_back(time);
+					}
 					m_messageBus.sendMessage(msg);
 				}
 				else if (command == aw::hash("ping request"))
@@ -421,6 +438,7 @@ namespace aw
 		else if (msg.ID == aw::hash("connect"))
 		{
 			std::string name = *msg.getValue<std::string>(0);
+			m_name = name;
 			Message answer;
 			answer.ID = aw::hash("result connecting");
 			answer.push_back(connectToMasterServer(name));
@@ -430,7 +448,6 @@ namespace aw
 		{
 			if (m_connected)
 			{
-
 				sf::Packet toSend;
 				toSend << aw::hash("get game list");
 				m_socket.send(toSend);
@@ -465,8 +482,8 @@ namespace aw
 	{
 		m_socket.setBlocking(true);
 
-		sf::Socket::Status status = m_socket.connect("82.211.56.205", 12121, sf::seconds(1));
-		//sf::Socket::Status status = m_socket.connect("127.0.0.1", 12121, sf::seconds(1));
+		//sf::Socket::Status status = m_socket.connect("82.211.56.205", 12121, sf::seconds(1));
+		sf::Socket::Status status = m_socket.connect("127.0.0.1", 12121, sf::seconds(1));
 
 		if (status != sf::Socket::Done)
 		{

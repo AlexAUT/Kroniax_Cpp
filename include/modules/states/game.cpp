@@ -4,8 +4,6 @@
 #include <sstream>
 #include <random>
 
-
-
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
@@ -15,6 +13,8 @@
 
 //Global Function
 void initGui(aw::GuiController &gui);
+
+sf::Color getRandomColor();
 
 namespace aw
 {
@@ -312,8 +312,8 @@ namespace aw
 				m_countDownNextAction.setTime(*msg.getValue<float>(3));
 			}
 			//Set up the player vector
-			//Push_back main player [0] is ALWAYS the you^^
-			//[0] is always the on this device
+			//Push_back main player [0]
+			//[0] is always the one this device
 			m_players.clear();
 			m_players.push_back(Player());
 
@@ -325,26 +325,39 @@ namespace aw
 				//Set up all online players
 				for (std::size_t i = 0; i < m_players.size(); ++i)
 				{
-					m_players[i] = m_players[0];
+					m_players[i].setPosition(m_players[0].getPosition());
+					m_players[i].setGravitation(m_players[0].getGravitation());
 				}
 				//First clear the timeTable
 				m_timeTable.clear();
+				//Set the main player name
+				m_players[0].setName(*msg.getValue<std::string>(4));
 				//load players and times
-				for (std::size_t i = 4;; i += 2)
+				for (std::size_t i = 5;; i += 2)
 				{
 					std::string *name = msg.getValue<std::string>(i);
 					float *time = msg.getValue<float>(i + 1);
 
 					if (name && time)
 					{
-						m_timeTable.addPlayer(*name, *time);
-						m_players.push_back(Player(*name));
-						m_players.back().loadInformation(m_levelName);
-						m_players.back().setColor(sf::Color(145, 145, 145));
+						sf::Color randomColor = getRandomColor();
+
+						if (*name == m_players[0].getName())
+						{
+							randomColor = sf::Color::White;
+						}
+						else
+						{
+							m_players.push_back(Player(*name));
+							m_players.back().setSpeed(m_players[0].getSpeed());
+							m_players.back().setGravitation(m_players[0].getGravitation());
+							m_players.back().setColor(randomColor);
+						}
+						m_timeTable.addPlayer(*name, *time, randomColor);
 					}
 					else
 					{
-						m_players.pop_back();
+						//m_players.pop_back();
 						break;
 					}
 				}
@@ -356,7 +369,9 @@ namespace aw
 		{
 			m_players.push_back(Player(*msg.getValue<std::string>(0)));
 			m_players.back().loadInformation(m_levelName);
-			m_timeTable.addPlayer(*msg.getValue<std::string>(0));
+			sf::Color randomColor = getRandomColor();
+			m_players.back().setColor(randomColor);
+			m_timeTable.addPlayer(*msg.getValue<std::string>(0), 0, randomColor);
 		}
 		//Remove a player from m_players and timetable (same index)
 		else if (msg.ID == aw::hash("remove player"))
@@ -409,6 +424,15 @@ namespace aw
 		else if (msg.ID == aw::hash("new best time"))
 		{
 			m_timeTable.addTime(*msg.getValue<std::string>(0), *msg.getValue<float>(1));
+		}
+		else if (msg.ID == aw::hash("global ladder"))
+		{
+			std::cout << "YES LADDER!" << std::endl;
+			m_timeTable.clearLadder();
+			for (int i = 0; msg.getValue<std::string>(i) != nullptr; i += 2)
+			{
+				m_timeTable.addLadderTime(*msg.getValue<std::string>(i), *msg.getValue<float>(i + 1));
+			}
 		}
 		//Set the volume of the music
 		else if (msg.ID == aw::hash("sound settings"))
@@ -914,4 +938,23 @@ void initGui(aw::GuiController &gui)
 	gui.addButton(3, "back", sf::Vector2f(250, 250), "Back to menu");
 	gui.addLabel(3, "", sf::Vector2f(250, 100), "Game is paused");
 	gui.getElement(3, 2)->setCharacterSize(35);
+}
+
+
+sf::Color getRandomColor()
+{
+	//Random with level will be load from the brackground(old Levels)
+	// Seed with a real random value, if available
+	std::random_device rd;
+
+	// Choose a random range
+	std::default_random_engine e1(rd());
+	std::uniform_int_distribution<int> uniform_dist(50, 180);
+
+	sf::Color returnColor;
+	returnColor.r = uniform_dist(e1);
+	returnColor.g = uniform_dist(e1);
+	returnColor.b = uniform_dist(e1);
+
+	return returnColor;
 }

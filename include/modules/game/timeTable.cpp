@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include <iostream>
 
 namespace aw
 {
@@ -14,19 +15,19 @@ namespace aw
 		m_font.loadFromFile("data/fonts/visitor1.ttf");
 	}
 
-	void TimeTable::addPlayer(const std::string &name, float time)
+	void TimeTable::addPlayer(const std::string &name, float time, const sf::Color &color)
 	{
-		m_players.push_back(priv::Player(name, time));
+		m_currentHighscore.push_back(priv::Player(name, time, color));
 		//Set up the array
 	}
 
 	void TimeTable::removePlayer(const std::string &name)
 	{
-		for (auto it = m_players.begin(); it != m_players.end(); ++it)
+		for (auto it = m_currentHighscore.begin(); it != m_currentHighscore.end(); ++it)
 		{
 			if (it->name == name)
 			{
-				m_players.erase(it);
+				m_currentHighscore.erase(it);
 				break;
 			}
 		}
@@ -34,9 +35,9 @@ namespace aw
 	
 	void TimeTable::removePlayer(std::size_t index)
 	{
-		if (index < m_players.size())
+		if (index < m_currentHighscore.size())
 		{
-			m_players.erase(m_players.begin() + index);
+			m_currentHighscore.erase(m_currentHighscore.begin() + index);
 		}
 	}
 
@@ -45,20 +46,30 @@ namespace aw
 		//Serach the player
 		std::size_t index = getPlayerIndex(name);
 		//Add the new time
-		m_players[index].time = time;
+		m_currentHighscore[index].time = time;
 	}
 
 	void TimeTable::addTime(std::size_t index, float time)
 	{
-		if (index < m_players.size())
+		if (index < m_currentHighscore.size())
 		{
-			m_players[index].time = time;
+			m_currentHighscore[index].time = time;
 		}
+	}
+
+	void TimeTable::addLadderTime(const std::string &name, float time)
+	{
+		m_ladder.push_back(priv::Player(name, time, sf::Color::White));
+	}
+
+	void TimeTable::clearLadder()
+	{
+		m_ladder.clear();
 	}
 
 	void TimeTable::resetTimes()
 	{
-		for (auto &it : m_players)
+		for (auto &it : m_currentHighscore)
 		{
 			it.time = 0;
 		}
@@ -68,55 +79,69 @@ namespace aw
 	{
 		sf::RectangleShape overlay(sf::Vector2f(800, 450));
 		overlay.setFillColor(sf::Color(0, 0, 0, 180));
-
+		//The highscore of this current game
 		sf::Text toDraw;
 		toDraw.setFont(m_font);
 
-		toDraw.setPosition(250, 50);
-		toDraw.setString("Scoreboard");
-		toDraw.setCharacterSize(45);
+		toDraw.setPosition(175, 50);
+		toDraw.setString("Timetable");
+		toDraw.setCharacterSize(35);
 		window.draw(toDraw);
 
-		toDraw.setCharacterSize(25);
+		toDraw.setCharacterSize(18);
 
 		for (std::size_t i = 0; i < 20; ++i)
 		{
-			if (i >= m_players.size())
+			if (i >= m_currentHighscore.size())
 			{
-				toDraw.setPosition(sf::Vector2f((static_cast<int>(i / 10) * 350) + 100.f, 120 + i * 25.f - (static_cast<int>(i / 10) * 250)));
-				toDraw.setString("Dummy");
-				window.draw(toDraw);
-				//break;
+				break;
 			}
 			else
 			{
-				toDraw.setPosition(sf::Vector2f((static_cast<int>(i / 10) * 300) + 100.f, 120 + i * 25.f));
+				toDraw.setPosition(sf::Vector2f((static_cast<int>(i / 10) * 250) + 35.f, 120 + (i % 10) * 25.f));
 				std::stringstream sstr;
-				if (m_players[i].time > 0.5f)
+				if (m_currentHighscore[i].time > 0.5f)
 				{
-					sstr << m_players[i].time << "sec";
+					sstr << (i+1) << ": " << m_currentHighscore[i].time << " sec  ";
 				}
 				else
 				{
-					sstr << "no time";
+					sstr << (i+1) <<  " no time  ";
 				}
-				toDraw.setString(m_players[i].name + "   " + sstr.str());
+				toDraw.setString(sstr.str() + m_currentHighscore[i].name);
+				toDraw.setColor(m_currentHighscore[i].color);
 				window.draw(toDraw);
 			}
+		}
+
+		//LADDER of the current MAP
+		toDraw.setPosition(600, 50);
+		toDraw.setString("Ladder");
+		toDraw.setCharacterSize(35);
+		toDraw.setColor(sf::Color::White);
+		window.draw(toDraw);
+		toDraw.setCharacterSize(18);
+		for (std::size_t i = 0; i < m_ladder.size(); ++i)
+		{
+			toDraw.setPosition(sf::Vector2f(550.f, 120 + i * 25.f));
+			std::stringstream sstr;
+			sstr << (i + 1) << ": " << m_ladder[i].time << " sec  " << m_ladder[i].name;
+			toDraw.setString(sstr.str());
+			window.draw(toDraw);
 		}
 	}
 
 	void TimeTable::clear()
 	{
-		m_players.clear();
+		m_currentHighscore.clear();
 	}
 
 
 	std::size_t TimeTable::getPlayerIndex(const std::string &name)
 	{
-		for (std::size_t i = 0; i < m_players.size(); ++i)
+		for (std::size_t i = 0; i < m_currentHighscore.size(); ++i)
 		{
-			if (name == m_players[i].name)
+			if (name == m_currentHighscore[i].name)
 			{
 				return i;
 			}
@@ -127,15 +152,15 @@ namespace aw
 
 	float TimeTable::getTime(std::size_t index)
 	{
-		if (index < m_players.size())
+		if (index < m_currentHighscore.size())
 		{
-			if (m_players[index].time < 1)
+			if (m_currentHighscore[index].time < 1)
 			{
 				return 1000000;
 			}
 			else
 			{
-				return m_players[index].time;
+				return m_currentHighscore[index].time;
 			}
 		}
 
