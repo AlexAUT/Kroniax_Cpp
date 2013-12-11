@@ -5,6 +5,8 @@
 
 #include <SFML/Network/TcpSocket.hpp>
 
+#include <string>
+
 namespace aw
 {
 	class MessageBus;
