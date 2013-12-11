@@ -427,7 +427,6 @@ namespace aw
 		}
 		else if (msg.ID == aw::hash("global ladder"))
 		{
-			std::cout << "YES LADDER!" << std::endl;
 			m_timeTable.clearLadder();
 			for (int i = 0; msg.getValue<std::string>(i) != nullptr; i += 2)
 			{
