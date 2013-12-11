@@ -5,18 +5,33 @@
 
 namespace aw
 {
+	MapCollum::MapCollum() :
+		m_vertexArray(sf::Triangles)
+	{
+
+	}
+
 	void MapCollum::addRect(const sf::Vector2f &position, const sf::Vector2f &size, const sf::Color &color)
 	{
-		m_rects.push_back(sf::RectangleShape(size));
-		m_rects.back().setPosition(position);
-		m_rects.back().setFillColor(color);
+		//Triangle1:
+		//Left top
+		m_vertexArray.append(sf::Vertex(sf::Vector2f(position), color));
+		//Right top
+		m_vertexArray.append(sf::Vertex(sf::Vector2f(position.x + size.x, position.y), color));
+		//Left bottom
+		m_vertexArray.append(sf::Vertex(sf::Vector2f(position.x, position.y + size.y), color));
+		
+		//Triangle2:
+		//Right top
+		m_vertexArray.append(m_vertexArray[m_vertexArray.getVertexCount() - 2]);
+		//Right bottom
+		m_vertexArray.append(sf::Vertex(sf::Vector2f(position + size), color));
+		//Left bottom
+		m_vertexArray.append(m_vertexArray[m_vertexArray.getVertexCount() - 3]);
 	}
 
 	void MapCollum::render(sf::RenderWindow &window)
 	{
-		for (auto &it : m_rects)
-		{
-			window.draw(it);
-		}
+		window.draw(m_vertexArray);
 	}
 }

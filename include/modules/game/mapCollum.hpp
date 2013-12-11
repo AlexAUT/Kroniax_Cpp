@@ -2,9 +2,7 @@
 #define AWMAPCOLLUM_HPP
 
 /////INCLUDES/////
-#include <SFML/Graphics/RectangleShape.hpp>
-
-#include <vector>
+#include <SFML/Graphics/VertexArray.hpp>
 
 /////FORWARD DECL/////
 namespace sf
@@ -17,6 +15,8 @@ namespace aw
 	class MapCollum
 	{
 	public:
+		MapCollum();
+
 		void addRect(const sf::Vector2f &position, const sf::Vector2f &size, const sf::Color &color);
 
 		void render(sf::RenderWindow &window);
@@ -24,7 +24,7 @@ namespace aw
 	private:
 
 	private:
-		std::vector<sf::RectangleShape> m_rects;
+		sf::VertexArray m_vertexArray;
 	};
 }
 
