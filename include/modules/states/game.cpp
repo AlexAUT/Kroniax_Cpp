@@ -340,7 +340,7 @@ namespace aw
 
 					if (name && time)
 					{
-						sf::Color randomColor = getRandomColor();
+						sf::Color randomColor;
 
 						if (*name == m_players[0].getName())
 						{
@@ -348,6 +348,7 @@ namespace aw
 						}
 						else
 						{
+							randomColor = getRandomColor();
 							m_players.push_back(Player(*name));
 							m_players.back().setSpeed(m_players[0].getSpeed());
 							m_players.back().setGravitation(m_players[0].getGravitation());

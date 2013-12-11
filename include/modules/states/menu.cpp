@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 
+#include <algorithm>
 #include <random>
 
 #include <SFML/Window/Event.hpp>
@@ -85,7 +86,7 @@ namespace aw
 		//Update the levelinformation 
 		updateLevelInformation();
 		//Will update the gameInformation Browser if this layer is active
-		updateGameInformation();
+		updateGameInformation(frameTime);
 	}
 
 	void Menu::render(sf::RenderWindow &window)
@@ -238,10 +239,19 @@ namespace aw
 		m_mapRenderer.load(path);
 	}
 
-	void Menu::updateGameInformation()
+	void Menu::updateGameInformation(const sf::Time &frameTime)
 	{
 		if (m_gui.getActiveLayerInt() == 9)
 		{
+			m_timeSinceUpdateGameList += frameTime;
+			if (m_timeSinceUpdateGameList > sf::seconds(7))
+			{
+				m_timeSinceUpdateGameList = sf::Time::Zero;
+				Message msg;
+				msg.ID = aw::hash("request game list");
+				m_messageBus.sendMessage(msg);
+			}
+
  			std::string selectedMap = m_gui.getElement(9, 0)->getText();
 
 			for (std::size_t i = 0; i < m_gameList.size(); ++i)
@@ -502,7 +512,10 @@ namespace aw
 			Message msg;
 			msg.ID = aw::hash("connect");
 			//Pushback the name of the player
-			msg.push_back(m_gui.getElement(7, 0)->getText());
+			std::string name = m_gui.getElement(7, 0)->getText();
+			//lowercase the name (the server will do this too, without it the timetable would be bugged)
+			std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+			msg.push_back(name);
 			
 			m_messageBus.sendMessage(msg);
 		}

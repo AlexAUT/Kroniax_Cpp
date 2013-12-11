@@ -38,7 +38,7 @@ namespace aw
 		void loadRandomLevel();
 
 		void updateLevelInformation();
-		void updateGameInformation();
+		void updateGameInformation(const sf::Time &frameTime);
 
 		//Gui action events (when a button is triggered etc.)
 		void buttonAction();
@@ -90,6 +90,7 @@ namespace aw
 			{}
 		};
 		std::vector<GameInformation> m_gameList; //Will be used to store the online serverlist
+		sf::Time m_timeSinceUpdateGameList;
 	};
 }
 
