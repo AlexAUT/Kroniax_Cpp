@@ -636,11 +636,11 @@ void initMultiplayerLayers(aw::GuiController &gui)
 {
 	//Layer 7 // set up connection layer
 	gui.addLayer();
-	gui.addInput(7, "name", sf::Vector2f(345, 125), "Player");
+	gui.addInput(7, "name", sf::Vector2f(345, 150), "Player");
 	gui.getElement(7, 0)->setMaxTextLength(12);
-	gui.addLabel(7, "", sf::Vector2f(250, 125), "Name:");
-	gui.addButton(7, "submit", sf::Vector2f(325, 200), "Submit");
-	gui.addButton(7, "back", sf::Vector2f(325, 240), "Back");
+	gui.addLabel(7, "", sf::Vector2f(250, 150), "Name:");
+	gui.addButton(7, "submit", sf::Vector2f(325, 225), "Submit");
+	gui.addButton(7, "back", sf::Vector2f(325, 265), "Back");
 
 	//Layer 8 //Connection failed layer
 	gui.addLayer();
