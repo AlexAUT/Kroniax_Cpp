@@ -662,7 +662,7 @@ void initCreditsLayer(aw::GuiController &gui)
 
 	gui.addLabel(6, "credit", sf::Vector2f(50, 145), "Developed by Alexander Weinrauch (AlexAUT).");
 	gui.addLabel(6, "credit", sf::Vector2f(50, 195), "Special Thanks to:");
-	gui.addLabel(6, "credit", sf::Vector2f(150, 235), "Laurent for SFML!");
+	gui.addLabel(6, "credit", sf::Vector2f(150, 235), "Laurent Gomila for SFML!");
 	gui.addLabel(6, "credit", sf::Vector2f(150, 265), "fallahn for sfChat (Chat system)");
 	gui.addLabel(6, "credit", sf::Vector2f(150, 295), "MafiaFLairBeatz for the music!");
 	gui.addLabel(6, "credit", sf::Vector2f(150, 325), "Machinimasound for the music!");
