@@ -15,6 +15,7 @@ namespace aw
 	}
 
 	GuiBaseElement::GuiBaseElement(GuiType type, const std::string& ID, const sf::Vector2f& position, const std::string& text) :
+		m_maxLength(1000),
 		m_type(type),
 		m_selected(false),
 		m_selectable(type != GUI_LABEL), // Labels are not selectable
@@ -80,10 +81,14 @@ namespace aw
 				// Ensure the unicode character is printable
 				if (unicode > 30 && (unicode < 127 || unicode > 159))
 				{
-					sf::String string = m_body.getString();
-					string += unicode;
-					m_body.setString(string);
-					createSelectionVertices();
+					//Check if the text isn't too long
+					if (m_body.getString().getSize() < m_maxLength)
+					{
+						sf::String string = m_body.getString();
+						string += unicode;
+						m_body.setString(string);
+						createSelectionVertices();
+					}
 				}
 			}
 			else if (e.type == sf::Event::KeyPressed)
@@ -235,6 +240,19 @@ namespace aw
 	{
 		m_body.setCharacterSize(size);
 		createSelectionVertices();
+	}
+
+	void GuiBaseElement::setMaxTextLength(std::size_t length)
+	{
+		m_maxLength = length;
+
+		if (m_body.getString().getSize() > m_maxLength)
+		{
+			sf::String text = m_body.getString();
+			text.erase(m_maxLength, text.getSize() - m_maxLength);
+			m_body.setString(text);
+			createSelectionVertices();
+		}
 	}
 
 	void GuiBaseElement::setObjectToCenter(int windowWidth)

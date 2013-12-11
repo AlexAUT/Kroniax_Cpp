@@ -63,6 +63,7 @@ namespace aw
 		void setText(std::string text);
 		void setActiveEntry(unsigned int index);
 		void setCharacterSize(unsigned int size);
+		void setMaxTextLength(std::size_t length);
 
 		void setObjectToCenter(int windowWidth);
 
@@ -73,6 +74,7 @@ namespace aw
 	private:
 
 		sf::Text m_body;
+		std::size_t m_maxLength;
 
 		GuiType m_type;
 
