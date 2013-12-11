@@ -164,11 +164,17 @@ namespace aw
 		{
 			if (m_onlineState == OnlineState::LOADING)
 			{
+				sf::RectangleShape overlay(sf::Vector2f(800, 450));
+				overlay.setFillColor(sf::Color(0, 0, 0, 180));
+				window.draw(overlay);
 				m_timeTable.render(window);
 				m_countDownNextAction.render(window, "until the game will start");
 			}
 			else if (m_onlineState == OnlineState::FINISHED)
 			{
+				sf::RectangleShape overlay(sf::Vector2f(800, 450));
+				overlay.setFillColor(sf::Color(0, 0, 0, 180));
+				window.draw(overlay);
 				m_timeTable.render(window);
 				m_countDownNextAction.render(window, "until the next level");
 			}
@@ -949,7 +955,7 @@ sf::Color getRandomColor()
 
 	// Choose a random range
 	std::default_random_engine e1(rd());
-	std::uniform_int_distribution<int> uniform_dist(50, 180);
+	std::uniform_int_distribution<int> uniform_dist(125, 230);
 
 	sf::Color returnColor;
 	returnColor.r = uniform_dist(e1);
