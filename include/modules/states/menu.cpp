@@ -613,7 +613,7 @@ void initTutorialLayers(aw::GuiController &gui)
 	//Will be implemented when needed...
 	//Tutorial2 = layer(3)
 	gui.addLayer();
-	gui.addButton(3, "start level6", sf::Vector2f(300, 345), "Start Level4");
+	gui.addButton(3, "start level4", sf::Vector2f(300, 345), "Start Level4");
 	gui.addButton(3, "back", sf::Vector2f(297, 375), "Back to menu");
 	gui.addLabel(3, "text", sf::Vector2f(50, 120), "Some more Information:\n\n\nGreen horizontal lines will" 
 		"change your speed!\n\nYellow horizontal lines will change your gravity!\n\nBlue lines will affect your view!");

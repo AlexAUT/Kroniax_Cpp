@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <random>
+#include <iostream>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
@@ -434,9 +435,11 @@ namespace aw
 		}
 		else if (msg.ID == aw::hash("global ladder"))
 		{
+			
 			m_timeTable.clearLadder();
 			for (int i = 0; msg.getValue<std::string>(i) != nullptr; i += 2)
 			{
+				std::cout << "LADDER" << std::endl;
 				m_timeTable.addLadderTime(*msg.getValue<std::string>(i), *msg.getValue<float>(i + 1));
 			}
 		}
