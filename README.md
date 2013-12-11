@@ -9,9 +9,9 @@ Credits
 -------
 
 * *Music*: MafiaFLairBeatz
-* *Music*: MachinimaSound.com
-* *SFML*: Laurent -> [Repo](https://github.com/LaurentGomila/SFML "Title")
-* *sfchat*: fallahn -> [Repo](https://code.google.com/p/sfchat/ "Title")
+* *Music*: MachinimaSound
+* *SFML*: Laurent Gomila -> [Repo](https://github.com/LaurentGomila/SFML "Title")
+* *sfchat*: fallahn -> [Repo](https://github.com/fallahn/sfchat "Title")
 
 Links
 -----
