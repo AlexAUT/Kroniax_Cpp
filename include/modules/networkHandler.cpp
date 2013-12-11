@@ -8,6 +8,7 @@
 #include <SFML/Network/Packet.hpp>
 #include <SFML/Network/IpAddress.hpp>
 
+const unsigned int KRONIAX_VERSION = 9;
 
 namespace aw
 {
@@ -345,6 +346,12 @@ namespace aw
 					toSend << aw::hash("I am alive");
 					m_socket.send(toSend);
 				}
+				else if (command == aw::hash("version error"))
+				{
+					Message msg;
+					msg.ID = command; // version error
+					m_messageBus.sendMessage(msg);
+				}
 			}
 		}
 	}
@@ -500,6 +507,7 @@ namespace aw
 		sf::Packet toSend;
 		toSend << aw::hash("name");
 		toSend << name;
+		toSend << KRONIAX_VERSION;
 		m_socket.send(toSend);
 		//Return success
 		return true;

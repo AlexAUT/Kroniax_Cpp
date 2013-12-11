@@ -52,6 +52,7 @@ namespace aw
 		void mapSelectionLayer();
 		void connectionFailedLayer();
 		void helpMultiplayerLayer();
+		void versionErrorLayer();
 
 
 	private:

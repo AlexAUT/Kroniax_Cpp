@@ -20,6 +20,7 @@ void initOptionsLayer(aw::GuiController &gui);
 void initCreditsLayer(aw::GuiController &gui);
 void initMultiplayerLayers(aw::GuiController &gui);
 void initMultiplayerHelpLayer(aw::GuiController &gui);
+void initVersionErrorLayer(aw::GuiController &gui);
 
 namespace aw
 {
@@ -66,6 +67,8 @@ namespace aw
 		initMultiplayerLayers(m_gui);
 		//Layer10
 		initMultiplayerHelpLayer(m_gui);
+		//Layer11
+		initVersionErrorLayer(m_gui);
 	}
 
 	void Menu::update(const sf::Time &frameTime)
@@ -216,6 +219,10 @@ namespace aw
 				}
 			}
 		}
+		else if (msg.ID == aw::hash("version error"))
+		{
+ 			m_gui.setActiveLayer(11);
+		}
 	}
 
 	void Menu::resetView()
@@ -355,6 +362,7 @@ namespace aw
 		case 8: connectionFailedLayer(); break;
 		case 9: mapSelectionLayer(); break;
 		case 10: helpMultiplayerLayer(); break;
+		case 11: versionErrorLayer(); break;
 		default: break;
 		}
 	}
@@ -557,6 +565,12 @@ namespace aw
 			m_gui.setActiveLayer(9);
 		}
 	}
+
+	void Menu::versionErrorLayer()
+	{
+		//Only one elemtn, do not need to check
+		m_gui.setActiveLayer(0);
+	}
 }
 
 
@@ -704,4 +718,12 @@ void initMultiplayerHelpLayer(aw::GuiController &gui)
 		"Hold tab to display the scoreboard\n\n"
 		"Press T to open the chat and Escape to close it");
 
+}
+
+void initVersionErrorLayer(aw::GuiController &gui)
+{
+	//Layer11
+	gui.addLayer();
+	gui.addButton(11, "back", sf::Vector2f(360, 350), "Back");
+	gui.addLabel(11, "", sf::Vector2f(100, 160), "Sorry but you are useing an outdated version.\nPlease update your client.");
 }
