@@ -219,9 +219,12 @@ namespace aw
 					Message mapList(aw::hash("game list"));
 					while (!receivedData.endOfPacket())
 					{
-						std::string name;
-						receivedData >> name;
+						std::string name, mapName;
+						unsigned int players;
+						receivedData >> name >> mapName >> players;
 						mapList.push_back(name);
+						mapList.push_back(mapName);
+						mapList.push_back(players);
 					}
 
 					m_messageBus.sendMessage(mapList);

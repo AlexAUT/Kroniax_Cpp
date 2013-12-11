@@ -14,6 +14,8 @@
 
 #include <SFML/Audio/Music.hpp>
 
+#include <vector>
+
 namespace aw
 {
 	class MessageBus;
@@ -36,6 +38,7 @@ namespace aw
 		void loadRandomLevel();
 
 		void updateLevelInformation();
+		void updateGameInformation();
 
 		//Gui action events (when a button is triggered etc.)
 		void buttonAction();
@@ -75,6 +78,18 @@ namespace aw
 		{
 			std::string name, author, difficulty, lentgh = "";
 		} m_levelInformation;
+
+		struct GameInformation
+		{
+			std::string name;
+			std::string mapName;
+			unsigned int playerNumber;
+
+			GameInformation(const std::string &pName, const std::string &pMapName, unsigned int pPlayerNumber) :
+				name(pName), mapName(pMapName), playerNumber(pPlayerNumber)
+			{}
+		};
+		std::vector<GameInformation> m_gameList; //Will be used to store the online serverlist
 	};
 }
 

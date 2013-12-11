@@ -84,6 +84,8 @@ namespace aw
 
 		//Update the levelinformation 
 		updateLevelInformation();
+		//Will update the gameInformation Browser if this layer is active
+		updateGameInformation();
 	}
 
 	void Menu::render(sf::RenderWindow &window)
@@ -196,14 +198,16 @@ namespace aw
 		else if (msg.ID == aw::hash("game list"))
 		{
 			m_gui.getElement(9, 0)->clearEntries();
+			m_gameList.clear();
 
-			for (std::size_t i = 0;; ++i)
+			for (std::size_t i = 0;; i += 3)
 			{
 				std::string *ptr = msg.getValue<std::string>(i);
 
 				if (ptr)
 				{
 					m_gui.getElement(9, 0)->addEntry(*ptr);
+					m_gameList.push_back(GameInformation(*ptr, *msg.getValue<std::string>(i + 1), *msg.getValue<unsigned int>(i + 2)));
 				}
 				else
 				{
@@ -234,6 +238,25 @@ namespace aw
 		m_mapRenderer.load(path);
 	}
 
+	void Menu::updateGameInformation()
+	{
+		if (m_gui.getActiveLayerInt() == 9)
+		{
+ 			std::string selectedMap = m_gui.getElement(9, 0)->getText();
+
+			for (std::size_t i = 0; i < m_gameList.size(); ++i)
+			{
+				if (selectedMap == m_gameList[i].name)
+				{
+					m_gui.getElement(9, 1)->setText("Current Map: " + m_gameList[i].mapName);
+					std::stringstream sstr;
+					sstr << m_gameList[i].playerNumber;
+					m_gui.getElement(9, 2)->setText("Online Players: " + sstr.str());
+					break;
+				}
+			}
+		}
+	}
 
 	void Menu::updateLevelInformation()
 	{
@@ -651,7 +674,7 @@ void initMultiplayerLayers(aw::GuiController &gui)
 	gui.addLayer();
 	gui.addList(9, "select server", sf::Vector2f(275, 165), "Select a server");
 	gui.addLabel(9, "map", sf::Vector2f(275, 220), "Current map: ");
-	gui.addLabel(9, "player", sf::Vector2f(275, 255), "Player: ");
+	gui.addLabel(9, "player", sf::Vector2f(275, 255), "Online Player: ");
 	//gui.addLabel(9, "lentgh", sf::Vector2f(275, 290), "Length: ");
 	//gui.addLabel(9, "author", sf::Vector2f(275, 325), "Author: ");
 	gui.addButton(9, "back", sf::Vector2f(300, 385), "Back");
