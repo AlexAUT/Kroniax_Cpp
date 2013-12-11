@@ -6,7 +6,6 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
-#include <iostream>
 
 namespace aw
 {

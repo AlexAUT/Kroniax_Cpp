@@ -1,7 +1,5 @@
 #include "camera.hpp"
 
-#include <iostream>
-
 namespace aw
 {
 	Camera::Camera() :

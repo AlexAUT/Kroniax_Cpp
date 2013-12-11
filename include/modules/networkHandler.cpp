@@ -8,7 +8,6 @@
 #include <SFML/Network/Packet.hpp>
 #include <SFML/Network/IpAddress.hpp>
 
-#include <iostream>
 
 namespace aw
 {

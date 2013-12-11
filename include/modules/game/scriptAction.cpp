@@ -3,8 +3,6 @@
 #include "player.hpp"
 #include "camera.hpp"
 
-#include <iostream>
-
 namespace aw
 {
 	namespace priv
