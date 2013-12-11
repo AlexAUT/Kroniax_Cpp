@@ -311,12 +311,12 @@ namespace aw
 
 		if (m_type == GUI_INPUT) // Rect surrounding the Text
 		{
-			m_vertices[0] = sf::Vertex(sf::Vector2f(xPos - distance, yPos - distance / 3), sf::Color(165, 165, 165)); // LeftTop
-			m_vertices[1] = sf::Vertex(sf::Vector2f(xPos + width + distance, yPos - distance / 3), sf::Color(165, 165, 165)); // RightTop
-			m_vertices[2] = sf::Vertex(sf::Vector2f(xPos + width + distance, yPos + height + distance), sf::Color(165, 165, 165)); // RightBttom
+			m_vertices[0] = sf::Vertex(sf::Vector2f(xPos - distance, 7 + yPos - distance / 3), sf::Color(165, 165, 165)); // LeftTop
+			m_vertices[1] = sf::Vertex(sf::Vector2f(xPos + width + distance, 7 + yPos - distance / 3), sf::Color(165, 165, 165)); // RightTop
+			m_vertices[2] = sf::Vertex(sf::Vector2f(xPos + width + distance, 7 + yPos + height + distance), sf::Color(165, 165, 165)); // RightBttom
 
 			m_vertices[3] = m_vertices[2]; // RightBttom
-			m_vertices[4] = sf::Vertex(sf::Vector2f(xPos - distance, yPos + height + distance), sf::Color(165, 165, 165)); // LeftBottom
+			m_vertices[4] = sf::Vertex(sf::Vector2f(xPos - distance, 7 + yPos + height + distance), sf::Color(165, 165, 165)); // LeftBottom
 			m_vertices[5] = m_vertices[0]; // LeftTop
 		}
 	}
