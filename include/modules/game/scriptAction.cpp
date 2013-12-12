@@ -44,13 +44,13 @@ namespace aw
 		}
 		else if (m_elapsedTime <= m_duration)
 		{
-			percentage = frameTime / m_duration;
+			percentage = frameTime.asSeconds() / m_duration.asSeconds();
 		}
 		else
 		{
 			//subtract the overtime
 			sf::Time difference = frameTime - (m_elapsedTime - m_duration);
-			percentage = difference / m_duration;
+			percentage = difference.asSeconds() / m_duration.asSeconds();
 		}
 
 		switch (m_type)
