@@ -14,7 +14,9 @@ namespace aw
 		ROTATE_CAMERA,
 		ZOOM,
 		CAMERA_OFFSET,
-		SHAKE_CAMERA
+		SHAKE_CAMERA,
+		TILT_X,
+		TILT_Y
 	};
 
 	//Forward declaration
@@ -26,7 +28,7 @@ namespace aw
 	{
 	public:
 		ScriptAction();
-		ScriptAction(ScriptType type, const sf::Time &duration, float value1, float value2 = 0);
+		ScriptAction(ScriptType type, const sf::Time &duration = sf::Time::Zero, float value1 = 0.f, float value2 = 0.f);
 
 		void upate(const sf::Time &frameTime, Player &player, Camera &camera);
 

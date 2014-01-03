@@ -41,6 +41,8 @@ namespace aw
 					case ROTATE_CAMERA: rotateCamera(it.first, it.second); break;
 					case ZOOM: zoomAction(it.first, it.second); break;
 					case CAMERA_OFFSET: cameraOffset(it.first, it.second, it.third); break;
+					case TILT_X: tiltX(it.first); break;
+					case TILT_Y: tiltY(it.first); break;
 					default: break;
 					}
 				}
@@ -118,6 +120,8 @@ namespace aw
 				case ScriptType::CHECKPOINT: toDraw.setFillColor(sf::Color(255, 127, 36)); break;
 				case ScriptType::CHANGE_GRAVITY: toDraw.setFillColor(sf::Color(255, 255, 0)); break;
 				case ScriptType::CHANGE_SPEED: toDraw.setFillColor(sf::Color(127, 250, 0)); break;
+				case ScriptType::TILT_X:;
+				case ScriptType::TILT_Y: toDraw.setFillColor(sf::Color(127, 127, 127)); break;
 				default: toDraw.setFillColor(sf::Color(0, 0, 205)); break;//Camera scripts
 				}
 
@@ -207,5 +211,13 @@ namespace aw
 	void ScriptManager::cameraOffset(float xValue, float yValue, float duration)
 	{
 		m_scriptActions.push_back(ScriptAction(ScriptType::CAMERA_OFFSET, sf::seconds(duration), xValue, yValue));
+	}
+	void ScriptManager::tiltX(float duration)
+	{
+		m_scriptActions.push_back(ScriptAction(ScriptType::TILT_X, sf::seconds(duration)));
+	}
+	void ScriptManager::tiltY(float duration)
+	{
+		m_scriptActions.push_back(ScriptAction(ScriptType::TILT_Y, sf::seconds(duration)));
 	}
 }

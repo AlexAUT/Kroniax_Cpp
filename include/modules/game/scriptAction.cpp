@@ -12,6 +12,8 @@ namespace aw
 		void rotateCamera(float percentage, float value, Camera &camera);
 		void zoomCamera(float percentage, float value, Camera &camera);
 		void cameraOffset(float percentage, float xValue, float yValue, Camera &camera);
+		void tiltX(float percentage, Player &player);
+		void tiltY(float percentage, Player &player);
 	}
 
 	//--------------------------------------------------------------------------------------------------------
@@ -59,9 +61,10 @@ namespace aw
 		case ScriptType::CHANGE_GRAVITY: priv::changeGravity(percentage, m_value1, player); break;
 		case ScriptType::ROTATE_CAMERA: priv::rotateCamera(percentage, m_value1, camera); break;
 		case ScriptType::ZOOM: priv::zoomCamera(percentage, m_value1, camera); break;
-		case ScriptType::CAMERA_OFFSET: priv::cameraOffset(percentage, m_value1, m_value2, camera);
-		default:
-			break;
+		case ScriptType::CAMERA_OFFSET: priv::cameraOffset(percentage, m_value1, m_value2, camera); break;
+		case ScriptType::TILT_X: priv::tiltX(percentage, player); break;
+		case ScriptType::TILT_Y: priv::tiltY(percentage, player); break;
+		default: break;
 		}
 	}
 
@@ -95,6 +98,14 @@ namespace aw
 		void cameraOffset(float percentage, float xValue, float yValue, Camera &camera)
 		{
 			camera.moveOffset(sf::Vector2f(xValue * percentage, yValue * percentage));
+		}
+		void tiltX(float percentage, Player &player)
+		{
+			player.setSpeedX(0);
+		}
+		void tiltY(float percentage, Player &player)
+		{
+			player.setSpeed({ player.getSpeed().x, 0.f });
 		}
 	}
 }

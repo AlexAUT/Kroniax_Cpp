@@ -66,6 +66,8 @@ namespace aw
 		void rotateCamera(float value, float duration);
 		void zoomAction(float value, float duration);
 		void cameraOffset(float xValue, float yValue, float duration);
+		void tiltX(float duration);
+		void tiltY(float duration);
 
 
 	private:
