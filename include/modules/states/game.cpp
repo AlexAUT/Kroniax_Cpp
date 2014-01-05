@@ -628,6 +628,13 @@ namespace aw
 
 				m_openMusic = 1;
 			}
+			else if (levelnumber < 16)
+			{
+				if (m_openMusic != 2)
+					m_music.openFromFile("data/music/MachinimaSound.com_-_Queen_of_the_Night.ogg");
+
+				m_openMusic = 2;
+			}
 		}
 		else if (m_gameType == GameType::ONLINE_TIME_CHALLENGE && m_music.getStatus() != sf::Music::Playing)
 		{
