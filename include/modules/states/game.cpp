@@ -8,6 +8,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include "../../global.hpp"
 #include "../../messageBus/messageBus.hpp"
 #include "../../utilities/hash.hpp"
 #include "../../modules/chatHandler.hpp"
@@ -28,7 +29,7 @@ namespace aw
 		m_openMusic(-1)
 	{
 		m_messageBus.addReceiver(this);
-		m_gui.loadFont("data/fonts/visitor1.ttf");
+		m_gui.loadFont(Helper::getData("fonts/visitor1.ttf"));
 
 		initGui(m_gui); //Global Function
 	}
@@ -617,21 +618,21 @@ namespace aw
 			if (levelnumber < 6)
 			{
 				if (m_openMusic != 0)
-					m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg");
+					m_music.openFromFile(Helper::getData("music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg"));
 
 				m_openMusic = 0;
 			}
 			else if (levelnumber < 11)
 			{
 				if (m_openMusic != 1)
-					m_music.openFromFile("data/music/MachinimaSound.com_-_After_Dark.ogg");
+					m_music.openFromFile(Helper::getData("music/MachinimaSound.com_-_After_Dark.ogg"));
 
 				m_openMusic = 1;
 			}
 			else if (levelnumber < 16)
 			{
 				if (m_openMusic != 2)
-					m_music.openFromFile("data/music/MachinimaSound.com_-_Queen_of_the_Night.ogg");
+					m_music.openFromFile(Helper::getData("music/MachinimaSound.com_-_Queen_of_the_Night.ogg"));
 
 				m_openMusic = 2;
 			}
@@ -648,12 +649,12 @@ namespace aw
 	
 			switch (musicNumber)
 			{
-			case 0: m_music.openFromFile("data/music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg"); break;
-			case 1: m_music.openFromFile("data/music/Infinity - Techno Trance Project 2011 by MafiaFLairBeatz.ogg"); break;
-			case 2: m_music.openFromFile("data/music/MachinimaSound.com_-_After_Dark.ogg"); break;
-			case 3: m_music.openFromFile("data/music/MachinimaSound.com_-_Queen_of_the_Night.ogg"); break;
-			case 4: m_music.openFromFile("data/music/Power Fight - Electro Techno Beat.ogg"); break;
-			case 5: m_music.openFromFile("data/music/Return of the Electro by MafiaFLairBeatz.ogg"); break;
+			case 0: m_music.openFromFile(Helper::getData("music/Galaxy - New Electro House Techno by MafiaFLairBeatz.ogg")); break;
+			case 1: m_music.openFromFile(Helper::getData("music/Infinity - Techno Trance Project 2011 by MafiaFLairBeatz.ogg")); break;
+			case 2: m_music.openFromFile(Helper::getData("music/MachinimaSound.com_-_After_Dark.ogg")); break;
+			case 3: m_music.openFromFile(Helper::getData("music/MachinimaSound.com_-_Queen_of_the_Night.ogg")); break;
+			case 4: m_music.openFromFile(Helper::getData("music/Power Fight - Electro Techno Beat.ogg")); break;
+			case 5: m_music.openFromFile(Helper::getData("music/Return of the Electro by MafiaFLairBeatz.ogg")); break;
 			default: break;
 			}
 		}
@@ -676,11 +677,11 @@ namespace aw
 		std::string path;
 		if (m_gameType == GameType::OFFICIAL_ARCADE || m_gameType == GameType::OFFICIAL_TIMECHALLENGE)
 		{
-			path = "data/levels/official/" + m_levelName + ".cfg";
+			path = Helper::getData("levels/official/" + m_levelName + ".cfg");
 		}
 		else
 		{
-			path = "data/levels/custom/" + m_levelName + ".cfg";
+			path = Helper::getData("levels/custom/" + m_levelName + ".cfg");
 		}
 
 		//Load all modules

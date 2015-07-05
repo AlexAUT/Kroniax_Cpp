@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include "../global.hpp"
 #include "../utilities/hash.hpp"
 #include "../messageBus/messageBus.hpp"
 
@@ -13,7 +14,7 @@ namespace aw
 	{
 		m_messageBus.addReceiver(this);
 
-		mFont.loadFromFile("data/fonts/visitor1.ttf");
+		mFont.loadFromFile(Helper::getData("fonts/visitor1.ttf"));
 
 		mSourundingRect.setPosition(sf::Vector2f(5, 145));
 		mSourundingRect.setSize(sf::Vector2f(790, 300));

@@ -1,5 +1,7 @@
 #include "gameTimer.hpp"
 
+#include "../../global.hpp"
+
 #include <sstream>
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -9,7 +11,7 @@ namespace aw
 	GameTimer::GameTimer() :
 		m_elapsedTime(0)
 	{
-		m_font.loadFromFile("data/fonts/visitor1.ttf");
+		m_font.loadFromFile(Helper::getData("fonts/visitor1.ttf"));
 		m_text.setFont(m_font);
 		m_text.setPosition(10, 415);
 		m_text.setCharacterSize(23);

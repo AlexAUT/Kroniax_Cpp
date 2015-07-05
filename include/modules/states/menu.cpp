@@ -1,5 +1,6 @@
 #include "menu.hpp"
 
+#include "../../global.hpp"
 #include "../../messageBus/messageBus.hpp"
 #include "../../utilities/hash.hpp"
 
@@ -39,19 +40,19 @@ namespace aw
 		m_overlay.setSize(sf::Vector2f(800.f, 450.f));
 		m_overlay.setFillColor(sf::Color(0, 0, 0, 180));
 
-		m_texLogo.loadFromFile("data/images/kroniax.png");
+		m_texLogo.loadFromFile(Helper::getData("images/kroniax.png"));
 		m_logo.setTexture(m_texLogo);
 		m_logo.setScale(0.6f, 0.6f);
 		m_logo.setPosition(215.f, -25.f);
 
 		resetView();
 
-		m_music.openFromFile("data/music/Power Fight - Electro Techno Beat.ogg");
+		m_music.openFromFile(Helper::getData("music/Power Fight - Electro Techno Beat.ogg"));
 	}
 
 	void Menu::initGui()
 	{
-		m_gui.loadFont("data/fonts/visitor1.ttf");
+		m_gui.loadFont(Helper::getData("fonts/visitor1.ttf"));
 
 		//Layer 0
 		initMainLayer(m_gui);
@@ -242,7 +243,7 @@ namespace aw
 		int levelNumber = uniform_dist(e1);
 		std::stringstream sstr;
 		sstr << levelNumber;
-		std::string path = "data/levels/old levels/Level" + sstr.str() + "_old.cfg";
+		std::string path = Helper::getData("levels/old levels/Level" + sstr.str() + "_old.cfg");
 		m_mapRenderer.load(path);
 	}
 
@@ -285,7 +286,7 @@ namespace aw
 			//Check if update is needed
 			if (m_levelInformation.name != name)
 			{
-				std::fstream file(("data/levels/official/" + name + ".cfg").c_str());
+				std::fstream file((Helper::getData("levels/official/" + name + ".cfg")).c_str());
 
 				if (file.good())
 				{

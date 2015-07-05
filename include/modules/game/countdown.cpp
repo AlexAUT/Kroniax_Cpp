@@ -1,5 +1,7 @@
 #include "countdown.hpp"
 
+#include "../../global.hpp"
+
 #include <sstream>
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -10,7 +12,7 @@ namespace aw
 	Countdown::Countdown() :
 		m_timeLeft(0.f)
 	{
-		m_font.loadFromFile("data/fonts/visitor1.ttf");
+		m_font.loadFromFile(Helper::getData("fonts/visitor1.ttf"));
 		m_text.setFont(m_font);
 		m_text.setPosition(300, 5);
 		m_text.setCharacterSize(15);

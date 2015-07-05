@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 
+#include "../global.hpp"
 #include "../utilities/hash.hpp"
 #include "../messageBus/messageBus.hpp"
 
@@ -22,7 +23,7 @@ namespace aw
 
 	void Settings::save()
 	{
-		std::fstream file("data/config.cfg", std::ios::out | std::ios::trunc);
+		std::fstream file(Helper::getData("config.cfg"), std::ios::out | std::ios::trunc);
 		file << "Config file for the game Kroniax\n";
 
 		//Save window settings
@@ -51,7 +52,7 @@ namespace aw
 		file.close();
 
 		//Arcade levellist
-		file.open("data/arcade levellist.cfg", std::ios::out | std::ios::trunc);
+		file.open(Helper::getData("arcade levellist.cfg"), std::ios::out | std::ios::trunc);
 
 		file << m_arcadeSettings.unlockValue << "\n";
 		for (auto &it : m_arcadeSettings.levelList)
@@ -64,7 +65,7 @@ namespace aw
 
 	void Settings::loadWindowAndSoundSettings()
 	{
-		std::fstream file("data/config.cfg", std::ios::in);
+		std::fstream file(Helper::getData("config.cfg"), std::ios::in);
 		std::string line;
 
 		while (std::getline(file, line))
@@ -110,7 +111,7 @@ namespace aw
 
 	void Settings::loadArcadeSettings()
 	{
-		std::fstream file("data/arcade levellist.cfg", std::ios::in);
+		std::fstream file(Helper::getData("arcade levellist.cfg"), std::ios::in);
 		std::string line;
 
 		//First line = unlocked levels
