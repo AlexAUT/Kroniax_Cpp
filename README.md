@@ -9,7 +9,7 @@ Credits
 -------
 
 * *Music*: MafiaFLairBeatz
-* *Music*: MachinimaSound
+* *Music*: MachinimaSound, license: https://machinimasound.com/licensing/
 * *SFML*: Laurent Gomila -> [Repo](https://github.com/LaurentGomila/SFML "Title")
 * *sfchat*: fallahn -> [Repo](https://github.com/fallahn/sfchat "Title")
 
