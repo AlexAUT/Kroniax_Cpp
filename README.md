@@ -3,7 +3,7 @@ Kroniax
 
 The official source of the game Kroniax, being developed by Alexander Weinrauch in C++ with SFML.
 
-Please read the license file!
+Kroniax is licensed under the MIT license. See the LICENSE.txt file for details.
 
 Credits
 -------
