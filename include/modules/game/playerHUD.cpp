@@ -2,6 +2,7 @@
 
 #include "player.hpp"
 
+#include <cmath>
 #include <sstream>
 
 #include <SFML/Graphics/RenderWindow.hpp>
