@@ -128,7 +128,7 @@ install(TARGETS Kroniax
                 RUNTIME DESTINATION .)
 
 # Install game data
-install(DIRECTORY config levels data
+install(DIRECTORY tools data
                 DESTINATION .)
 
 # On Windows install required audio libraries
@@ -136,3 +136,4 @@ if(WIN32)
         install(FILES ${SFML_ROOT}/bin/openal32.dll ${SFML_ROOT}/bin/libsndfile-1.dll
                         DESTINATION .)
 endif()
+
