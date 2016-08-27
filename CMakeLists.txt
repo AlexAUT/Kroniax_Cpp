@@ -6,6 +6,7 @@ project(Kroniax)
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
 set(SFML_STATIC_LIBS FALSE CACHE BOOL "Choose whether SFML is linked statically or not.")
 set(KRONIAX_STATIC_STD_LIBS FALSE CACHE BOOL "Use statically linked standard/runtime libraries? This option must match the one used for SFML.")
+set(KRONIAX_DATADIR CACHE STRING "Optional path to a custom data directory (if not provided, data will be loaded from ./data.")
     
 # Make sure that the runtime library gets link statically
 if(KRONIAX_STATIC_STD_LIBS)
@@ -23,6 +24,10 @@ if(KRONIAX_STATIC_STD_LIBS)
                 # Note: Doesn't work for TDM compiler, since it's compiling the runtime libs statically by default
                 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
         endif()
+endif()
+
+if(KRONIAX_DATADIR)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDATADIR=\\\"${KRONIAX_DATADIR}\\\"")
 endif()
 
 # Kroniax uses C++11 features

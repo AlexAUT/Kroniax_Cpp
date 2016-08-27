@@ -1,5 +1,7 @@
 #include "timeTable.hpp"
 
+#include "../../global.hpp"
+
 #include <sstream>
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -11,7 +13,7 @@ namespace aw
 {
 	TimeTable::TimeTable()
 	{
-		m_font.loadFromFile("data/fonts/visitor1.ttf");
+		m_font.loadFromFile(Helper::getData("fonts/visitor1.ttf"));
 	}
 
 	void TimeTable::addPlayer(const std::string &name, float time, const sf::Color &color)

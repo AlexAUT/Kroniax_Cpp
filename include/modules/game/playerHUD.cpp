@@ -1,6 +1,7 @@
 #include "playerHUD.hpp"
 
 #include "player.hpp"
+#include "../../global.hpp"
 
 #include <cmath>
 #include <sstream>
@@ -11,7 +12,7 @@ namespace aw
 {
 	PlayerHUD::PlayerHUD()
 	{
-		m_font.loadFromFile("data/fonts/visitor1.ttf");
+		m_font.loadFromFile(Helper::getData("fonts/visitor1.ttf"));
 		m_displaySpeed.setFont(m_font);
 		m_displaySpeed.setColor(sf::Color::White);
 		m_displaySpeed.setCharacterSize(18);
